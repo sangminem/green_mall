@@ -13,7 +13,6 @@ import Signup from './pages/Signup';
 const App = () => {
   return (
     <Fragment>
-      {/* <Header/> */}
         <Routes>
           <Route path="/" element={<Main/>}/>
           <Route path="/login" element={<Login/>}/>
@@ -22,7 +21,6 @@ const App = () => {
           <Route path="/detail/:id" element={<Detail/>}/>
           <Route path="/cart" element={<Cart/>}/>
         </Routes>
-        {/* <Footer/> */}
     </Fragment>
   );
 }
