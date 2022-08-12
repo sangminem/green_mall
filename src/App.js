@@ -6,6 +6,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         green mall 리액트 프로젝트 🚀✨
+        reset 
       </header>
     </div>
   );
