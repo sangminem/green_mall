@@ -22,7 +22,7 @@ const App = () => {
           <Route path="/cart" element={<Cart/>}/>
         </Routes>
     </Fragment>
-  );
+  )
 }
 
 export default App;
