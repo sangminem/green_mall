@@ -22,7 +22,7 @@ const App = () => {
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/category" element={<Category/>}/>
-        <Route path="/detail/:id" element={<Detail/>}/>
+        <Route path="/detail" element={ <Detail/> }/> 
         <Route path="/cart" element={<Cart/>}/>
       </Routes>
     </Fragment>
