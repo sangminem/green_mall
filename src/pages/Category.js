@@ -16,6 +16,20 @@ const Category = () => {
     const [product, setProduct] = useState(furnitureData);
     const [sortPrd, setSort] = useState([]);
 
+
+    // [TODO] 가격에 콤마 추가
+    const addComma = (nStr) => {
+        nStr += "";
+		let x = nStr.split(".");
+		let x1 = x[0];
+		let x2 = x.length > 1 ? "." + x[1] : "";
+		let rgx = /(\d+)(\d{3})/;
+		while (rgx.test(x1)) {
+			x1 = x1.replace(rgx, "$1" + "," + "$2");
+		}
+		return x1 + x2;
+    }
+
     // [TODO] 상품 정렬
     const productSort = () => {
         let copy = [...furnitureData];
@@ -45,7 +59,8 @@ const Category = () => {
                                     <Col xs={4} onClick={goDetail}> 
                                         <img src={a.imgSrc} style={{width:"100%"}}/>
                                         <h2 style={{fontSize:"16px"}}>{a.title}</h2>
-                                        <span>{a.price} 원</span>
+                                        <span>{addComma(a.price)}</span>
+                                        {/* <span>{a.price} 원</span> */}
                                     </Col>                                
                                 </Fragment>   
                             )
