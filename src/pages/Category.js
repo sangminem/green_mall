@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
-import {Button, Navbar, Container, Nav, NavDropdown, Row, Col} from 'react-bootstrap';
+// import {Navbar, Container, Nav, NavDropdown, Row, Col} from 'react-bootstrap';
+import { Button, Container, Grid } from '@mui/material';
 
 const Category = () => {
 
@@ -49,24 +50,23 @@ const Category = () => {
 
     return (
         <Fragment>
-            <Container>      
-                <Button variant="outline-primary" onClick={productSort}>정렬</Button>
-                <Row>             
+            <Container maxWidth="md">                   
+                <Button variant="outlined" onClick={productSort}>정렬</Button>
+                <Grid container spacing={3}> 
                     {
                         product.map((a, i) => {
                             return (
                                 <Fragment key={i}>                                     
-                                    <Col xs={4} onClick={goDetail}> 
+                                    <Grid item xs={4} onClick={goDetail}> 
                                         <img src={a.imgSrc} style={{width:"100%"}}/>
                                         <h2 style={{fontSize:"16px"}}>{a.title}</h2>
                                         <span>{addComma(a.price)}</span>
-                                        {/* <span>{a.price} 원</span> */}
-                                    </Col>                                
+                                    </Grid>                                
                                 </Fragment>   
                             )
                         })
                     }
-                 </Row>
+                </Grid>      
             </Container>
         </Fragment>
     );
