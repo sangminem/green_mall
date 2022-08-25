@@ -10,6 +10,7 @@ import Category from "./pages/Category";
 import Login from "./pages/Login";
 import Detail from "./pages/Detail";
 import Cart from "./pages/Cart";
+import Register from "./pages/Register";
 import Signup from './pages/Signup';
 import Header from './components/Header';
 
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/category" element={<Category/>}/>
         <Route path="/detail/:id" element={<Detail/>}/>
         <Route path="/cart" element={<Cart/>}/>
+        <Route path="/register" element={<Register/>}/>
       </Routes>
     </Fragment>
   )
