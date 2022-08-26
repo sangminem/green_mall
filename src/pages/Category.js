@@ -39,14 +39,21 @@
      }
  
      // 상품 정렬 기능
-     const itemSort = function() {
+     const itemSort = function(gubun) {
 
         let prdCopy = [...products];
         
-        // 이름 오름차순 정렬
-        prdCopy.sort((a, b) => {
-            return a.product_nm < b.product_nm ? -1 : a.product_nm > b.product_nm ? 1 : 0;
-        });
+        if(gubun === "low") {
+            // 낮은 가격순 정렬
+            prdCopy.sort((a, b) => {
+                return parseFloat(a.item_price) - parseFloat(b.item_price);
+            });
+        } else {
+             // 높은 가격순 정렬
+             prdCopy.sort((a, b) => {
+                return parseFloat(b.item_price) - parseFloat(a.item_price);
+            });
+        }
 
         setProducts(prdCopy);
      }
@@ -61,10 +68,10 @@
      }, [])
  
      return (
-         <React.Fragment>
-             <Button variant="outline-dark" onClick={itemSort}>정렬</Button>
- 
+         <React.Fragment>           
               <Container>
+                  <Button variant="outline-dark" onClick={() => itemSort("low")}>낮은 가격순</Button>
+                  <Button variant="outline-dark" onClick={() => itemSort("high")}>높은 가격순</Button>
                   <Row>
                      {
                          products.map((a, i) => {
