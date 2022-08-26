@@ -10,6 +10,7 @@
  import Row from 'react-bootstrap/Row';
  import Col from 'react-bootstrap/Col';
  import Button from 'react-bootstrap/Button';
+ import swal from 'sweetalert';
  
  const Category = () => {
  
@@ -21,12 +22,18 @@
  
          axios.get(url)
              .then(function(res) {
-                 console.log(res.data);
-                 console.log("성공");
-                 setProducts(res.data);                                                                                                                                                  
+                // status가 200인 경우 여기로 들어옴
+                console.log(res);
+                setProducts(res.data);                                                                                                                                                  
              })
              .catch(function(err) {
-                 console.log("데이터 로드중 오류가 발생했습니다.");
+                // 서버 자체에 에러가 있는 경우 여기로 빠짐. status가 200이 아닌 경우
+                swal({
+                    text: "서버 접속중 오류가 발생했습니다.",
+                    icon: "error",
+                    button: "확인",
+                  });
+                console.log(err);
              })
      }
  

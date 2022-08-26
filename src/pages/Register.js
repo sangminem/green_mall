@@ -9,6 +9,7 @@
  import Form from 'react-bootstrap/Form';
  import Container from 'react-bootstrap/Container';
  import Button from 'react-bootstrap/Button';
+ import swal from 'sweetalert';
  
  const Register = () => {
  
@@ -41,14 +42,26 @@
                  // status가 200인 경우 여기로 들어옴
                  // 실제로 db insert가 성공인지 실패인지 구분하기 위해, 서버에서 성공인 경우 errCode를 0으로 보내도록 해놓음
                  if(res.data.errCode == 0) {
-                     alert("상품정보를 성공적으로 등록했습니다.")
+                     swal({
+                        text: "상품정보를 성공적으로 등록했습니다.",
+                        icon: "success",
+                        button: "확인",
+                      });
                  } else {
-                     alert("상품정보 등록중 오류가 발생했습니다.")
+                    swal({
+                        text: "상품정보 등록중 오류가 발생했습니다.",
+                        icon: "error",
+                        button: "확인",
+                      });
                  }
                  console.log(res);
              }).catch(function (err) {
                  // 서버 자체에 에러가 있는 경우 여기로 빠짐. status가 200이 아닌 경우
-                 alert("서버 접속중 오류가 발생했습니다.")
+                 swal({
+                    text: "서버 접속중 오류가 발생했습니다.",
+                    icon: "error",
+                    button: "확인",
+                  });
                  console.log(err);
              });
      }
@@ -62,7 +75,7 @@
          <React.Fragment>
              <Container>
                  <h4>상품정보등록</h4>
-                 <Form onSubmit={registerItem}>
+                 <Form>
                      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                          <Form.Label>상품 이름</Form.Label>
                          <Form.Control type="text" value={product_nm} onChange={(e) => setProduct_nm(e.target.value)}/>
@@ -84,7 +97,7 @@
                          <option value="interior">인테리어</option>
                      </Form.Select>
  
-                     <button>상품 등록</button>
+                     <Button onClick={registerItem}>상품 등록</Button>
                  </Form>
              </Container>
          </React.Fragment>
