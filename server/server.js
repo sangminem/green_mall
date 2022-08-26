@@ -69,7 +69,7 @@
      insertArr.push(data[key]);
    }
  
-   connection.query("INSERT INTO TBGM_PRODUCT values (?, ?, ?, ?, ?, ?, ?)", insertArr, function (err, rows, fields) {
+   connection.query("INSERT INTO TBGM_PRODUCT (PRODUCT_NM, PRODUCT_SUMMARY, ITEM_PRICE, CATEGORY, BRAND_CD, BRAND_NM) VALUES (?, ?, ?, ?, ?, ?)", insertArr, function (err, rows, fields) {
      if (err){
          res.send(err);
          console.log(err);

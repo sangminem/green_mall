@@ -28,7 +28,6 @@
          const url = "http://localhost:4000/api/register";
  
          const data = {
-           product_id,
            product_nm,
            product_summary,
            item_price,
@@ -78,9 +77,7 @@
                  <Form>
                      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                          <Form.Label>상품 이름</Form.Label>
-                         <Form.Control type="text" value={product_nm} onChange={(e) => setProduct_nm(e.target.value)}/>
-                         <Form.Label>상품 id</Form.Label>
-                         <Form.Control type="text" value={product_id} onChange={(e) => setProduct_id(e.target.value)}/>
+                         <Form.Control type="text" value={product_nm} onChange={(e) => setProduct_nm(e.target.value)}/>                        
                          <Form.Label>상품 설명</Form.Label>
                          <Form.Control type="text" value={product_summary} onChange={(e) => setProduct_summary(e.target.value)}/>
                          <Form.Label>상품 가격</Form.Label>
