@@ -25,3 +25,18 @@
 .container {
   max-width: 720px !important;
 }
+
+
+
+/* 카테고리 리스트 (hy) */
+.tit-lg {
+  font-size: 18px; 
+}
+
+.tit-md {
+  font-size: 15px;
+}
+
+.tit-sm {
+  font-size: 14px;
+}
