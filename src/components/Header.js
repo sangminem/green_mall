@@ -8,22 +8,19 @@ const Header = () => {
     return (<>
         <Navbar bg="light" expand="lg">
             <Container>
-                <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+                <Navbar.Brand href="/">GREEN MALL</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                    <Nav.Link href="#home">Home</Nav.Link>
-                    <Nav.Link href="#link">Link</Nav.Link>
-                    <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.2">
-                        Another action
-                    </NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.4">
-                        Separated link
-                    </NavDropdown.Item>
+                    <Nav.Link href="/">Home</Nav.Link>
+                    <NavDropdown title="카테고리" id="category-nav-dropdown">
+                        <NavDropdown.Item href="/category">인테리어</NavDropdown.Item>
+                        <NavDropdown.Item href="/category">가구</NavDropdown.Item>                       
+                        <NavDropdown.Item href="/category">식물</NavDropdown.Item>                       
+                    </NavDropdown>
+                    <NavDropdown title="관리자" id="admin-nav-dropdown">
+                        <NavDropdown.Item href="/register">상품 등록/수정</NavDropdown.Item>
+                        <NavDropdown.Item href="/">상품 조회</NavDropdown.Item>                       
                     </NavDropdown>
                 </Nav>
                 </Navbar.Collapse>
