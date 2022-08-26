@@ -11,6 +11,7 @@
  import Col from 'react-bootstrap/Col';
  import Button from 'react-bootstrap/Button';
  import swal from 'sweetalert';
+ import { IoHeartOutline } from "react-icons/io5";
  
  const Category = () => {
  
@@ -73,6 +74,7 @@
                                          <p>{a.brand_nm}</p>
                                          <h4>{a.product_nm}</h4>
                                          <span>{a.item_price}</span>
+                                         <button style={{border: 0, background: "none"}}><IoHeartOutline/> 0</button>
                                      </Col>
                                  </React.Fragment>   
                              )
