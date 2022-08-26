@@ -39,7 +39,20 @@
  
      // 상품 정렬 기능
      const itemSort = function() {
- 
+
+        let prdCopy = [...products];
+        
+        // 이름 오름차순 정렬
+        prdCopy.sort((a, b) => {
+            a = a.product_nm;
+            b = b.product_nm;
+            if (a < b) return -1;
+            if (a > b) return 1;
+        
+            return 0;
+        });
+
+        setProducts(prdCopy);
      }
  
      useEffect(() => {
@@ -48,7 +61,7 @@
  
      return (
          <React.Fragment>
-             <Button variant="outline-dark">정렬</Button>
+             <Button variant="outline-dark" onClick={itemSort}>정렬</Button>
  
               <Container>
                   <Row>
