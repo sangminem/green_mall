@@ -1,9 +1,12 @@
 import React, { Fragment } from 'react';
+import Container from 'react-bootstrap/Container';
 
 const Main = () => {
     return (
         <Fragment>
-            메인페이지
+             <Container>
+                메인페이지
+             </Container>
         </Fragment>
     );
   }

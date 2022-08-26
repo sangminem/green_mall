@@ -45,7 +45,7 @@
         
         // 이름 오름차순 정렬
         prdCopy.sort((a, b) => {
-            return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
+            return a.product_nm < b.product_nm ? -1 : a.product_nm > b.product_nm ? 1 : 0;
         });
 
         setProducts(prdCopy);
@@ -70,7 +70,7 @@
                          products.map((a, i) => {
                              return (
                                  <React.Fragment key={i}>
-                                     <Col md={3} sm={4} xs={6}>
+                                     <Col xs={6}>
                                          <p>{a.brand_nm}</p>
                                          <h4>{a.product_nm}</h4>
                                          <span>{a.item_price}</span>
