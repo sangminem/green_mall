@@ -13,7 +13,6 @@
  const path = require("path");
  const multer = require("multer");
 
-
  app.use(express.static("public"));
 
  const storage = multer.diskStorage({
@@ -56,7 +55,7 @@
  
  
  app.get("/", (req, res) => {
-   res.send("서버 실행중");
+   res.send("서버 정상 실행중");
  });
  
  

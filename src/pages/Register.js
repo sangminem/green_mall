@@ -30,7 +30,7 @@
  
      /** 
       * 상품 데이터 db에 등록
-     */
+     **/
      const registerItem = function(e) {
          e.preventDefault();
  

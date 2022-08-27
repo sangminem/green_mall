@@ -20,45 +20,29 @@
  
     // 처음 렌더링 시 실행
     useEffect(() => {
-         getData(); getImg();
+         getData(); 
         }, [])
         
     const [products, setProducts] = useState([]);
-    const [uploadedImg, setUploadedImg] = useState({fileName: "", fillPath: ""});
+
     const SERVER_URL = "http://localhost:4000";
 
      // 상품 데이터 db에서 가져오기
      const getData = function () {
-         const url = "http://localhost:4000/api/products";
+         const url = `${SERVER_URL}/api/products`;
  
          axios.get(url)
              .then(function(res) {
-                // status가 200인 경우 여기로 들어옴
-                setProducts(res.data);                                                                                                                                                  
-                console.log(res);
-             })
-             .catch(function(err) {
-                // 서버 자체에 에러가 있는 경우 여기로 빠짐. status가 200이 아닌 경우
-                swal({
-                    text: "서버 접속중 오류가 발생했습니다.",
-                    icon: "error",
-                    button: "확인",
-                  });
-                console.log(err);
-             })
-     }
 
+                let data = res.data;
+                console.log("data", data);
 
-     // 상품 데이터 db에서 가져오기
-     const getImg = function () {
-         const url = "http://localhost:4000/api/img";
- 
-         axios.get(url)
-             .then(function(res) {
-                const { fileName } = res.data;
-                console.log(res);
-                // setUploadedImg({ fileName, filePath: `${SERVER_URL}/images/${fileName}` });
+                for (let key in data) {                    
+                    data[key].image = `${SERVER_URL}/images/` + data[key].image;   // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에
+                    console.log(data[key].image);
+                }
                
+                setProducts(res.data);        
              })
              .catch(function(err) {
                 swal({
@@ -69,6 +53,7 @@
                 console.log(err);
              })
      }
+
  
      // 상품 정렬 기능
      const itemSort = function(gubun) {
@@ -100,14 +85,13 @@
                     <Dropdown.Item onClick={() => itemSort("low")}>낮은 가격순</Dropdown.Item>
                     <Dropdown.Item onClick={() => itemSort("high")}>높은 가격순</Dropdown.Item>
                   </DropdownButton>
-                  <img src={uploadedImg.filePath} alt="" />
                   <Row>
                      {
                          products.map((a, i) => {
                              return (
                                  <React.Fragment key={i}>
                                      <Col xs={6} style={{margin: "15px 0"}}>
-                                         
+                                         <img src={a.image} alt="" />
                                          <p style={{fontSize: "12px", margin: "6px 0"}}>{a.brand_nm}</p>
                                          <h4 style={{fontSize: "14px"}}>{a.product_nm}</h4>
                                          <span style={{fontSize: "15px", fontWeight: 600}}>{addComma(a.item_price)} 원</span>
