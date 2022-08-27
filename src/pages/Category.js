@@ -71,9 +71,7 @@
 
      return (
          <React.Fragment>           
-              <Container>
-                  {/* <Button variant="outline-dark" onClick={() => itemSort("low")}>낮은 가격순</Button>
-                  <Button variant="outline-dark" onClick={() => itemSort("high")}>높은 가격순</Button> */}
+              <Container>                  
                   <DropdownButton id="dropdown-basic-button" title="정렬">
                     <Dropdown.Item onClick={() => itemSort("low")}>낮은 가격순</Dropdown.Item>
                     <Dropdown.Item onClick={() => itemSort("high")}>높은 가격순</Dropdown.Item>
@@ -83,11 +81,11 @@
                          products.map((a, i) => {
                              return (
                                  <React.Fragment key={i}>
-                                     <Col xs={6}>
-                                         <p className='tit-sm'>{a.brand_nm}</p>
+                                     <Col xs={6} style={{margin: "15px 0"}}>
+                                         <p style={{fontSize: "12px", margin: "6px 0"}}>{a.brand_nm}</p>
                                          <h4 style={{fontSize: "14px"}}>{a.product_nm}</h4>
                                          <span style={{fontSize: "15px", fontWeight: 600}}>{addComma(a.item_price)} 원</span>
-                                         <button style={{border: 0, background: "none"}}><IoHeartOutline/> 0</button>
+                                         <button style={{border: 0, background: "none", fontSize: "13px"}}><IoHeartOutline/> 0</button>
                                      </Col>
                                  </React.Fragment>   
                              )
