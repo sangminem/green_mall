@@ -12,31 +12,40 @@
  import swal from 'sweetalert';
  
  const Register = () => {
+
+    useEffect(() => {
+         
+    }, [])
  
-     const [product_id, setProduct_id] = useState("");
      const [product_nm, setProduct_nm] = useState("");
      const [product_summary, setProduct_summary] = useState("");
      const [item_price, setItem_price] = useState("");
      const [category, setCategory] = useState("");
      const [brand_cd, setBrand_cd] = useState("");
      const [brand_nm, setBrand_nm] = useState("");
+     const [content, setContent] = useState("");
+     const [uploadedImg, setUploadedImg] = useState({fileName: "", fillPath: ""});
+
+     const SERVER_URL = "http://localhost:4000";
  
-     // 상품 데이터 db에 등록
+     /** 
+      * 상품 데이터 db에 등록
+     */
      const registerItem = function(e) {
          e.preventDefault();
  
-         const url = "http://localhost:4000/api/register";
+         const url = `${SERVER_URL}/api/register`;
  
-         const data = {
-           product_nm,
-           product_summary,
-           item_price,
-           category,
-           brand_cd,
-           brand_nm
-         }
+         const formData = new FormData();
+         formData.append("product_nm", product_nm); 
+         formData.append("product_summary", product_summary); 
+         formData.append("item_price", item_price); 
+         formData.append("category", category); 
+         formData.append("brand_cd", brand_cd); 
+         formData.append("brand_nm", brand_nm); 
+         formData.append("img", content); 
  
-         axios.post(url, data)
+         axios.post(url, formData)
              .then(function (res){
                  // status가 200인 경우 여기로 들어옴
                  // 실제로 db insert가 성공인지 실패인지 구분하기 위해, 서버에서 성공인 경우 errCode를 0으로 보내도록 해놓음
@@ -65,11 +74,6 @@
              });
      }
  
- 
-     useEffect(() => {
-         
-     }, [])
- 
      return (
          <React.Fragment>
              <Container>
@@ -93,6 +97,9 @@
                          <option value="plant">식물/데코</option>
                          <option value="interior">인테리어</option>
                      </Form.Select>
+
+                     <Form.Label>상품 이미지</Form.Label>
+                     <Form.Control type="file" onChange={(e) => setContent(e.target.files[0])}/> 
  
                      <Button onClick={registerItem}>상품 등록</Button>
                  </Form>

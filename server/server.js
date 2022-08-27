@@ -13,6 +13,20 @@
  const path = require("path");
  const multer = require("multer");
 
+
+ app.use(express.static("public"));
+
+ const storage = multer.diskStorage({
+    destination: "./public/images/",
+    filename: function(req, file, cb) {
+      cb(null, "imgfile" + Date.now() + path.extname(file.originalname));
+    }
+  });
+
+  const upload = multer({
+    storage: storage
+  });
+
  
  /** mysql db connection 설정  */ 
  const connection = mysql.createConnection({
@@ -62,16 +76,19 @@
  
  
  // 상품 데이터 등록
- app.post("/api/register", (req, res) => {
+ app.post("/api/register", upload.single("img"), (req, res) => {
    const data = req.body;
-   let insertArr = [];
+   const insertData = [];
  
    for (let key in data) {
-     console.log(data[key]);
-     insertArr.push(data[key]);
+     insertData.push(data[key]);
    }
+
+   insertData.push(req.file.filename);
+
+   console.log(insertData);
  
-   connection.query("INSERT INTO TBGM_PRODUCT (PRODUCT_NM, PRODUCT_SUMMARY, ITEM_PRICE, CATEGORY, BRAND_CD, BRAND_NM) VALUES (?, ?, ?, ?, ?, ?)", insertArr, function (err, rows, fields) {
+   connection.query("INSERT INTO TBGM_PRODUCT (PRODUCT_NM, PRODUCT_SUMMARY, ITEM_PRICE, CATEGORY, BRAND_CD, BRAND_NM, IMAGE) VALUES (?, ?, ?, ?, ?, ?, ?)", insertData, function (err, rows, fields) {
      if (err){
          res.send(err);
          console.log(err);
@@ -85,22 +102,23 @@
    
  });
 
-
- app.use(express.static("public"));
- 
- const storage = multer.diskStorage({
-    destination: "./public/images/",
-    filename: function(req, file, cb) {
-      cb(null, "imgfile" + Date.now() + path.extname(file.originalname));
-    }
-  });
-
-  const upload = multer({
-    storage: storage
-  });
   
-  app.post("/api/upload", upload.single("img"), function(req, res, next) {
-    res.send({
-      fileName: req.file.filename
-    });
-  });
+  // app.post("/api/upload", upload.single("img"), function(req, res, next) {
+  //   let insertData = [req.file.filename];
+
+  //   connection.query("INSERT INTO TBGM_IMG (IMAGE) VALUES (?)", insertData, function (err, rows, fields) {
+  //     if (err){
+  //         res.send(err);
+  //         console.log(err);
+  //         console.log("상품정보 등록 실패");
+  //     } else{
+  //         res.send({errCode: 0});
+  //         console.log(rows);
+  //         console.log("상품정보 등록 성공");
+  //     };
+  //   });
+
+  //   // res.send({
+  //   //   fileName: req.file.filename
+  //   // });
+  // });

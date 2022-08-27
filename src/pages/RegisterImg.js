@@ -18,11 +18,12 @@
         fileName: "",
         fillPath: ""
     });
+
     const BASE_URL = "http://localhost:4000";
 
     const onChange = e => {
         setContent(e.target.files[0]);
-      };
+    };
 
     const onSubmit = e => {
         e.preventDefault();
@@ -36,7 +37,7 @@
           .then(res => {
             const { fileName } = res.data;
             console.log(fileName);
-            setUploadedImg({ fileName, filePath: `${BASE_URL}/img/${fileName}` });
+            // setUploadedImg({ fileName, filePath: `${BASE_URL}/images/${fileName}` });
             alert("The file is successfully uploaded");
           })
           .catch(err => {
