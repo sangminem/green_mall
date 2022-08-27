@@ -10,7 +10,9 @@
  const port = 4000;
  const mysql = require('mysql');
  const bodyParser = require('body-parser');
- 
+ const path = require("path");
+ const multer = require("multer");
+
  
  /** mysql db connection 설정  */ 
  const connection = mysql.createConnection({
@@ -82,3 +84,23 @@
    });
    
  });
+
+
+ app.use(express.static("public"));
+ 
+ const storage = multer.diskStorage({
+    destination: "./public/images/",
+    filename: function(req, file, cb) {
+      cb(null, "imgfile" + Date.now() + path.extname(file.originalname));
+    }
+  });
+
+  const upload = multer({
+    storage: storage
+  });
+  
+  app.post("/api/upload", upload.single("img"), function(req, res, next) {
+    res.send({
+      fileName: req.file.filename
+    });
+  });
