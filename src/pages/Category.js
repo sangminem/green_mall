@@ -90,11 +90,11 @@
                          products.map((a, i) => {
                              return (
                                  <React.Fragment key={i}>
-                                     <Col xs={6} style={{margin: "15px 0"}}>
+                                     <Col xs={6} style={{margin: "15px 0", padding: "20px"}}>
                                          
                                          {
                                             a.image !== '' ? (
-                                                <img src={a.image} alt="" style={{width: "100%"}} />
+                                                <img src={a.image} alt="" style={{width: "100%", borderRadius: "12px"}} />
                                             ) : (
                                                 ""
                                             )
