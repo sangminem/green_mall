@@ -100,24 +100,3 @@
    });
    
  });
-
-  
-  // app.post("/api/upload", upload.single("img"), function(req, res, next) {
-  //   let insertData = [req.file.filename];
-
-  //   connection.query("INSERT INTO TBGM_IMG (IMAGE) VALUES (?)", insertData, function (err, rows, fields) {
-  //     if (err){
-  //         res.send(err);
-  //         console.log(err);
-  //         console.log("상품정보 등록 실패");
-  //     } else{
-  //         res.send({errCode: 0});
-  //         console.log(rows);
-  //         console.log("상품정보 등록 성공");
-  //     };
-  //   });
-
-  //   // res.send({
-  //   //   fileName: req.file.filename
-  //   // });
-  // });

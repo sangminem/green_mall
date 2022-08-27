@@ -91,7 +91,14 @@
                              return (
                                  <React.Fragment key={i}>
                                      <Col xs={6} style={{margin: "15px 0"}}>
-                                         <img src={a.image} alt="" />
+                                         
+                                         {
+                                            a.image !== '' ? (
+                                                <img src={a.image} alt="" style={{width: "100%"}} />
+                                            ) : (
+                                                ""
+                                            )
+                                         }
                                          <p style={{fontSize: "12px", margin: "6px 0"}}>{a.brand_nm}</p>
                                          <h4 style={{fontSize: "14px"}}>{a.product_nm}</h4>
                                          <span style={{fontSize: "15px", fontWeight: 600}}>{addComma(a.item_price)} 원</span>
