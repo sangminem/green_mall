@@ -48,3 +48,34 @@
 .tit-sm {
   font-size: 14px;
 }
+
+.tbl {
+  width: 100%;
+  /* height: 250px;
+  overflow: hidden; */
+}
+
+.tbl thead, .tbl tbody tr {
+  display:table;
+  width:100%;
+  table-layout:fixed;
+}
+
+.tbl tbody {
+  display: block;
+  overflow: auto;
+  height: 280px;
+}
+
+.tbl th {
+  text-align: center;
+  font-weight: 500;
+  background: #eee;
+  border-bottom: 1px solid #ccc;
+}
+
+.tbl th, .tbl td {
+  padding: 6px 10px;
+  font-size: 14px;
+  border-bottom: 1px solid #efefef;
+}

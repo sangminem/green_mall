@@ -82,8 +82,6 @@ const Register = () => {
       });
   };
 
-
-
   /**
    * 카테고리별 상품 데이터 가져오기
    *
@@ -123,19 +121,42 @@ const Register = () => {
   return (
     <React.Fragment>
       <Container>
-        <h4>상품정보관리</h4>
-        <table>          
-          {products.map((a, i) => {
-            return (
-              <React.Fragment key={i}>
-                <tr>
-                  <td>{a.brand_nm}</td>
-                  <td>{a.product_nm}</td>
-                </tr>               
-              </React.Fragment>
-            );
-          })}
-        </table>
+        <div className="tbl">
+          <table>            
+            <thead>
+              <tr>
+                <th>이미지</th>
+                <th>상품명</th>
+                <th>상품가격</th>
+                <th>카테고리</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((a, i) => {
+                return (
+                  <React.Fragment key={i}>
+                    <tr>
+                      <td>
+                        {a.image !== "" ? (
+                          <img
+                            src={a.image}
+                            alt=""
+                            style={{ width: "60px", borderRadius: "12px" }}
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </td>
+                      <td>{a.product_nm}</td>
+                      <td>{a.item_price}</td>
+                      <td>{a.category}</td>
+                    </tr>
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>브랜드명</Form.Label>
@@ -183,7 +204,9 @@ const Register = () => {
             onChange={(e) => setContent(e.target.files[0])}
           />
 
-          <Button onClick={registerItem} style={{margin: "16px 0"}}>상품 등록</Button>
+          <Button onClick={registerItem} style={{ margin: "16px 0" }}>
+            상품 등록
+          </Button>
         </Form>
       </Container>
     </React.Fragment>
