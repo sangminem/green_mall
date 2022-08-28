@@ -12,9 +12,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import swal from "sweetalert";
+import { Grid, GridColumn } from "@progress/kendo-react-grid";
+import '@progress/kendo-theme-default/dist/all.css';
 
 const Register = () => {
-  // 상품정보 
+  // 상품정보
   const [productInfo, setProductInfo] = useState({
     product_nm: "",
     product_summary: "",
@@ -119,13 +121,11 @@ const Register = () => {
    * @return
    */
   const setData = (e) => {
-    let tag = e.currentTarget;
+    console.log(e);
 
     let copy = products.filter((item) => {
-      return item.product_id == 21;
+      return item.product_nm == 21;
     });
-
-    console.log(copy[0].product_nm);
 
     // setProduct_nm(copy[0].product_nm);
   };
@@ -145,6 +145,16 @@ const Register = () => {
     });
   };
 
+  const imgCell = (props) => {
+    return (
+      <td>
+        <img src={props.dataItem.image} style={{ width: 70, height: 70, borderRadius: "10px" }} alt="이미지" />
+      </td>
+    )
+  }
+
+
+
   return (
     <React.Fragment>
       <Container>
@@ -155,47 +165,19 @@ const Register = () => {
         >
           상품 등록
         </Button>
-        {/* 상품 리스트  */}
-        <div className="tbl">
-          <table>
-            <thead>
-              <tr>
-                <th>이미지</th>
-                <th>상품명</th>
-                <th>상품가격</th>
-                <th>카테고리</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((a, i) => {
-                return (
-                  <React.Fragment key={i}>
-                    <tr
-                      onClick={(e) => {
-                        setData(e);
-                      }}
-                    >
-                      <td>
-                        {a.image !== "" ? (
-                          <img
-                            src={a.image}
-                            alt=""
-                            style={{ width: "60px", borderRadius: "12px" }}
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </td>
-                      <td>{a.product_nm}</td>
-                      <td>{a.item_price}</td>
-                      <td>{a.category}</td>
-                    </tr>
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+
+        {/* 상품 리스트  */}       
+        <Grid
+          data={products}
+          style={{
+            height: "400px", overflow: "auto"
+          }} className="g-k-grid"
+        >
+          <GridColumn title="상품이미지" field="image" cell={imgCell}/>
+          <GridColumn title="상품명" field="product_nm" />
+          <GridColumn title="상품가격" field="item_price" />
+          <GridColumn title="카테고리" field="category" />
+        </Grid>
 
         {/* 상품 등록  */}
         <Form>
