@@ -14,17 +14,17 @@ import Button from "react-bootstrap/Button";
 import swal from "sweetalert";
 
 const Register = () => {
-  const [product_nm, setProduct_nm] = useState("");
-  const [product_summary, setProduct_summary] = useState("");
-  const [item_price, setItem_price] = useState("");
-  const [category, setCategory] = useState("");
-  const [brand_cd, setBrand_cd] = useState("");
-  const [brand_nm, setBrand_nm] = useState("");
-  const [content, setContent] = useState("");
-  const [uploadedImg, setUploadedImg] = useState({
-    fileName: "",
-    fillPath: "",
+  const [productInfo, setProductInfo] = useState({
+    product_nm: "",
+    product_summary: "",
+    item_price: "",
+    category: "",
+    brand_cd: "",
+    brand_nm: "",
   });
+
+  const [content, setContent] = useState("");
+
   const [products, setProducts] = useState([]);
 
   const SERVER_URL = "http://localhost:4000";
@@ -46,12 +46,7 @@ const Register = () => {
     const url = `${SERVER_URL}/api/register`;
 
     const formData = new FormData();
-    formData.append("product_nm", product_nm);
-    formData.append("product_summary", product_summary);
-    formData.append("item_price", item_price);
-    formData.append("category", category);
-    formData.append("brand_cd", brand_cd);
-    formData.append("brand_nm", brand_nm);
+    formData.append("productInfo", JSON.stringify(productInfo));
     formData.append("img", content);
 
     axios
@@ -100,7 +95,6 @@ const Register = () => {
       .get(url)
       .then(function (res) {
         let data = res.data;
-        console.log("data", data);
 
         for (let key in data) {
           data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
@@ -118,11 +112,59 @@ const Register = () => {
       });
   };
 
+  /**
+   * 상품 상세정보 가져오기
+   *
+   * @param {string} categoryId 카테고리ID
+   * @return
+   */
+  const setData = (e) => {
+    let tag = e.currentTarget;
+
+    let copy = products.filter((item) => {
+      return item.product_id == 21;
+    });
+
+    console.log(copy[0].product_nm);
+
+    // setProduct_nm(copy[0].product_nm);
+  };
+
+  /**
+   * input value 가져오기
+   *
+   * @param
+   * @return
+   */
+  const getValue = (e) => {
+    let { name, value } = e.target;
+
+    console.log(typeof value);
+
+    // console.log("name", name);
+    // console.log("val", value);
+
+    setProductInfo({
+      ...productInfo,
+      [name]: value,
+    });
+
+    console.log(productInfo);
+  };
+
   return (
     <React.Fragment>
       <Container>
+        <Button
+          onClick={() => {
+            console.log("");
+          }}
+        >
+          상품 등록
+        </Button>
+        {/* 상품 리스트  */}
         <div className="tbl">
-          <table>            
+          <table>
             <thead>
               <tr>
                 <th>이미지</th>
@@ -135,7 +177,11 @@ const Register = () => {
               {products.map((a, i) => {
                 return (
                   <React.Fragment key={i}>
-                    <tr>
+                    <tr
+                      onClick={(e) => {
+                        setData(e);
+                      }}
+                    >
                       <td>
                         {a.image !== "" ? (
                           <img
@@ -157,46 +203,35 @@ const Register = () => {
             </tbody>
           </table>
         </div>
+
+        {/* 상품 등록  */}
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>브랜드명</Form.Label>
-            <Form.Control
-              type="text"
-              value={brand_nm}
-              onChange={(e) => setBrand_nm(e.target.value)}
-            />
+            <Form.Control type="text" name="brand_nm" onChange={getValue} />
             <Form.Label>브랜드코드</Form.Label>
-            <Form.Control
-              type="text"
-              value={brand_cd}
-              onChange={(e) => setBrand_cd(e.target.value)}
-            />
+            <Form.Control type="text" name="brand_cd" onChange={getValue} />
             <Form.Label>상품명</Form.Label>
-            <Form.Control
-              type="text"
-              value={product_nm}
-              onChange={(e) => setProduct_nm(e.target.value)}
-            />
+            <Form.Control type="text" name="product_nm" onChange={getValue} />
             <Form.Label>판매가격</Form.Label>
-            <Form.Control
-              type="text"
-              value={item_price}
-              onChange={(e) => setItem_price(e.target.value)}
-            />
+            <Form.Control type="text" name="item_price" onChange={getValue} />
             <Form.Label>상품설명</Form.Label>
             <Form.Control
               as="textarea"
               style={{ height: "100px" }}
-              value={product_summary}
-              onChange={(e) => setProduct_summary(e.target.value)}
+              name="product_summary"
+              onChange={getValue}
             />
           </Form.Group>
-          <Form.Select onChange={(e) => setCategory(e.target.value)}>
+          {/* <Form.Select onChange={(e) => setCategory(e.target.value)}>
             <option>카테고리</option>
             <option value="furniture">가구</option>
             <option value="plant">식물/데코</option>
             <option value="interior">인테리어</option>
-          </Form.Select>
+          </Form.Select> */}
+
+          {/* <Form.Label>상품대표이미지</Form.Label>
+          <Form.Control type="file" name="img" onChange={getValue} /> */}
 
           <Form.Label>상품대표이미지</Form.Label>
           <Form.Control
