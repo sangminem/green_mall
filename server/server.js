@@ -69,6 +69,7 @@ app.get("/api/products/:category", (req, res) => {
   const cate = req.params.category;
   const sqlQuery = `SELECT * FROM TBGM_PRODUCT WHERE CATEGORY = '${cate}'`;
 
+  console.log(cate);
   connection.query(sqlQuery, function (err, results) {
     if (err) {
       console.log(err);
