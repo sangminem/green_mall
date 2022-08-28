@@ -13,7 +13,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import swal from "sweetalert";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
-import '@progress/kendo-theme-default/dist/all.css';
+import "@progress/kendo-theme-default/dist/all.css";
 
 const Register = () => {
   // 상품정보
@@ -28,6 +28,7 @@ const Register = () => {
 
   const [content, setContent] = useState("");
   const [products, setProducts] = useState([]);
+  const [openForm, setOpenForm] = useState(false);
 
   const SERVER_URL = "http://localhost:4000";
 
@@ -148,12 +149,32 @@ const Register = () => {
   const imgCell = (props) => {
     return (
       <td>
-        <img src={props.dataItem.image} style={{ width: 70, height: 70, borderRadius: "10px" }} alt="이미지" />
+        <img
+          src={props.dataItem.image}
+          style={{ width: 60, height: 60, borderRadius: "10px" }}
+          alt="이미지"
+        />
       </td>
-    )
-  }
+    );
+  };
 
+  const MyEditCommandCell = (props) => {
+    return (
+      <td>
+        <button
+          className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
+          onClick={() => enterEdit(props.dataItem)}
+        >
+          Edit
+        </button>
+      </td>
+    );
+  };
 
+  const enterEdit = (item) => {
+    setOpenForm(true);
+    // setEditItem(item);
+  };
 
   return (
     <React.Fragment>
@@ -166,58 +187,65 @@ const Register = () => {
           상품 등록
         </Button>
 
-        {/* 상품 리스트  */}       
+        {/* 상품 리스트  */}
         <Grid
           data={products}
           style={{
-            height: "400px", overflow: "auto"
-          }} className="g-k-grid"
+            height: "600px",
+            overflow: "auto",
+          }}
+          className="g-k-grid"
         >
-          <GridColumn title="상품이미지" field="image" cell={imgCell}/>
+          <GridColumn title="상품이미지" field="image" cell={imgCell} />
           <GridColumn title="상품명" field="product_nm" />
           <GridColumn title="상품가격" field="item_price" />
           <GridColumn title="카테고리" field="category" />
+          <GridColumn cell={MyEditCommandCell} />
         </Grid>
 
-        {/* 상품 등록  */}
-        <Form>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>브랜드명</Form.Label>
-            <Form.Control type="text" name="brand_nm" onChange={getValue} />
-            <Form.Label>브랜드코드</Form.Label>
-            <Form.Control type="text" name="brand_cd" onChange={getValue} />
-            <Form.Label>상품명</Form.Label>
-            <Form.Control type="text" name="product_nm" onChange={getValue} />
-            <Form.Label>판매가격</Form.Label>
-            <Form.Control type="number" name="item_price" onChange={getValue} />
-            <Form.Label>상품설명</Form.Label>
-            <Form.Control
-              as="textarea"
-              style={{ height: "100px" }}
-              name="product_summary"
-              onChange={getValue}
-            />
-          </Form.Group>
-          <Form.Select name="category" onChange={getValue}>
-            <option>카테고리</option>
-            <option value="furniture">가구</option>
-            <option value="plant">식물/데코</option>
-            <option value="interior">인테리어</option>
-          </Form.Select>
-
-          <Form.Label>상품대표이미지</Form.Label>
-          <Form.Control
-            type="file"
-            onChange={(e) => setContent(e.target.files[0])}
-          />
-
-          <Button onClick={registerItem} style={{ margin: "16px 0" }}>
-            상품 등록
-          </Button>
-        </Form>
+        {openForm && <EditForm registerItem={registerItem} getValue={getValue} setContent={setContent}/>}
       </Container>
     </React.Fragment>
   );
 };
+
+
+function EditForm(props) {  
+
+  return (
+    <Form>
+    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+      <Form.Label>브랜드명</Form.Label>
+      <Form.Control type="text" name="brand_nm" onChange={props.getValue} />
+      <Form.Label>브랜드코드</Form.Label>
+      <Form.Control type="text" name="brand_cd" onChange={props.getValue} />
+      <Form.Label>상품명</Form.Label>
+      <Form.Control type="text" name="product_nm" onChange={props.getValue} />
+      <Form.Label>판매가격</Form.Label>
+      <Form.Control type="number" name="item_price" onChange={props.getValue} />
+      <Form.Label>상품설명</Form.Label>
+      <Form.Control
+        as="textarea"
+        style={{ height: "100px" }}
+        name="product_summary"
+        onChange={props.getValue}
+      />
+    </Form.Group>
+    <Form.Select name="category" onChange={props.getValue}>
+      <option>카테고리</option>
+      <option value="furniture">가구</option>
+      <option value="plant">식물/데코</option>
+      <option value="interior">인테리어</option>
+    </Form.Select>
+
+    <Form.Label>상품대표이미지</Form.Label>
+    <Form.Control type="file" onChange={(e) => props.setContent(e.target.files[0])} />
+
+    <Button onClick={props.registerItem} style={{ margin: "16px 0" }}>
+      상품 등록
+    </Button>
+  </Form>
+  )
+}
 
 export default Register;
