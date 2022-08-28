@@ -1,8 +1,8 @@
 /** 
  * @desc 상품 리스트 화면
- * @auth hy
+ * @author hy
  * @since 2022.08.23
- * */ 
+ */ 
 
  import React, { Fragment, useEffect, useState } from 'react';
  import axios from 'axios';
@@ -13,32 +13,36 @@
  import Col from 'react-bootstrap/Col';
  import Dropdown from 'react-bootstrap/Dropdown';
  import DropdownButton from 'react-bootstrap/DropdownButton';
- import Button from 'react-bootstrap/Button';
  import {IoHeartOutline} from "react-icons/io5";
  
  const Category = () => {
  
     // 처음 렌더링 시 실행
     useEffect(() => {
-         getData(); 
+         getData("furniture"); 
         }, [])
         
     const [products, setProducts] = useState([]);
 
     const SERVER_URL = "http://localhost:4000";
 
-     // 상품 데이터 db에서 가져오기
-     const getData = function () {
-         const url = `${SERVER_URL}/api/products`;
+
+    /**
+     * 카테고리별 상품 데이터 가져오기
+     *
+     * @param {string} category 카테고리명
+     * @return 
+     */
+     const getData = function (category) {
+         const url = `${SERVER_URL}/api/products/${category}`;
  
          axios.get(url)
              .then(function(res) {
-
                 let data = res.data;
                 console.log("data", data);
 
                 for (let key in data) {                    
-                    data[key].image = `${SERVER_URL}/images/` + data[key].image;   // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에
+                    data[key].image = `${SERVER_URL}/images/` + data[key].image;   // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
                     console.log(data[key].image);
                 }
                
@@ -55,7 +59,12 @@
      }
 
  
-     // 상품 정렬 기능
+    /**
+     * 상품 정렬 기능
+     *
+     * @param {string} gubun 정렬기준
+     * @return 
+     */
      const itemSort = function(gubun) {
         let prdCopy = [...products];
         
@@ -71,6 +80,8 @@
 
         setProducts(prdCopy);
      }
+
+     
 
     // [TODO] 상세페이지 이동
     const goDetail = () => {

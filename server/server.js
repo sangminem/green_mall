@@ -1,6 +1,6 @@
 /** 
  * @desc 서버 및 DB 연동
- * @auth hy
+ * @author hy
  * @since 2022.08.23
  * */ 
 
@@ -27,7 +27,9 @@
   });
 
  
- /** mysql db connection 설정  */ 
+/**
+ * MYSQL DB 설정
+ */
  const connection = mysql.createConnection({
    host: 'luves9631.cafe24.com',
    user: 'luves9631',
@@ -53,17 +55,22 @@
    console.log(`Example app listening at http://localhost:${port}`);
  });
  
- 
  app.get("/", (req, res) => {
    res.send("서버 정상 실행중");
  });
  
  
- /** api 설정 */
+
+/**
+ * API
+ */
  
- // 상품 데이터 가져오기
- app.get("/api/products", (req, res) => {    
-   connection.query("SELECT * FROM TBGM_PRODUCT", function (err, results) {
+/**
+ * 카테고리별 상품 가져오기
+ */
+ app.get("/api/products/:category", (req, res) => {  
+  console.log(req.params.category);  
+   connection.query("SELECT * FROM TBGM_PRODUCT WHERE CATEGORY = 'furniture'", function (err, results) {
      if (err) {
        console.log("데이터 가져오기 실패");
      } else {
@@ -74,7 +81,9 @@
  });
  
  
- // 상품 데이터 등록
+/**
+ * 상품 데이터 등록
+ */
  app.post("/api/register", upload.single("img"), (req, res) => {
    const data = req.body;
    const insertData = [];
