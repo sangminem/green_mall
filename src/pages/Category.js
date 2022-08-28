@@ -106,7 +106,7 @@ const Category = () => {
           {products.map((a, i) => {
             return (
               <React.Fragment key={i}>
-                <Col xs={6} style={{ margin: "20px 0", padding: "0 15px" }}>
+                <Col xs={6} style={{ margin: "18px 0", padding: "0 15px" }}>
                   {a.image !== "" ? (
                     <img
                       src={a.image}
@@ -119,7 +119,7 @@ const Category = () => {
                   <p style={{ fontSize: "12px", margin: "10px 0 6px", color: "#555" }}>
                     {a.brand_nm}
                   </p>
-                  <h4 style={{ fontSize: "15px" }}>{a.product_nm}</h4>
+                  <h4 style={{ fontSize: "14px" }}>{a.product_nm}</h4>
                   <span style={{ fontSize: "16px", fontWeight: 700, color: "#27ae60" }}>
                     {addComma(a.item_price)} 원
                   </span>
