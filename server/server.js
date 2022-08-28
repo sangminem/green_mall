@@ -95,10 +95,7 @@ app.get("/api/products/:categoryId", (req, res) => {
  * 상품 데이터 등록
  */
 app.post("/api/register", upload.single("img"), (req, res) => {
-  const data =  JSON.parse(req.body.productInfo);
-  console.log("req.body", req.body);  
-  console.log("req.body.json", req.body.productInfo);  
-  console.log("req.body.json.parse", JSON.parse(req.body.productInfo));  
+  const data =  JSON.parse(req.body.productInfo);   
 
   const insertData = [];
   const sqlQuery = "INSERT INTO TBGM_PRODUCT (PRODUCT_NM, PRODUCT_SUMMARY, ITEM_PRICE, CATEGORY, BRAND_CD, BRAND_NM, IMAGE) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -110,7 +107,6 @@ app.post("/api/register", upload.single("img"), (req, res) => {
   console.log(insertData);
 
   insertData.push(req.file.filename);
-
 
   connection.query(
     sqlQuery,

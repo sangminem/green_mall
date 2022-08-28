@@ -14,6 +14,7 @@ import Button from "react-bootstrap/Button";
 import swal from "sweetalert";
 
 const Register = () => {
+  // 상품정보 
   const [productInfo, setProductInfo] = useState({
     product_nm: "",
     product_summary: "",
@@ -24,7 +25,6 @@ const Register = () => {
   });
 
   const [content, setContent] = useState("");
-
   const [products, setProducts] = useState([]);
 
   const SERVER_URL = "http://localhost:4000";
@@ -139,17 +139,10 @@ const Register = () => {
   const getValue = (e) => {
     let { name, value } = e.target;
 
-    console.log(typeof value);
-
-    // console.log("name", name);
-    // console.log("val", value);
-
     setProductInfo({
       ...productInfo,
       [name]: value,
     });
-
-    console.log(productInfo);
   };
 
   return (
@@ -214,7 +207,7 @@ const Register = () => {
             <Form.Label>상품명</Form.Label>
             <Form.Control type="text" name="product_nm" onChange={getValue} />
             <Form.Label>판매가격</Form.Label>
-            <Form.Control type="text" name="item_price" onChange={getValue} />
+            <Form.Control type="number" name="item_price" onChange={getValue} />
             <Form.Label>상품설명</Form.Label>
             <Form.Control
               as="textarea"
@@ -223,15 +216,12 @@ const Register = () => {
               onChange={getValue}
             />
           </Form.Group>
-          {/* <Form.Select onChange={(e) => setCategory(e.target.value)}>
+          <Form.Select name="category" onChange={getValue}>
             <option>카테고리</option>
             <option value="furniture">가구</option>
             <option value="plant">식물/데코</option>
             <option value="interior">인테리어</option>
-          </Form.Select> */}
-
-          {/* <Form.Label>상품대표이미지</Form.Label>
-          <Form.Control type="file" name="img" onChange={getValue} /> */}
+          </Form.Select>
 
           <Form.Label>상품대표이미지</Form.Label>
           <Form.Control
