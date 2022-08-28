@@ -24,7 +24,7 @@ const Category = () => {
 
   const SERVER_URL = "http://localhost:4000";  
 
-  // 처음 렌더링 시 실행
+  // 경로가 변경될때마다 카테고리별 상품 데이터 가져오기
   useLayoutEffect(() => {
     getData(categoryId);
     

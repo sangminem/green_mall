@@ -7,7 +7,7 @@ import {useDispatch} from "react-redux";
 
 const Header = () => {
     return (<>
-        <Navbar bg="light" expand="lg">
+        {/* <Navbar bg="light" expand="lg">
             <Container>
                 <Navbar.Brand>GREEN MALL</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -15,12 +15,11 @@ const Header = () => {
                 <Nav className="me-auto">
                     <Nav.Link>Home</Nav.Link>
                     <NavDropdown title="카테고리" id="category-nav-dropdown">
-                        <Link to="/category/interior">인테리어</Link>
+                        <Nav.Item>
+                          <Link to="/category/interior">인테리어</Link>
+                        </Nav.Item>
                         <Link to="/category/furniture">가구</Link>
                         <Link to="/category/plant">식물</Link>
-                        {/* <NavDropdown.Item><Link to="/category">인테리어</Link></NavDropdown.Item>
-                        <NavDropdown.Item><Link to="/category/furniture">가구</Link></NavDropdown.Item>                       
-                        <NavDropdown.Item><Link to="/category">식물</Link></NavDropdown.Item>                        */}
                     </NavDropdown>
                     <NavDropdown title="관리자" id="admin-nav-dropdown">
                         <NavDropdown.Item>상품 등록/수정</NavDropdown.Item>
@@ -28,6 +27,19 @@ const Header = () => {
                     </NavDropdown>
                 </Nav>
                 </Navbar.Collapse>
+            </Container>
+        </Navbar> */}
+        <Navbar bg="light" variant="light">
+            <Container>
+            <Navbar.Brand as={Link} to="/">GREEN MALL</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
+            <Nav className="me-auto">
+                <Nav.Link as={Link} to="/category/interior">인테리어</Nav.Link>
+                <Nav.Link as={Link} to="/category/furniture">가구</Nav.Link>
+                <Nav.Link as={Link} to="/category/plant">식물</Nav.Link>
+                <Nav.Link as={Link} to="/register">상품관리</Nav.Link>
+            </Nav>
             </Container>
         </Navbar>
     </>)
