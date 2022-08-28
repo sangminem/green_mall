@@ -82,6 +82,8 @@ const Register = () => {
       });
   };
 
+
+
   /**
    * 카테고리별 상품 데이터 가져오기
    *
@@ -93,7 +95,7 @@ const Register = () => {
     if (categoryId) {
       url = `${SERVER_URL}/api/products/${categoryId}`;
     } else {
-      url = `${SERVER_URL}/api/products`;
+      url = `${SERVER_URL}/api/products/all`;
     }
 
     axios
@@ -104,7 +106,6 @@ const Register = () => {
 
         for (let key in data) {
           data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
-          console.log(data[key].image);
         }
 
         setProducts(res.data);
@@ -123,56 +124,45 @@ const Register = () => {
     <React.Fragment>
       <Container>
         <h4>상품정보관리</h4>
-        <div>
+        <table>          
           {products.map((a, i) => {
             return (
               <React.Fragment key={i}>
-                <Col xs={6} style={{ margin: "15px 0", padding: "20px" }}>
-                  {a.image !== "" ? (
-                    <img
-                      src={a.image}
-                      alt=""
-                      style={{ width: "100%", borderRadius: "12px" }}
-                    />
-                  ) : (
-                    ""
-                  )}
-                  <p style={{ fontSize: "12px", margin: "6px 0" }}>
-                    {a.brand_nm}
-                  </p>
-                  <h4 style={{ fontSize: "14px" }}>{a.product_nm}</h4>
-                </Col>
+                <tr>
+                  <td>{a.brand_nm}</td>
+                  <td>{a.product_nm}</td>
+                </tr>               
               </React.Fragment>
             );
           })}
-        </div>
+        </table>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>브랜드 이름</Form.Label>
+            <Form.Label>브랜드명</Form.Label>
             <Form.Control
               type="text"
               value={brand_nm}
               onChange={(e) => setBrand_nm(e.target.value)}
             />
-            <Form.Label>브랜드 코드</Form.Label>
+            <Form.Label>브랜드코드</Form.Label>
             <Form.Control
               type="text"
               value={brand_cd}
               onChange={(e) => setBrand_cd(e.target.value)}
             />
-            <Form.Label>상품 이름</Form.Label>
+            <Form.Label>상품명</Form.Label>
             <Form.Control
               type="text"
               value={product_nm}
               onChange={(e) => setProduct_nm(e.target.value)}
             />
-            <Form.Label>상품 가격</Form.Label>
+            <Form.Label>판매가격</Form.Label>
             <Form.Control
               type="text"
               value={item_price}
               onChange={(e) => setItem_price(e.target.value)}
             />
-            <Form.Label>상품 설명</Form.Label>
+            <Form.Label>상품설명</Form.Label>
             <Form.Control
               as="textarea"
               style={{ height: "100px" }}
@@ -187,7 +177,7 @@ const Register = () => {
             <option value="interior">인테리어</option>
           </Form.Select>
 
-          <Form.Label>상품 이미지</Form.Label>
+          <Form.Label>상품대표이미지</Form.Label>
           <Form.Control
             type="file"
             onChange={(e) => setContent(e.target.files[0])}

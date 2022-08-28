@@ -67,7 +67,17 @@ app.get("/", (req, res) => {
  */
 app.get("/api/products/:categoryId", (req, res) => {
   const cate = req.params.categoryId;
-  const sqlQuery = `SELECT * FROM TBGM_PRODUCT WHERE CATEGORY = '${cate}'`;
+  let sqlQuery = "";
+
+  switch(cate) {
+    case "all": 
+      sqlQuery = `SELECT * FROM TBGM_PRODUCT`;
+      break;
+    default:
+      sqlQuery = `SELECT * FROM TBGM_PRODUCT WHERE CATEGORY = '${cate}'`;
+      break;  
+  }
+  // const sqlQuery = `SELECT * FROM TBGM_PRODUCT WHERE CATEGORY = '${cate}'`;
 
   console.log(cate);
   connection.query(sqlQuery, function (err, results) {

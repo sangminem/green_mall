@@ -47,7 +47,6 @@ const Category = () => {
 
         for (let key in data) {
           data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
-          console.log(data[key].image);
         }
 
         setProducts(res.data);
