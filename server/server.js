@@ -65,8 +65,8 @@ app.get("/", (req, res) => {
 /**
  * 카테고리별 상품 가져오기
  */
-app.get("/api/products/:category", (req, res) => {
-  const cate = req.params.category;
+app.get("/api/products/:categoryId", (req, res) => {
+  const cate = req.params.categoryId;
   const sqlQuery = `SELECT * FROM TBGM_PRODUCT WHERE CATEGORY = '${cate}'`;
 
   console.log(cate);

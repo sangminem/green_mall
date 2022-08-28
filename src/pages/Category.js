@@ -16,30 +16,28 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { IoHeartOutline } from "react-icons/io5";
 
-
-
 const Category = () => {
   
   const location = useLocation();
-  const {category} = useParams();
+  const {categoryId} = useParams();
   const [products, setProducts] = useState([]);  
 
   const SERVER_URL = "http://localhost:4000";  
 
   // 처음 렌더링 시 실행
   useLayoutEffect(() => {
-    getData(category);
+    getData(categoryId);
     
    }, [location]);
 
   /**
    * 카테고리별 상품 데이터 가져오기
    *
-   * @param {string} category 카테고리명
+   * @param {string} categoryId 카테고리ID
    * @return
    */
-  const getData = function (category) {
-    const url = `${SERVER_URL}/api/products/${category}`;
+  const getData = function (categoryId) {
+    const url = `${SERVER_URL}/api/products/${categoryId}`;
 
     axios
       .get(url)
