@@ -4,8 +4,8 @@
  * @since 2022.08.23
  */
 
-import React, { Fragment, useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import React, { Fragment, useEffect, useState, useLayoutEffect } from "react";
+import { useParams, useLocation } from 'react-router-dom';
 import axios from "axios";
 import swal from "sweetalert";
 import addComma from "../Utils.js";
@@ -16,16 +16,21 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { IoHeartOutline } from "react-icons/io5";
 
-const Category = () => {
-  // 처음 렌더링 시 실행
-  useEffect(() => {
-    getData(category);
-  }, []);
 
+
+const Category = () => {
+  
+  const location = useLocation();
   const {category} = useParams();
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);  
 
   const SERVER_URL = "http://localhost:4000";  
+
+  // 처음 렌더링 시 실행
+  useLayoutEffect(() => {
+    getData(category);
+    
+   }, [location]);
 
   /**
    * 카테고리별 상품 데이터 가져오기
