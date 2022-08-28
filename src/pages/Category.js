@@ -106,7 +106,7 @@ const Category = () => {
           {products.map((a, i) => {
             return (
               <React.Fragment key={i}>
-                <Col xs={6} style={{ margin: "15px 0", padding: "20px" }}>
+                <Col xs={6} style={{ margin: "15px 0", padding: "0 15px" }}>
                   {a.image !== "" ? (
                     <img
                       src={a.image}
