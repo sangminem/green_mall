@@ -113,7 +113,9 @@ app.post("/api/register", upload.single("img"), (req, res) => {
     insertData.push(data[key]);
   }
 
-  console.log(insertData);
+  console.log(req.file.filename);
+
+  // console.log(insertData);
 
   insertData.push(req.file.filename);
 

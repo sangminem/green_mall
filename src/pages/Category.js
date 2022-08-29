@@ -5,7 +5,7 @@
  */
 
 import React, { Fragment, useEffect, useState, useLayoutEffect } from "react";
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import swal from "sweetalert";
 import addComma from "../Utils.js";
@@ -17,20 +17,14 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { IoHeartOutline } from "react-icons/io5";
 
 const Category = () => {
-  
   const location = useLocation();
-  const {categoryId} = useParams();
-  const [products, setProducts] = useState([]);  
+  const { categoryId } = useParams();
+  const [products, setProducts] = useState([]);
 
-  const SERVER_URL = "http://localhost:4000";  
+  const SERVER_URL = "http://localhost:4000";
 
   // 경로가 변경될때마다 카테고리별 상품 데이터 가져오기
-  useLayoutEffect(() => {
-    
-    
-   }, []);
-
- 
+  useLayoutEffect(() => {}, []);
 
   /**
    * 상품 정렬 기능
@@ -86,11 +80,23 @@ const Category = () => {
                   ) : (
                     ""
                   )}
-                  <p style={{ fontSize: "12px", margin: "10px 0 6px", color: "#555" }}>
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      margin: "10px 0 6px",
+                      color: "#555",
+                    }}
+                  >
                     {a.brand_nm}
                   </p>
                   <h4 style={{ fontSize: "14px" }}>{a.product_nm}</h4>
-                  <span style={{ fontSize: "16px", fontWeight: 700, color: "#27ae60" }}>
+                  <span
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: 700,
+                      color: "#27ae60",
+                    }}
+                  >
                     {addComma(a.item_price)} 원
                   </span>
                   <button

@@ -26,13 +26,11 @@ const ProductMng = () => {
     item_price: "",
     category: "",
     brand_nm: "",
-    image: ""
   });
 
   const [content, setContent] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImg, setPreviewImg] = useState(null);
-  const [idx, setIdx] = useState(0);
 
   // 처음 렌더링 시 실행
   useEffect(() => {
@@ -73,18 +71,17 @@ const ProductMng = () => {
   const getProductDetail = (idx) => {
     const url = `${SERVER_URL}/api/products/detail`;
     const data = {
-      product_id: idx,
+      product_id: idx, // product_id 로 상품 상세정보 조회
     };
 
     axios
       .post(url, data)
       .then(function (res) {
         let data = res.data;
-        console.log(data);
 
-        data.image = `${SERVER_URL}/images/` + data.image;         
+        data.image = `${SERVER_URL}/images/` + data.image;
 
-        setProductDetail(data);       
+        setProductDetail(data);
       })
       .catch(function (err) {
         console.log(err);
@@ -179,24 +176,21 @@ const ProductMng = () => {
         </div>
 
         <ProductList
-          Button={Button}
-          idx={idx}
-          setIdx={setIdx}
           productList={productList}
+          Button={Button}
           addComma={addComma}
           editProduct={editProduct}
         />
 
         {isModalOpen && (
           <ProductForm
+            productDetail={productDetail}
             registerItem={registerItem}
             getValue={getValue}
             setContent={setContent}
             setIsModalOpen={setIsModalOpen}
-            getProductList={getProductList}
             previewImg={previewImg}
             onChangeImage={onChangeImage}
-            productDetail={productDetail}
           />
         )}
       </Container>
