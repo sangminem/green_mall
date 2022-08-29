@@ -26,40 +26,11 @@ const Category = () => {
 
   // 경로가 변경될때마다 카테고리별 상품 데이터 가져오기
   useLayoutEffect(() => {
-    getData(categoryId);
     
-   }, [location]);
+    
+   }, []);
 
-  /**
-   * 카테고리별 상품 데이터 가져오기
-   *
-   * @param {string} categoryId 카테고리ID
-   * @return
-   */
-  const getData = function (categoryId) {
-    const url = `${SERVER_URL}/api/products/${categoryId}`;
-
-    axios
-      .get(url)
-      .then(function (res) {
-        let data = res.data;
-        console.log("data", data);
-
-        for (let key in data) {
-          data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
-        }
-
-        setProducts(res.data);
-      })
-      .catch(function (err) {
-        swal({
-          text: "서버 접속중 오류가 발생했습니다.",
-          icon: "error",
-          button: "확인",
-        });
-        console.log(err);
-      });
-  };
+ 
 
   /**
    * 상품 정렬 기능

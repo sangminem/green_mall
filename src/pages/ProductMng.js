@@ -4,7 +4,7 @@
  * @since 2022.08.24
  * */
 
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
@@ -14,8 +14,13 @@ import ProductForm from "../components/ProductForm";
 import addComma from "../Utils";
 
 const ProductMng = () => {
-  // 상품정보
-  const [productInfo, setProductInfo] = useState({
+  const SERVER_URL = "http://localhost:4000";
+
+  // 상품 리스트 (arr)
+  const [productList, setProductList] = useState([]);
+
+  // 상품 상세정보 (obj)
+  const [productDetail, setProductDetail] = useState({
     product_nm: "",
     product_summary: "",
     item_price: "",
@@ -24,20 +29,70 @@ const ProductMng = () => {
   });
 
   const [content, setContent] = useState("");
-  const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImg, setPreviewImg] = useState(null);
   const [idx, setIdx] = useState(0);
 
-  const SERVER_URL = "http://localhost:4000";
-
   // 처음 렌더링 시 실행
   useEffect(() => {
-    getData();
+    getProductList();
   }, []);
 
   /**
-   * 상품 데이터 DB에 등록
+   * 상품 리스트 가져오기
+   *
+   * @param {string} categoryId 카테고리ID
+   * @return
+   */
+  const getProductList = function () {
+    const url = `${SERVER_URL}/api/products`;
+
+    axios
+      .get(url)
+      .then(function (res) {
+        let data = res.data;
+
+        for (let key in data) {
+          data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
+        }
+
+        setProductList(res.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  /**
+   * 상품 상세정보 가져오기
+   *
+   * @param {string}
+   * @return
+   */
+  const getProductDetail = (idx) => {
+    const url = `${SERVER_URL}/api/products/detail`;
+    const data = {
+      product_id: idx,
+    };
+
+    axios
+      .post(url, data)
+      .then(function (res) {
+        let data = res.data;
+        console.log(data);
+
+        setProductDetail(data);
+        // for (let key in data) {
+        //   data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
+        // }
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  /**
+   * 상품 상세정보 등록
    *
    * @param
    * @return
@@ -48,7 +103,7 @@ const ProductMng = () => {
     const url = `${SERVER_URL}/api/register`;
 
     const formData = new FormData();
-    formData.append("productInfo", JSON.stringify(productInfo));
+    formData.append("productDetail", JSON.stringify(productDetail));
     formData.append("img", content);
 
     axios
@@ -61,7 +116,7 @@ const ProductMng = () => {
             button: "확인",
           });
           setIsModalOpen(false);
-          getData();
+          getProductList();
         } else {
           swal({
             text: "상품정보 등록중 오류가 발생했습니다.",
@@ -77,64 +132,6 @@ const ProductMng = () => {
   };
 
   /**
-   * 카테고리별 상품 데이터 가져오기
-   *
-   * @param {string} categoryId 카테고리ID
-   * @return
-   */
-  const getData = function (categoryId) {
-    let url = "";
-    if (categoryId) {
-      url = `${SERVER_URL}/api/products/${categoryId}`;
-    } else {
-      url = `${SERVER_URL}/api/products/all`;
-    }
-
-    axios
-      .get(url)
-      .then(function (res) {
-        let data = res.data;
-
-        for (let key in data) {
-          data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
-        }
-
-        setProducts(res.data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
-  /**
-   * 상품 상세정보 가져오기
-   *
-   * @param {string}
-   * @return
-   */
-  const getProductDetail = (idx) => {
-    const url = `${SERVER_URL}/api/products/detail`;    
-    const data = {
-      product_id: idx
-    }
-
-    axios
-      .post(url, data)
-      .then(function (res) {
-        let data = res.data;
-        console.log(data);
-
-        setProductInfo(data);
-        // for (let key in data) {
-        //   data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
-        // }        
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
-  /**
    * input value 가져오기
    *
    * @param
@@ -143,37 +140,23 @@ const ProductMng = () => {
   const getValue = (e) => {
     let { name, value } = e.target;
 
-    setProductInfo({
-      ...productInfo,
+    setProductDetail({
+      ...productDetail,
       [name]: value,
     });
   };
 
-  /**
-   * 상품 정보 등록/수정 버튼 클릭시
-   *
-   * @param
-   * @return
-   */
+  // 상품 등록/수정 버튼 클릭시
   const editProduct = (idx) => {
     setIsModalOpen(true);
 
-    // console.log(idx);
-
-    if(typeof idx == "number") {
+    if (typeof idx == "number") {
       getProductDetail(idx);
     } else {
-      console.log("존재안함")
     }
   };
 
-
-  /**
-   * 이미지 업로드시 이미지 프리뷰
-   *
-   * @param
-   * @return
-   */
+  // 이미지 업로드시 이미지 프리뷰
   const onChangeImage = (fileBlob) => {
     const reader = new FileReader();
 
@@ -191,11 +174,18 @@ const ProductMng = () => {
   return (
     <React.Fragment>
       <Container>
-        <div style={{textAlign: "right", margin: "10px 0"}}>
+        <div style={{ textAlign: "right", margin: "10px 0" }}>
           <Button onClick={editProduct}>상품 등록</Button>
         </div>
 
-        <ProductList Button={Button} idx={idx} setIdx={setIdx} products={products} addComma={addComma} editProduct={editProduct}/>
+        <ProductList
+          Button={Button}
+          idx={idx}
+          setIdx={setIdx}
+          productList={productList}
+          addComma={addComma}
+          editProduct={editProduct}
+        />
 
         {isModalOpen && (
           <ProductForm
@@ -203,10 +193,10 @@ const ProductMng = () => {
             getValue={getValue}
             setContent={setContent}
             setIsModalOpen={setIsModalOpen}
-            getData={getData}
+            getProductList={getProductList}
             previewImg={previewImg}
-            onChangeImage={onChangeImage}    
-            productInfo={productInfo}        
+            onChangeImage={onChangeImage}
+            productDetail={productDetail}
           />
         )}
       </Container>

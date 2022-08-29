@@ -5,7 +5,6 @@
  * */
 
 import React, { Fragment, useEffect, useState } from "react";
-import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -23,7 +22,7 @@ const ProductForm = (props) => {
             <option value="interior">인테리어</option>
           </Form.Select>
           <Form.Label>브랜드명</Form.Label>
-          <Form.Control type="text" name="brand_nm" value={props.productInfo.brand_nm} onChange={props.getValue} />
+          <Form.Control type="text" name="brand_nm" value={props.productDetail.brand_nm} onChange={props.getValue} />
           <Form.Label>상품명</Form.Label>
           <Form.Control
             type="text"

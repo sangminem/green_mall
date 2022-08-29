@@ -63,23 +63,11 @@ app.get("/", (req, res) => {
  */
 
 /**
- * 카테고리별 상품 가져오기
+ * 상품 리스트 가져오기
  */
-app.get("/api/products/:categoryId", (req, res) => {
-  const cate = req.params.categoryId;
-  let sqlQuery = "";
+app.get("/api/products", (req, res) => {
+  const sqlQuery = "SELECT * FROM TBGM_PRODUCT";
 
-  switch(cate) {
-    case "all": 
-      sqlQuery = `SELECT * FROM TBGM_PRODUCT`;
-      break;
-    default:
-      sqlQuery = `SELECT * FROM TBGM_PRODUCT WHERE CATEGORY = '${cate}'`;
-      break;  
-  }
-  // const sqlQuery = `SELECT * FROM TBGM_PRODUCT WHERE CATEGORY = '${cate}'`;
-
-  console.log(cate);
   connection.query(sqlQuery, function (err, results) {
     if (err) {
       console.log(err);
@@ -106,17 +94,17 @@ app.get("/api/products/:categoryId", (req, res) => {
       console.log(err);
       console.log("데이터 가져오기 실패");
     } else {
-      console.log(results);
+      console.log(results[0]);
       res.send(results[0]);
     }
   });
 });
 
 /**
- * 상품 데이터 등록
+ * 상품 상세정보 등록
  */
 app.post("/api/register", upload.single("img"), (req, res) => {
-  const data =  JSON.parse(req.body.productInfo);   
+  const data =  JSON.parse(req.body.productDetail);   
 
   const insertData = [];
   const sqlQuery = "INSERT INTO TBGM_PRODUCT (PRODUCT_NM, PRODUCT_SUMMARY, ITEM_PRICE, CATEGORY, BRAND_NM, IMAGE, RGST_DATE) VALUES (?, ?, ?, ?, ?, ?, NOW())";

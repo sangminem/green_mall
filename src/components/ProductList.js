@@ -10,9 +10,8 @@ import Container from "react-bootstrap/Container";
 const ProductList = (props) => {
   useEffect(() => {}, []);
 
-  const products = props.products;
+  const productList = props.productList;
   
-
   return (
     <React.Fragment>
       <Container>
@@ -28,7 +27,7 @@ const ProductList = (props) => {
               </tr>
             </thead>
             <tbody>
-              {products.map((a, i) => {
+              {productList.map((a, i) => {
                 return (
                   <React.Fragment key={i}>
                     <tr>
