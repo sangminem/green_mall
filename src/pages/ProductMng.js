@@ -1,5 +1,5 @@
 /**
- * @desc 상품정보 등록 화면 (관리자)
+ * @desc 상품관리 화면 (관리자)
  * @author hy
  * @since 2022.08.24
  * */
@@ -14,8 +14,9 @@ import Button from "react-bootstrap/Button";
 import swal from "sweetalert";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import "@progress/kendo-theme-default/dist/all.css";
+import ProductForm from "./ProductForm";
 
-const Register = () => {
+const ProductMng = () => {
   // 상품정보
   const [productInfo, setProductInfo] = useState({
     product_nm: "",
@@ -71,11 +72,6 @@ const Register = () => {
         console.log(res);
       })
       .catch(function (err) {
-        swal({
-          text: "서버 접속중 오류가 발생했습니다.",
-          icon: "error",
-          button: "확인",
-        });
         console.log(err);
       });
   };
@@ -106,11 +102,6 @@ const Register = () => {
         setProducts(res.data);
       })
       .catch(function (err) {
-        swal({
-          text: "서버 접속중 오류가 발생했습니다.",
-          icon: "error",
-          button: "확인",
-        });
         console.log(err);
       });
   };
@@ -203,49 +194,11 @@ const Register = () => {
           <GridColumn cell={MyEditCommandCell} />
         </Grid>
 
-        {openForm && <EditForm registerItem={registerItem} getValue={getValue} setContent={setContent}/>}
+        {openForm && <ProductForm registerItem={registerItem} getValue={getValue} setContent={setContent}/>}
       </Container>
     </React.Fragment>
   );
 };
 
 
-function EditForm(props) {  
-
-  return (
-    <Form>
-    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-      <Form.Label>브랜드명</Form.Label>
-      <Form.Control type="text" name="brand_nm" onChange={props.getValue} />
-      <Form.Label>브랜드코드</Form.Label>
-      <Form.Control type="text" name="brand_cd" onChange={props.getValue} />
-      <Form.Label>상품명</Form.Label>
-      <Form.Control type="text" name="product_nm" onChange={props.getValue} />
-      <Form.Label>판매가격</Form.Label>
-      <Form.Control type="number" name="item_price" onChange={props.getValue} />
-      <Form.Label>상품설명</Form.Label>
-      <Form.Control
-        as="textarea"
-        style={{ height: "100px" }}
-        name="product_summary"
-        onChange={props.getValue}
-      />
-    </Form.Group>
-    <Form.Select name="category" onChange={props.getValue}>
-      <option>카테고리</option>
-      <option value="furniture">가구</option>
-      <option value="plant">식물/데코</option>
-      <option value="interior">인테리어</option>
-    </Form.Select>
-
-    <Form.Label>상품대표이미지</Form.Label>
-    <Form.Control type="file" onChange={(e) => props.setContent(e.target.files[0])} />
-
-    <Button onClick={props.registerItem} style={{ margin: "16px 0" }}>
-      상품 등록
-    </Button>
-  </Form>
-  )
-}
-
-export default Register;
+export default ProductMng;

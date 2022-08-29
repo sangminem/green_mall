@@ -10,8 +10,7 @@ import Category from "./pages/Category";
 import Login from "./pages/Login";
 import Detail from "./pages/Detail";
 import Cart from "./pages/Cart";
-import Register from "./pages/Register";
-import RegisterView from "./pages/RegisterView";
+import ProductMng from "./pages/ProductMng";
 import Signup from './pages/Signup';
 import Header from './components/Header';
 
@@ -26,8 +25,8 @@ const App = () => {
         <Route path="/category/:categoryId" element={<Category/>}/>
         <Route path="/detail/:id" element={<Detail/>}/>
         <Route path="/cart" element={<Cart/>}/>
-        <Route path="/register" element={<Register/>}/>
-        <Route path="/registerView" element={<RegisterView/>}/>
+        <Route path="/productMng" element={<ProductMng/>}/>
+        {/* <Route path="/registerView" element={<RegisterView/>}/> */}
       </Routes>
     </Fragment>
   )

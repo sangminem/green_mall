@@ -38,7 +38,7 @@ const Header = () => {
                 <Nav.Link as={Link} to="/category/interior">인테리어</Nav.Link>
                 <Nav.Link as={Link} to="/category/furniture">가구</Nav.Link>
                 <Nav.Link as={Link} to="/category/plant">식물/데코</Nav.Link>
-                <Nav.Link as={Link} to="/register">상품관리</Nav.Link>
+                <Nav.Link as={Link} to="/productMng">상품관리</Nav.Link>
             </Nav>
             </Container>
         </Navbar>
