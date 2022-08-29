@@ -26,6 +26,7 @@ const ProductMng = () => {
     item_price: "",
     category: "",
     brand_nm: "",
+    image: ""
   });
 
   const [content, setContent] = useState("");
@@ -81,10 +82,9 @@ const ProductMng = () => {
         let data = res.data;
         console.log(data);
 
-        setProductDetail(data);
-        // for (let key in data) {
-        //   data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
-        // }
+        data.image = `${SERVER_URL}/images/` + data.image;         
+
+        setProductDetail(data);       
       })
       .catch(function (err) {
         console.log(err);
