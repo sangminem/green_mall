@@ -10,7 +10,7 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import swal from "sweetalert";
 import ProductList from "../components/ProductList";
-import ProductForm from "./ProductForm";
+import ProductForm from "../components/ProductForm";
 
 const ProductMng = () => {
   // 상품정보
