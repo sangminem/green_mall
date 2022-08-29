@@ -11,6 +11,7 @@ const ProductList = (props) => {
   useEffect(() => {}, []);
 
   const products = props.products;
+  
 
   return (
     <React.Fragment>
@@ -36,7 +37,7 @@ const ProductList = (props) => {
                           <img
                             src={a.image}
                             alt=""
-                            style={{ width: "60px", borderRadius: "12px" }}
+                            style={{ width: "70px", borderRadius: "12px" }}
                           />
                         ) : (
                           ""
@@ -45,7 +46,7 @@ const ProductList = (props) => {
                       <td style={{width: "40%"}}>{a.product_nm}</td>
                       <td style={{width: "15%", textAlign: "right"}}>{props.addComma(a.item_price)} 원</td>
                       <td style={{width: "15%", textAlign: "center"}}>{a.category}</td>
-                      <td style={{width: "15%"}}><props.Button variant="light">수정</props.Button></td>
+                      <td style={{width: "15%"}}><props.Button variant="light" onClick={() => { props.editProduct(a.product_id)}}>수정</props.Button></td>
                     </tr>
                   </React.Fragment>
                 );

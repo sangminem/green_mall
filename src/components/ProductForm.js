@@ -23,7 +23,7 @@ const ProductForm = (props) => {
             <option value="interior">인테리어</option>
           </Form.Select>
           <Form.Label>브랜드명</Form.Label>
-          <Form.Control type="text" name="brand_nm" onChange={props.getValue} />
+          <Form.Control type="text" name="brand_nm" value={props.productInfo.brand_nm} onChange={props.getValue} />
           <Form.Label>상품명</Form.Label>
           <Form.Control
             type="text"
@@ -32,7 +32,7 @@ const ProductForm = (props) => {
           />
           <Form.Label>상품대표이미지</Form.Label>
           {
-            props.previewImg ? <img src={props.previewImg} style={{width: "120px", border: "1px solid #ccc"}}></img> : <img src={process.env.PUBLIC_URL + '/noimg2.png'} style={{width: "120px", border: "1px solid #ccc"}}></img>
+            props.previewImg ? <img src={props.previewImg} style={{width: "120px", border: "1px solid #ccc"}} alt=""></img> : <img src={process.env.PUBLIC_URL + '/noimg2.png'} style={{width: "120px", border: "1px solid #ccc"}} alt=""></img>
           }
           <Form.Control
             type="file"

@@ -27,6 +27,7 @@ const ProductMng = () => {
   const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImg, setPreviewImg] = useState(null);
+  const [idx, setIdx] = useState(0);
 
   const SERVER_URL = "http://localhost:4000";
 
@@ -108,17 +109,29 @@ const ProductMng = () => {
   /**
    * 상품 상세정보 가져오기
    *
-   * @param {string} categoryId 카테고리ID
+   * @param {string}
    * @return
    */
-  const setData = (e) => {
-    console.log(e);
+  const getProductDetail = (idx) => {
+    const url = `${SERVER_URL}/api/products/detail`;    
+    const data = {
+      product_id: idx
+    }
 
-    let copy = products.filter((item) => {
-      return item.product_nm == 21;
-    });
+    axios
+      .post(url, data)
+      .then(function (res) {
+        let data = res.data;
+        console.log(data);
 
-    // setProduct_nm(copy[0].product_nm);
+        setProductInfo(data);
+        // for (let key in data) {
+        //   data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
+        // }        
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   };
 
   /**
@@ -142,10 +155,25 @@ const ProductMng = () => {
    * @param
    * @return
    */
-  const editProduct = () => {
+  const editProduct = (idx) => {
     setIsModalOpen(true);
+
+    // console.log(idx);
+
+    if(typeof idx == "number") {
+      getProductDetail(idx);
+    } else {
+      console.log("존재안함")
+    }
   };
 
+
+  /**
+   * 이미지 업로드시 이미지 프리뷰
+   *
+   * @param
+   * @return
+   */
   const onChangeImage = (fileBlob) => {
     const reader = new FileReader();
 
@@ -167,7 +195,7 @@ const ProductMng = () => {
           <Button onClick={editProduct}>상품 등록</Button>
         </div>
 
-        <ProductList Button={Button} products={products} addComma={addComma}/>
+        <ProductList Button={Button} idx={idx} setIdx={setIdx} products={products} addComma={addComma} editProduct={editProduct}/>
 
         {isModalOpen && (
           <ProductForm
@@ -177,7 +205,8 @@ const ProductMng = () => {
             setIsModalOpen={setIsModalOpen}
             getData={getData}
             previewImg={previewImg}
-            onChangeImage={onChangeImage}
+            onChangeImage={onChangeImage}    
+            productInfo={productInfo}        
           />
         )}
       </Container>

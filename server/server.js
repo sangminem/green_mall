@@ -91,6 +91,27 @@ app.get("/api/products/:categoryId", (req, res) => {
   });
 });
 
+
+/**
+ * 상품 상세정보 가져오기
+ */
+ app.post("/api/products/detail", (req, res) => {
+  const data = req.body;
+  let prdid = data.product_id;
+
+  let sqlQuery = `SELECT * FROM TBGM_PRODUCT WHERE PRODUCT_ID = ${prdid}`;
+
+  connection.query(sqlQuery, function (err, results) {
+    if (err) {
+      console.log(err);
+      console.log("데이터 가져오기 실패");
+    } else {
+      console.log(results);
+      res.send(results[0]);
+    }
+  });
+});
+
 /**
  * 상품 데이터 등록
  */
