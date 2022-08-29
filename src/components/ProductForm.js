@@ -32,7 +32,7 @@ const ProductForm = (props) => {
           />
           <Form.Label>상품대표이미지</Form.Label>
           {
-            props.previewImg ? <img src={props.previewImg} style={{width: "120px"}}></img> : <img src={process.env.PUBLIC_URL + '/noimg.jpg'} style={{width: "120px"}}></img>
+            props.previewImg ? <img src={props.previewImg} style={{width: "120px", border: "1px solid #ccc"}}></img> : <img src={process.env.PUBLIC_URL + '/noimg2.png'} style={{width: "120px", border: "1px solid #ccc"}}></img>
           }
           <Form.Control
             type="file"
@@ -60,7 +60,6 @@ const ProductForm = (props) => {
           variant="light"
           onClick={() => {
             props.setIsModalOpen(false);
-            props.getData();
           }}
           style={{ margin: "16px 6px" }}
         >
@@ -71,7 +70,6 @@ const ProductForm = (props) => {
         className="modal-overlay"
         onClick={() => {
           props.setIsModalOpen(false);
-          props.getData();
         }}
       ></div>
     </React.Fragment>

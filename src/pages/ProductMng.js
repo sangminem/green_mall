@@ -11,6 +11,7 @@ import Button from "react-bootstrap/Button";
 import swal from "sweetalert";
 import ProductList from "../components/ProductList";
 import ProductForm from "../components/ProductForm";
+import addComma from "../Utils";
 
 const ProductMng = () => {
   // 상품정보
@@ -162,9 +163,11 @@ const ProductMng = () => {
   return (
     <React.Fragment>
       <Container>
-        <Button onClick={editProduct}>상품 등록</Button>
+        <div style={{textAlign: "right", margin: "10px 0"}}>
+          <Button onClick={editProduct}>상품 등록</Button>
+        </div>
 
-        <ProductList Button={Button} products={products} />
+        <ProductList Button={Button} products={products} addComma={addComma}/>
 
         {isModalOpen && (
           <ProductForm

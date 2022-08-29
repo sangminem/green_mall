@@ -16,14 +16,14 @@ const ProductList = (props) => {
     <React.Fragment>
       <Container>
         <div className="tbl">
-          <table>
+          <table>           
             <thead>
               <tr>
-                <th>대표이미지</th>
-                <th>상품명</th>
-                <th>상품가격</th>
-                <th>카테고리</th>
-                <th>변경</th>
+                <th style={{width: "15%"}}>대표이미지</th>
+                <th style={{width: "40%"}}>상품명</th>
+                <th style={{width: "15%"}}>상품가격</th>
+                <th style={{width: "15%"}}>카테고리</th>
+                <th style={{width: "15%"}}>변경</th>
               </tr>
             </thead>
             <tbody>
@@ -31,7 +31,7 @@ const ProductList = (props) => {
                 return (
                   <React.Fragment key={i}>
                     <tr>
-                      <td>
+                      <td style={{width: "15%"}}>
                         {a.image !== "" ? (
                           <img
                             src={a.image}
@@ -42,10 +42,10 @@ const ProductList = (props) => {
                           ""
                         )}
                       </td>
-                      <td>{a.product_nm}</td>
-                      <td>{a.item_price}</td>
-                      <td>{a.category}</td>
-                      <td><props.Button>수정</props.Button></td>
+                      <td style={{width: "40%"}}>{a.product_nm}</td>
+                      <td style={{width: "15%", textAlign: "right"}}>{props.addComma(a.item_price)} 원</td>
+                      <td style={{width: "15%", textAlign: "center"}}>{a.category}</td>
+                      <td style={{width: "15%"}}><props.Button variant="light">수정</props.Button></td>
                     </tr>
                   </React.Fragment>
                 );

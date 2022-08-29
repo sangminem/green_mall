@@ -76,7 +76,7 @@
 
 .tbl th, .tbl td {
   padding: 4px 8px;
-  font-size: 14px;
+  font-size: 13px;
   border-bottom: 1px solid #efefef;
 }
 
@@ -105,4 +105,9 @@
 
 .form-label {
   display: block;
+}
+
+.btn-primary {
+  background: rgb(39, 174, 96) !important;
+  border: rgb(39, 174, 96) !important;
 }
