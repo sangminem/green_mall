@@ -9,21 +9,15 @@ import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
-import swal from "sweetalert";
 
 const ProductForm = (props) => {
   useEffect(() => {
-    getData();
+    
   }, []);
-
-  const SERVER_URL = "http://localhost:4000";
-
-  const [products, setProducts] = useState([]);
 
   return (
     <React.Fragment>
-      <Container>
-        <Form>
+        <Form className="g-modal">
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>브랜드명</Form.Label>
             <Form.Control
@@ -70,11 +64,15 @@ const ProductForm = (props) => {
             onChange={(e) => props.setContent(e.target.files[0])}
           />
 
+
           <Button onClick={props.registerItem} style={{ margin: "16px 0" }}>
             상품 등록
           </Button>
+          <Button onClick={() => {props.setIsModalOpen(false); props.getData()}} style={{ margin: "16px 0" }}>
+            취소
+          </Button>
         </Form>
-      </Container>
+        <div className="modal-overlay" onClick={() => {props.setIsModalOpen(false); props.getData()}}></div>
     </React.Fragment>
   );
 };

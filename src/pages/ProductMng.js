@@ -12,8 +12,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import swal from "sweetalert";
-import { Grid, GridColumn } from "@progress/kendo-react-grid";
-import "@progress/kendo-theme-default/dist/all.css";
+import ProductList from "../components/ProductList";
 import ProductForm from "./ProductForm";
 
 const ProductMng = () => {
@@ -29,7 +28,7 @@ const ProductMng = () => {
 
   const [content, setContent] = useState("");
   const [products, setProducts] = useState([]);
-  const [openForm, setOpenForm] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const SERVER_URL = "http://localhost:4000";
 
@@ -137,68 +136,39 @@ const ProductMng = () => {
     });
   };
 
-  const imgCell = (props) => {
-    return (
-      <td>
-        <img
-          src={props.dataItem.image}
-          style={{ width: 60, height: 60, borderRadius: "10px" }}
-          alt="이미지"
-        />
-      </td>
-    );
-  };
 
-  const MyEditCommandCell = (props) => {
-    return (
-      <td>
-        <button
-          className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
-          onClick={() => enterEdit(props.dataItem)}
-        >
-          Edit
-        </button>
-      </td>
-    );
-  };
+  /**
+   * 상품 정보 등록/수정 버튼 클릭시
+   *
+   * @param
+   * @return
+   */
+  const editProduct = () => {
+    setIsModalOpen(true);
+  }
 
-  const enterEdit = (item) => {
-    setOpenForm(true);
-    // setEditItem(item);
-  };
 
   return (
     <React.Fragment>
       <Container>
-        <Button
-          onClick={() => {
-            console.log("");
-          }}
-        >
+        <Button onClick={editProduct}>
           상품 등록
         </Button>
 
-        {/* 상품 리스트  */}
-        <Grid
-          data={products}
-          style={{
-            height: "600px",
-            overflow: "auto",
-          }}
-          className="g-k-grid"
-        >
-          <GridColumn title="상품이미지" field="image" cell={imgCell} />
-          <GridColumn title="상품명" field="product_nm" />
-          <GridColumn title="상품가격" field="item_price" />
-          <GridColumn title="카테고리" field="category" />
-          <GridColumn cell={MyEditCommandCell} />
-        </Grid>
+        <ProductList Button={Button} products={products}/>
 
-        {openForm && <ProductForm registerItem={registerItem} getValue={getValue} setContent={setContent}/>}
+        {isModalOpen && (
+          <ProductForm
+            registerItem={registerItem}
+            getValue={getValue}
+            setContent={setContent}
+            setIsModalOpen={setIsModalOpen}
+            getData={getData}
+          />
+        )}
       </Container>
     </React.Fragment>
   );
 };
-
 
 export default ProductMng;
