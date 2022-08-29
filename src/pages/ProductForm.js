@@ -31,10 +31,15 @@ const ProductForm = (props) => {
             onChange={props.getValue}
           />
           <Form.Label>상품대표이미지</Form.Label>
+          <img src={props.previewImg} style={{width: "120px"}}></img>
           <Form.Control
             type="file"
-            onChange={(e) => props.setContent(e.target.files[0])}
+            onChange={(e) => {props.onChangeImage(e.target.files[0]); props.setContent(e.target.files[0]) }}
           />
+          {/* <Form.Control
+            type="file"
+            onChange={(e) => props.setContent(e.target.files[0])}
+          /> */}
           <Form.Label>판매가격</Form.Label>
           <Form.Control
             type="number"

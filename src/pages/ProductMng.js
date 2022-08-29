@@ -4,7 +4,7 @@
  * @since 2022.08.24
  * */
 
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
@@ -25,6 +25,7 @@ const ProductMng = () => {
   const [content, setContent] = useState("");
   const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [previewImg, setPreviewImg] = useState(null);
 
   const SERVER_URL = "http://localhost:4000";
 
@@ -134,7 +135,6 @@ const ProductMng = () => {
     });
   };
 
-
   /**
    * 상품 정보 등록/수정 버튼 클릭시
    *
@@ -143,17 +143,28 @@ const ProductMng = () => {
    */
   const editProduct = () => {
     setIsModalOpen(true);
-  }
+  };
 
+  const onChangeImage = (fileBlob) => {
+    const reader = new FileReader();
+
+    reader.readAsDataURL(fileBlob);
+
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setPreviewImg(reader.result);
+
+        resolve();
+      };
+    });
+  };
 
   return (
     <React.Fragment>
       <Container>
-        <Button onClick={editProduct}>
-          상품 등록
-        </Button>
+        <Button onClick={editProduct}>상품 등록</Button>
 
-        <ProductList Button={Button} products={products}/>
+        <ProductList Button={Button} products={products} />
 
         {isModalOpen && (
           <ProductForm
@@ -162,6 +173,8 @@ const ProductMng = () => {
             setContent={setContent}
             setIsModalOpen={setIsModalOpen}
             getData={getData}
+            previewImg={previewImg}
+            onChangeImage={onChangeImage}
           />
         )}
       </Container>
