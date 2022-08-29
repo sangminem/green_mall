@@ -6,10 +6,7 @@
 
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
-import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import swal from "sweetalert";
 import ProductList from "../components/ProductList";
@@ -22,7 +19,6 @@ const ProductMng = () => {
     product_summary: "",
     item_price: "",
     category: "",
-    brand_cd: "",
     brand_nm: "",
   });
 
@@ -61,6 +57,8 @@ const ProductMng = () => {
             icon: "success",
             button: "확인",
           });
+          setIsModalOpen(false);
+          getData();
         } else {
           swal({
             text: "상품정보 등록중 오류가 발생했습니다.",
