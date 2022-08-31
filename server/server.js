@@ -63,23 +63,11 @@ app.get("/", (req, res) => {
  */
 
 /**
- * 카테고리별 상품 가져오기
+ * 상품 리스트 api
  */
-app.get("/api/products/:categoryId", (req, res) => {
-  const cate = req.params.categoryId;
-  let sqlQuery = "";
+app.get("/api/product", (req, res) => {
+  const sqlQuery = `SELECT * FROM TBGM_PRODUCT`;
 
-  switch(cate) {
-    case "all": 
-      sqlQuery = `SELECT * FROM TBGM_PRODUCT`;
-      break;
-    default:
-      sqlQuery = `SELECT * FROM TBGM_PRODUCT WHERE CATEGORY = '${cate}'`;
-      break;  
-  }
-  // const sqlQuery = `SELECT * FROM TBGM_PRODUCT WHERE CATEGORY = '${cate}'`;
-
-  console.log(cate);
   connection.query(sqlQuery, function (err, results) {
     if (err) {
       console.log(err);
@@ -90,6 +78,25 @@ app.get("/api/products/:categoryId", (req, res) => {
     }
   });
 });
+
+
+/**
+ * 상품 상세페이지 api
+ */
+app.get("/api/product", (req, res) => {
+  const sqlQuery = `SELECT * FROM TBGM_PRODUCT`;
+
+  connection.query(sqlQuery, function (err, results) {
+    if (err) {
+      console.log(err);
+      console.log("데이터 가져오기 실패");
+    } else {
+      console.log(results);
+      res.send(results);
+    }
+  });
+});
+
 
 /**
  * 상품 데이터 등록

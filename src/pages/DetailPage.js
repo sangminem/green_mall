@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-const Detail = () => {
+const DetailPage = (props) => {
     return (
         <React.Fragment>
             상품 상세페이지
@@ -8,4 +8,4 @@ const Detail = () => {
     );
   }
   
-  export default Detail;
+  export default DetailPage;

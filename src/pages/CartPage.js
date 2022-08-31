@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-const Cart = () => {
+const CartPage = () => {
     return (
         <React.Fragment>
             장바구니 페이지
@@ -8,4 +8,4 @@ const Cart = () => {
     );
   }
   
-  export default Cart;
+  export default CartPage;
