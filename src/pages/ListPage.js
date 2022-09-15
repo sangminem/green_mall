@@ -65,11 +65,6 @@ const ListPage = (props) => {
     props.setProductList(prdCopy);
   };
 
-  // [TODO] 상세페이지 이동
-  // const moveToDetail = () => {
-
-  // };
-
   return (
     <React.Fragment>
       <Container>
