@@ -13,7 +13,7 @@ import ProductList from "../components/ProductList";
 import ProductForm from "../components/ProductForm";
 import addComma from "../Utils";
 
-const ProductMng = () => {
+const ProductMngPage = () => {
   const SERVER_URL = "http://localhost:4000";
 
   // 상품 리스트 (arr)
@@ -198,4 +198,4 @@ const ProductMng = () => {
   );
 };
 
-export default ProductMng;
+export default ProductMngPage;

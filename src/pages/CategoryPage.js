@@ -16,22 +16,15 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { IoHeartOutline } from "react-icons/io5";
 
-const Category = () => {
-  const location = useLocation();
+const CategoryPage = () => {
   const { categoryId } = useParams();
   const [products, setProducts] = useState([]);
 
   const SERVER_URL = "http://localhost:4000";
 
-  // 경로가 변경될때마다 카테고리별 상품 데이터 가져오기
   useLayoutEffect(() => {}, []);
 
-  /**
-   * 상품 정렬 기능
-   *
-   * @param {string} gubun 정렬기준
-   * @return
-   */
+  // 상품 정렬 기능
   const itemSort = function (gubun) {
     let prdCopy = [...products];
 
@@ -50,10 +43,6 @@ const Category = () => {
     setProducts(prdCopy);
   };
 
-  // [TODO] 상세페이지 이동
-  const goDetail = () => {
-    alert("[TODO] 상세페이지 이동 기능 추가 예정");
-  };
 
   return (
     <React.Fragment>
@@ -114,4 +103,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryPage;

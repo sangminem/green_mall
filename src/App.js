@@ -5,13 +5,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Route, Routes, useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
 
-import Main from "./pages/Main";
-import Category from "./pages/Category";
-import Login from "./pages/Login";
-import Detail from "./pages/Detail";
-import Cart from "./pages/Cart";
-import ProductMng from "./pages/ProductMng";
-import Signup from './pages/Signup';
+import MainPage from "./pages/MainPage";
+import CategoryPage from "./pages/CategoryPage";
+import DetailPage from "./pages/DetailPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from './pages/SignupPage';
+import CartPage from "./pages/CartPage";
+import ProductMngPage from "./pages/ProductMngPage";
 import Header from './components/Header';
 
 const App = () => {
@@ -19,14 +19,13 @@ const App = () => {
     <Fragment>
       <Header />
       <Routes>
-        <Route path="/" element={<Main/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/signup" element={<Signup/>}/>
-        <Route path="/category/:categoryId" element={<Category/>}/>
-        <Route path="/detail/:id" element={<Detail/>}/>
-        <Route path="/cart" element={<Cart/>}/>
-        <Route path="/productMng" element={<ProductMng/>}/>
-        {/* <Route path="/registerView" element={<RegisterView/>}/> */}
+        <Route path="/" element={<MainPage/>}/>
+        <Route path="/login" element={<LoginPage/>}/>
+        <Route path="/signup" element={<SignupPage/>}/>
+        <Route path="/category/:id" element={<CategoryPage/>}/>
+        <Route path="/detail/:id" element={<DetailPage/>}/>
+        <Route path="/cart" element={<CartPage/>}/>
+        <Route path="/productMng" element={<ProductMngPage/>}/>
       </Routes>
     </Fragment>
   )
