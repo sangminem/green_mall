@@ -3,7 +3,7 @@ import {Button, Navbar, Container, Nav, NavDropdown, Row, Col} from 'react-boots
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Route, Routes, useHistory} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import { IoCartOutline } from "react-icons/io5";
 
 const Header = () => {
     return (<>       
@@ -17,6 +17,7 @@ const Header = () => {
                 <Nav.Link as={Link} to="/category/furniture">가구</Nav.Link>
                 <Nav.Link as={Link} to="/category/plant">식물/데코</Nav.Link>
                 <Nav.Link as={Link} to="/productMng">상품관리</Nav.Link>
+                <Nav.Link as={Link} to="/"><IoCartOutline/></Nav.Link>
             </Nav>
             </Container>
         </Navbar>

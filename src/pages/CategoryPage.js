@@ -1,13 +1,12 @@
 /**
- * @desc 상품 리스트 화면
+ * @desc 상품 카테고리 페이지
  * @author hy
  * @since 2022.08.23
  */
 
-import React, { Fragment, useEffect, useState, useLayoutEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import React, { Fragment, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import swal from "sweetalert";
 import addComma from "../Utils.js";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -17,35 +16,65 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { IoHeartOutline } from "react-icons/io5";
 
 const CategoryPage = () => {
-  const { categoryId } = useParams();
+  const { id } = useParams();
   const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, [id]);
 
   const SERVER_URL = "http://localhost:4000";
 
-  useLayoutEffect(() => {}, []);
+  /**
+   * 상품 카테고리 리스트 조회
+   */
+  const getData = function () {
+    const url = `${SERVER_URL}/api/products`;
 
-  // 상품 정렬 기능
+    axios
+      .get(url)
+      .then(function (res) {
+        let data = res.data;
+
+        for (let key in data) {
+          data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
+        }
+
+        // 상품의 카테고리와 useParam의 id가 일치하는 리스트만 담기
+        let copy = data.filter((item) => {
+          return item.category === id;
+        });
+
+        setProducts(copy);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  /**
+   * 상품 정렬 기능
+   */
   const itemSort = function (gubun) {
-    let prdCopy = [...products];
+    let copy = [...products];
 
     if (gubun === "low") {
       // 낮은 가격순 정렬
-      prdCopy.sort((a, b) => {
+      copy.sort((a, b) => {
         return parseFloat(a.item_price) - parseFloat(b.item_price);
       });
     } else {
       // 높은 가격순 정렬
-      prdCopy.sort((a, b) => {
+      copy.sort((a, b) => {
         return parseFloat(b.item_price) - parseFloat(a.item_price);
       });
     }
 
-    setProducts(prdCopy);
+    setProducts(copy);
   };
 
-
   return (
-    <React.Fragment>
+    <Fragment>
       <Container>
         <DropdownButton id="dropdown-basic-button" title="정렬">
           <Dropdown.Item onClick={() => itemSort("low")}>
@@ -99,7 +128,7 @@ const CategoryPage = () => {
           })}
         </Row>
       </Container>
-    </React.Fragment>
+    </Fragment>
   );
 };
 
