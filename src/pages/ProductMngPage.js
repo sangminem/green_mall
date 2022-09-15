@@ -12,7 +12,7 @@ import swal from "sweetalert";
 import ProductList from "../components/ProductList";
 import ProductForm from "../components/ProductForm";
 
-const ProductMng = () => {
+const ProductMngPage = () => {
   // 상품정보
   const [productInfo, setProductInfo] = useState({
     product_nm: "",
@@ -182,4 +182,4 @@ const ProductMng = () => {
   );
 };
 
-export default ProductMng;
+export default ProductMngPage;
