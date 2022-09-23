@@ -7,7 +7,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
+import {Button} from "antd";
 import swal from "sweetalert";
 import ProductList from "../components/ProductList";
 import ProductForm from "../components/ProductForm";
@@ -16,10 +16,10 @@ import addComma from "../Utils";
 const ProductMngPage = () => {
   const SERVER_URL = "http://localhost:4000";
 
-  // 상품 리스트 (arr)
+  // 상품 리스트 []
   const [productList, setProductList] = useState([]);
 
-  // 상품 상세정보 (obj)
+  // 상품 상세정보 {}
   const [productDetail, setProductDetail] = useState({
     product_nm: "",
     product_summary: "",
@@ -169,10 +169,10 @@ const ProductMngPage = () => {
   };
 
   return (
-    <React.Fragment>
+    <Fragment>
       <Container>
         <div style={{ textAlign: "right", margin: "10px 0" }}>
-          <Button onClick={editProduct}>상품 등록</Button>
+          <Button type="primary" onClick={editProduct}>상품 등록</Button>
         </div>
 
         <ProductList
@@ -194,7 +194,7 @@ const ProductMngPage = () => {
           />
         )}
       </Container>
-    </React.Fragment>
+    </Fragment>
   );
 };
 
