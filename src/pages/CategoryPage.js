@@ -8,16 +8,14 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import addComma from "../Utils.js";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+import {Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import { IoHeartOutline } from "react-icons/io5";
 
 const CategoryPage = () => {
   const { id } = useParams();
   const [products, setProducts] = useState([]);
+
+  const [productCnt, setProductCnt] = useState(0);  // 상품 갯수
 
   useEffect(() => {
     getData();
@@ -46,6 +44,7 @@ const CategoryPage = () => {
         });
 
         setProducts(copy);
+        setProductCnt(copy.length);
       })
       .catch(function (err) {
         console.log(err);
@@ -54,20 +53,25 @@ const CategoryPage = () => {
 
   /**
    * 상품 정렬 기능
+   * @param sort_type (1: 낮은가격순, 2: 높은가격순, 3:최신등록순)
    */
-  const itemSort = function (gubun) {
+  const itemSort = function (sort_type) {
     let copy = [...products];
 
-    if (gubun === "low") {
-      // 낮은 가격순 정렬
-      copy.sort((a, b) => {
-        return parseFloat(a.item_price) - parseFloat(b.item_price);
-      });
-    } else {
-      // 높은 가격순 정렬
-      copy.sort((a, b) => {
-        return parseFloat(b.item_price) - parseFloat(a.item_price);
-      });
+    switch(sort_type) {
+      case 1: 
+        copy.sort((a, b) => {
+          return parseFloat(a.item_price) - parseFloat(b.item_price);
+        });
+        break;
+      case 2:
+        copy.sort((a, b) => {
+          return parseFloat(b.item_price) - parseFloat(a.item_price);
+        });
+        break;
+      default: 
+        console.log("default case");
+        break;
     }
 
     setProducts(copy);
@@ -76,11 +80,12 @@ const CategoryPage = () => {
   return (
     <Fragment>
       <Container>
+        총 {productCnt} 건 
         <DropdownButton id="dropdown-basic-button" title="정렬">
-          <Dropdown.Item onClick={() => itemSort("low")}>
+          <Dropdown.Item onClick={() => itemSort(1)}>
             낮은 가격순
           </Dropdown.Item>
-          <Dropdown.Item onClick={() => itemSort("high")}>
+          <Dropdown.Item onClick={() => itemSort(2)}>
             높은 가격순
           </Dropdown.Item>
         </DropdownButton>
