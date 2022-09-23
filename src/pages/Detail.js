@@ -1,12 +1,23 @@
-import React, { Component, Fragment } from 'react';
-import {Button, Stack, Container, Row, Col, Card} from 'react-bootstrap'
+import React, { Component, Fragment, useState } from 'react';
+import {Button, Stack, Container, Row, Col, Card, Modal} from 'react-bootstrap'
 import Image from 'react-bootstrap/Image'
 import styles from './../css/detail.module.css';
 import styled from 'styled-components';
 import Detailinfo from '../components/DetailInfo';
 import DeliverylInfo from '../components/deliveryInfo';
+import DetailPopup from '../popup/detailPopup';
 
-const Detail = () => {
+const Detail = (props) => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [cart, setCart] = useState(false);
+
+    const openModal = () => {
+        setModalOpen(true);
+    };
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
     return (
         <React.Fragment>
             <Container id='wrap'>
@@ -25,7 +36,9 @@ const Detail = () => {
                     </Stack>
                     <DeliverylInfo />
                     <div className="d-grid gap-2">
-                        <Button variant="secondary" size="lg">구매하기</Button>
+                        <Button variant="secondary" onClick={openModal}>구매하기</Button>
+                        <DetailPopup open={modalOpen} close={closeModal} cart={cart} header="장바구니 담기">
+                        </DetailPopup>
                     </div>
                     <Row className={`mt20 mb20 pt20`}>
                         <Col sm={2}><strong>상품 정보</strong></Col>
