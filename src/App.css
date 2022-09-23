@@ -37,6 +37,11 @@
 
 
 /* hy */
+button {
+  border: 0;
+  background: none;
+}
+
 .tit-lg {
   font-size: 18px; 
 }

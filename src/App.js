@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import {Button, Navbar, Container, Nav, NavDropdown, Row, Col} from 'react-bootstrap'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'antd/dist/antd.css';
 import {BrowserRouter, Route, Routes, useHistory} from "react-router-dom";
-import {useDispatch} from "react-redux";
 
 import MainPage from "./pages/MainPage";
 import CategoryPage from "./pages/CategoryPage";

@@ -8,14 +8,26 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import addComma from "../Utils.js";
-import {Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
+import { Dropdown, Menu, Space } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 import { IoHeartOutline } from "react-icons/io5";
 
+// 카테고리 페이지
 const CategoryPage = () => {
-  const { id } = useParams();
-  const [products, setProducts] = useState([]);
+  const { id } = useParams();   // 카테고리 id
+  const [products, setProducts] = useState([]);   // 상품 리스트 []
+  const [productCnt, setProductCnt] = useState(0);   // 상품 갯수 number
+  const [selected, setSelected] = useState("낮은가격순")    // 선택 정렬옵션
 
-  const [productCnt, setProductCnt] = useState(0);  // 상품 갯수
+  // 정렬 드롭다운 메뉴
+  const menu = (
+    <Menu items={[
+        { key: "1", label: (<a href="javascript:void(0)" onClick={() => itemSort(1)}>낮은가격순</a>), },
+        { key: "2", label: (<a href="javascript:void(0)" onClick={() => itemSort(2)}>높은가격순</a> ), },
+        { key: "3", label: (<a href="javascript:void(0)" onClick={() => itemSort(3)}>최신순</a> ), }
+      ]}/>
+  );
 
   useEffect(() => {
     getData();
@@ -53,42 +65,44 @@ const CategoryPage = () => {
 
   /**
    * 상품 정렬 기능
-   * @param sort_type (1: 낮은가격순, 2: 높은가격순, 3:최신등록순)
+   * @param sort_type (1: 낮은가격순, 2: 높은가격순, 3:최신순)
    */
   const itemSort = function (sort_type) {
     let copy = [...products];
 
-    switch(sort_type) {
-      case 1: 
+    switch (sort_type) {
+      case 1:
         copy.sort((a, b) => {
           return parseFloat(a.item_price) - parseFloat(b.item_price);
         });
+        setSelected("낮은가격순");
         break;
       case 2:
         copy.sort((a, b) => {
           return parseFloat(b.item_price) - parseFloat(a.item_price);
         });
+        setSelected("높은가격순");
         break;
-      default: 
+      default:
         console.log("default case");
         break;
     }
 
-    setProducts(copy);
+    setProducts(copy);    
   };
 
   return (
-    <Fragment>
+    <Fragment>     
       <Container>
-        총 {productCnt} 건 
-        <DropdownButton id="dropdown-basic-button" title="정렬">
-          <Dropdown.Item onClick={() => itemSort(1)}>
-            낮은 가격순
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => itemSort(2)}>
-            높은 가격순
-          </Dropdown.Item>
-        </DropdownButton>
+        총 {productCnt} 건
+        <Dropdown overlay={menu} trigger={["click"]}>
+          <a href="javascript:void(0)">
+            <Space>
+              {selected}
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
         <Row>
           {products.map((a, i) => {
             return (
