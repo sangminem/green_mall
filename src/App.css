@@ -37,6 +37,12 @@
 
 
 /* hy */
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 button {
   border: 0;
   background: none;
@@ -44,6 +50,7 @@ button {
 
 .tit-lg {
   font-size: 18px; 
+  font-weight: 500;
 }
 
 .tit-md {

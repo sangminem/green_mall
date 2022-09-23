@@ -8,29 +8,54 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import addComma from "../Utils.js";
-import { Container, Row, Col } from "react-bootstrap";
-import { Dropdown, Menu, Space } from "antd";
+import { Container } from "react-bootstrap";
+import { Row, Col, Dropdown, Menu, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { IoHeartOutline } from "react-icons/io5";
 
 // 카테고리 페이지
 const CategoryPage = () => {
-  const { id } = useParams();   // 카테고리 id
-  const [products, setProducts] = useState([]);   // 상품 리스트 []
-  const [productCnt, setProductCnt] = useState(0);   // 상품 갯수 number
-  const [selected, setSelected] = useState("낮은가격순")    // 선택 정렬옵션
+  const { id } = useParams(); // 카테고리 id
+  const [products, setProducts] = useState([]); // 상품 리스트 []
+  const [productCnt, setProductCnt] = useState(0); // 상품 갯수 number
+  const [selected, setSelected] = useState("낮은가격순"); // 선택 정렬옵션
+  const [cateTitle, setCateTitle] = useState("")    // 카테고리별 제목
 
   // 정렬 드롭다운 메뉴
   const menu = (
-    <Menu items={[
-        { key: "1", label: (<a href="javascript:void(0)" onClick={() => itemSort(1)}>낮은가격순</a>), },
-        { key: "2", label: (<a href="javascript:void(0)" onClick={() => itemSort(2)}>높은가격순</a> ), },
-        { key: "3", label: (<a href="javascript:void(0)" onClick={() => itemSort(3)}>최신순</a> ), }
-      ]}/>
+    <Menu
+      items={[
+        {
+          key: "1",
+          label: (
+            <a href="javascript:void(0)" onClick={() => itemSort(1)}>
+              낮은가격순
+            </a>
+          ),
+        },
+        {
+          key: "2",
+          label: (
+            <a href="javascript:void(0)" onClick={() => itemSort(2)}>
+              높은가격순
+            </a>
+          ),
+        },
+        {
+          key: "3",
+          label: (
+            <a href="javascript:void(0)" onClick={() => itemSort(3)}>
+              최신순
+            </a>
+          ),
+        },
+      ]}
+    />
   );
 
   useEffect(() => {
     getData();
+    pageTitle(id);
   }, [id]);
 
   const SERVER_URL = "http://localhost:4000";
@@ -88,26 +113,51 @@ const CategoryPage = () => {
         break;
     }
 
-    setProducts(copy);    
+    setProducts(copy);
   };
 
+   /**
+   * 카테고리별 제목 추가
+   * @param 
+   */
+    const pageTitle = function (id) {
+      let title = "";
+
+      switch(id) {
+        case "furniture":
+          title = "가구";
+          break;
+        case "plant":
+          title = "식물";
+          break;
+        default: 
+          break;
+      }
+
+      setCateTitle(title);      
+    };
+
+
   return (
-    <Fragment>     
+    <Fragment>
       <Container>
-        총 {productCnt} 건
-        <Dropdown overlay={menu} trigger={["click"]}>
-          <a href="javascript:void(0)">
-            <Space>
-              {selected}
-              <DownOutlined />
-            </Space>
-          </a>
-        </Dropdown>
-        <Row>
+        <p className="tit-lg">{cateTitle}</p>
+        <div className="flex">
+          <span>총 {productCnt} 개</span>
+          <Dropdown overlay={menu} trigger={["click"]}>
+            <a href="javascript:void(0)">
+              <Space>
+                {selected}
+                <DownOutlined />
+              </Space>
+            </a>
+          </Dropdown>          
+        </div>
+        <Row gutter={24}>
           {products.map((a, i) => {
             return (
-              <React.Fragment key={i}>
-                <Col xs={6} style={{ margin: "18px 0", padding: "0 15px" }}>
+              <Fragment key={i}>
+                <Col span={12} style={{ margin: "18px 0" }}>
                   {a.image !== "" ? (
                     <img
                       src={a.image}
@@ -142,7 +192,7 @@ const CategoryPage = () => {
                     <IoHeartOutline /> 0
                   </button>
                 </Col>
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </Row>
