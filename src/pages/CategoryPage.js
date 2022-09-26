@@ -145,12 +145,15 @@ const CategoryPage = () => {
    * 장바구니 모달
    * @param
    */
-  const showModal = function () {
+  const showModal = function (props) {
     setIsModalOpen(true);
+
+    console.log("props", props);
   };
 
   const handleOk = () => {
     setIsModalOpen(false);
+    setLocalItem();
   };
 
   const handleCancel = () => {
@@ -161,23 +164,36 @@ const CategoryPage = () => {
    * 장바구니 수량 계산
    * @param
    */
-  const addCount = function(type) {
-
-    count++;
-    
-    setCount(count);
-    let total = price * count;
-    setTotalPrice(total);
-  }
-
-  const minusCount = function() {
-
-    count--;
+  const calcCount = function(type) {
+    if(type === 1) {
+      count++;
+    } else {
+      count--;
+    }
 
     setCount(count);
     let total = price * count;
     setTotalPrice(total);
   }
+
+
+  /**
+   * 로컬스토리지에 담기
+   * @param
+   */
+  const setLocalItem = function() {
+    if (!localStorage.getItem("cart")) {
+      localStorage.setItem("cart", JSON.stringify([]));
+    } 
+
+    let newItem = localStorage.getItem("cart");
+    newItem = JSON.parse(newItem);
+
+    newItem.push({"count": count});
+
+    localStorage.setItem("cart", JSON.stringify(newItem));
+  }
+
 
 
   return (
@@ -233,19 +249,19 @@ const CategoryPage = () => {
                   >
                     <IoHeartOutline /> 0
                   </button>
-                  <button onClick={() => showModal(a.item_price)}>장바구니</button>
+                  <button onClick={() => showModal(a)}>장바구니</button>
                 </Col>
               </Fragment>
             );
           })}
         </Row>
       </Container>
-      <Modal title="장바구니" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <p className="tit-lg">금액계산</p>
+      <Modal title="장바구니 담기" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <p>상품명: </p>
         <p>가격: {price}</p>
-        <button onClick={addCount}>+</button>  
+        <button onClick={() => {calcCount(1)}}>+</button>  
         <p>수량: {count}</p>
-        <button onClick={minusCount}>-</button>
+        <button onClick={() => {calcCount(2)}}>-</button>
 
         <p>총금액: {totalPrice}</p>
       </Modal>
