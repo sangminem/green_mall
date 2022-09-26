@@ -9,17 +9,21 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import addComma from "../Utils.js";
 import { Container } from "react-bootstrap";
-import { Row, Col, Dropdown, Menu, Space } from "antd";
+import { Row, Col, Dropdown, Menu, Space, Modal } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { IoHeartOutline } from "react-icons/io5";
 
 // 카테고리 페이지
 const CategoryPage = () => {
-  const { id } = useParams(); // 카테고리 id
-  const [products, setProducts] = useState([]); // 상품 리스트 []
-  const [productCnt, setProductCnt] = useState(0); // 상품 갯수 number
-  const [selected, setSelected] = useState("낮은가격순"); // 선택 정렬옵션
-  const [cateTitle, setCateTitle] = useState("")    // 카테고리별 제목
+  let { id } = useParams(); // 카테고리 id
+  let [products, setProducts] = useState([]); // 상품 리스트 []
+  let [productCnt, setProductCnt] = useState(0); // 상품 갯수 number
+  let [selected, setSelected] = useState("낮은가격순"); // 선택 정렬옵션
+  let [cateTitle, setCateTitle] = useState(""); // 카테고리별 제목
+  let [isModalOpen, setIsModalOpen] = useState(false);    // 모달 오픈
+  let [price, setPrice] = useState(9000);   // 가격
+  let [count, setCount] = useState(1);  // 수량
+  let [totalPrice, setTotalPrice] =  useState(9000);  // 총금액
 
   // 정렬 드롭다운 메뉴
   const menu = (
@@ -116,26 +120,64 @@ const CategoryPage = () => {
     setProducts(copy);
   };
 
-   /**
+  /**
    * 카테고리별 제목 추가
-   * @param 
+   * @param
    */
-    const pageTitle = function (id) {
-      let title = "";
+  const pageTitle = function (id) {
+    let title = "";
 
-      switch(id) {
-        case "furniture":
-          title = "🛋가구";
-          break;
-        case "plant":
-          title = "🪴식물/데코";
-          break;
-        default: 
-          break;
-      }
+    switch (id) {
+      case "furniture":
+        title = "🛋가구";
+        break;
+      case "plant":
+        title = "🪴식물/데코";
+        break;
+      default:
+        break;
+    }
 
-      setCateTitle(title);      
-    };
+    setCateTitle(title);
+  };
+
+  /**
+   * 장바구니 모달
+   * @param
+   */
+  const showModal = function () {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  /**
+   * 장바구니 수량 계산
+   * @param
+   */
+  const addCount = function(type) {
+
+    count++;
+    
+    setCount(count);
+    let total = price * count;
+    setTotalPrice(total);
+  }
+
+  const minusCount = function() {
+
+    count--;
+
+    setCount(count);
+    let total = price * count;
+    setTotalPrice(total);
+  }
 
 
   return (
@@ -151,7 +193,7 @@ const CategoryPage = () => {
                 <DownOutlined />
               </Space>
             </a>
-          </Dropdown>          
+          </Dropdown>
         </div>
         <Row gutter={24}>
           {products.map((a, i) => {
@@ -191,12 +233,22 @@ const CategoryPage = () => {
                   >
                     <IoHeartOutline /> 0
                   </button>
+                  <button onClick={() => showModal(a.item_price)}>장바구니</button>
                 </Col>
               </Fragment>
             );
           })}
         </Row>
       </Container>
+      <Modal title="장바구니" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <p className="tit-lg">금액계산</p>
+        <p>가격: {price}</p>
+        <button onClick={addCount}>+</button>  
+        <p>수량: {count}</p>
+        <button onClick={minusCount}>-</button>
+
+        <p>총금액: {totalPrice}</p>
+      </Modal>
     </Fragment>
   );
 };
