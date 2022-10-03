@@ -30,20 +30,9 @@ const ProductMngPage = () => {
     detail_content: "",
   });
 
-  const [content, setContent] = useState("");
+  const [img, setImg] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImg, setPreviewImg] = useState(null);
-
-  const validateMessages = {
-    required: "${label} 은 필수입력항목입니다.",
-    types: {
-      email: "${label} is not a valid email!",
-      number: "${label} is not a valid number!",
-    },
-    number: {
-      range: "${label} must be between ${min} and ${max}",
-    },
-  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -77,7 +66,7 @@ const ProductMngPage = () => {
         let data = res.data;
 
         for (let key in data) {
-          data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
+          data[key].IMAGE = `${SERVER_URL}/images/` + data[key].IMAGE; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
         }
 
         setProductList(res.data);
@@ -104,7 +93,7 @@ const ProductMngPage = () => {
       .then(function (res) {
         let data = res.data;
 
-        data.image = `${SERVER_URL}/images/` + data.image;
+        data.IMAGE = `${SERVER_URL}/images/` + data.IMAGE;
 
         setProductDetail(data);
       })
@@ -126,7 +115,7 @@ const ProductMngPage = () => {
 
     const formData = new FormData();
     formData.append("productDetail", JSON.stringify(productDetail));
-    formData.append("img", content);
+    formData.append("img", img);
 
     axios
       .post(url, formData)
@@ -216,7 +205,7 @@ const ProductMngPage = () => {
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
-          width={750}
+          width={700}
           footer={[
             <Button type="primary" key="submit" onClick={registerItem}>
               등록
@@ -233,20 +222,32 @@ const ProductMngPage = () => {
             }}
             autoComplete="off"
           >
+            <Form.Item label="카테고리">
+              <Input name="category" onChange={getValue} />
+            </Form.Item>
             <Form.Item label="상품명">
               <Input name="product_nm" onChange={getValue} />
             </Form.Item>
             <Form.Item label="대표이미지">
-              <img
-                src={productDetail.image}
-                style={{ width: "120px", border: "1px solid #ccc" }}
-                alt=""
-              />
+              {previewImg ? (
+                <img
+                  src={previewImg}
+                  style={{ width: "120px", border: "1px solid #ccc" }}
+                  alt=""
+                />
+              ) : (
+                <img
+                  src={process.env.PUBLIC_URL + "/noimg2.png"}
+                  alt=""
+                  style={{ width: "120px", border: "1px solid #ccc" }}
+                />
+              )}
+
               <Input
                 type="file"
                 onChange={(e) => {
                   onChangeImage(e.target.files[0]);
-                  setContent(e.target.files[0]);
+                  setImg(e.target.files[0]);
                 }}
               />
             </Form.Item>
