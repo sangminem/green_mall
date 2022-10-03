@@ -7,7 +7,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
-import {Button} from "antd";
+import {Button, Modal} from "antd";
 import swal from "sweetalert";
 import ProductList from "../components/ProductList";
 import ProductForm from "../components/ProductForm";
@@ -182,7 +182,7 @@ const ProductMngPage = () => {
           editProduct={editProduct}
         />
 
-        {isModalOpen && (
+        {/* {isModalOpen && (
           <ProductForm
             productDetail={productDetail}
             registerItem={registerItem}
@@ -192,7 +192,11 @@ const ProductMngPage = () => {
             previewImg={previewImg}
             onChangeImage={onChangeImage}
           />
-        )}
+        )} */}
+
+      <Modal
+        title="장바구니 담기"       
+      />
       </Container>
     </Fragment>
   );
