@@ -225,7 +225,7 @@ const ProductMngPage = () => {
             <Form.Item label="카테고리">
               <Radio.Group name="category" onChange={getValue}>
                 <Radio value="furniture">가구</Radio>
-                <Radio value="plant">식물/데코</Radio>                
+                <Radio value="plant">식물/데코</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item label="상품명">
@@ -261,29 +261,12 @@ const ProductMngPage = () => {
               <Input name="discounted_rate" type="number" onChange={getValue} />
             </Form.Item>
             <Form.Item label="배송구분">
-              <Input name="delivery_dvsn" onChange={getValue} />
+              <Radio.Group name="delivery_dvsn" onChange={getValue}>
+                <Radio value="일반배송">일반배송</Radio>
+                <Radio value="새벽배송">새벽배송</Radio>
+              </Radio.Group>
             </Form.Item>
           </Form>
-
-          {/* <Select
-            defaultValue="furniture"
-            name="category"
-            style={{
-              width: 120,
-            }}
-            onChange={getValue}
-          >
-            <Option value="furniture">가구</Option>
-            <Option value="plant">식물/데코</Option>            
-          </Select> */}
-
-          {/* <Input
-            placeholder="카테고리"
-            type="text"
-            name="category"
-            value={productDetail.category}
-            onChange={getValue}
-          /> */}
         </Modal>
       </Container>
     </Fragment>

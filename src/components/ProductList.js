@@ -6,66 +6,44 @@
 
 import React, { Fragment, useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
+import { Space, Table } from "antd";
+import addComma from "../Utils";
+const { Column, ColumnGroup } = Table;
 
 const ProductList = (props) => {
   useEffect(() => {}, []);
 
   const productList = props.productList;
 
+  const columns = [
+    {
+      title: "대표이미지",
+      dataIndex: "IMAGE",
+      key: "IMAGE",
+      render: (text) => <img src={text} alt="" style={{width: "60px", borderRadius: "5px"}}/>,
+    },
+    {
+      title: "상품명",
+      dataIndex: "PRODUCT_NM",
+      key: "PRODUCT_NM",      
+    },
+    {
+      title: "상품가격",
+      dataIndex: "SALE_PRICE",
+      key: "SALE_PRICE",
+      render: (text) => addComma(text),
+    },
+    {
+      title: "카테고리",
+      dataIndex: "CATEGORY",
+      key: "CATEGORY",      
+    },
+  ];
+
   return (
     <React.Fragment>
       <Container>
-        <div className="tbl">
-          <table>
-            <thead>
-              <tr>
-                <th style={{ width: "15%" }}>대표이미지</th>
-                <th style={{ width: "40%" }}>상품명</th>
-                <th style={{ width: "15%" }}>상품가격</th>
-                <th style={{ width: "15%" }}>카테고리</th>
-                <th style={{ width: "15%" }}>변경</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productList.map((a, i) => {
-                return (
-                  <React.Fragment key={i}>
-                    <tr>
-                      <td style={{ width: "15%" }}>
-                        {a.image !== "" ? (
-                          <img
-                            src={a.image}
-                            alt=""
-                            style={{ width: "70px", borderRadius: "12px" }}
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </td>
-                      <td style={{ width: "40%" }}>{a.product_nm}</td>
-                      <td style={{ width: "15%", textAlign: "right" }}>
-                        {props.addComma(a.item_price)} 원
-                      </td>
-                      <td style={{ width: "15%", textAlign: "center" }}>
-                        {a.category}
-                      </td>
-                      <td style={{ width: "15%" }}>
-                        <props.Button
-                          variant="light"
-                          onClick={() => {
-                            props.editProduct(a.product_id);
-                          }}
-                        >
-                          수정
-                        </props.Button>
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <Table columns={columns} dataSource={productList} />
       </Container>
     </React.Fragment>
   );
