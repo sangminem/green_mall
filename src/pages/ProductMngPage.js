@@ -34,11 +34,15 @@ const ProductMngPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImg, setPreviewImg] = useState(null);
 
-  const [value, setValue] = useState("furniture");
-
-  const onChange = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
+  const validateMessages = {
+    required: "${label} 은 필수입력항목입니다.",
+    types: {
+      email: "${label} is not a valid email!",
+      number: "${label} is not a valid number!",
+    },
+    number: {
+      range: "${label} must be between ${min} and ${max}",
+    },
   };
 
   const showModal = () => {
@@ -212,6 +216,7 @@ const ProductMngPage = () => {
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
+          width={750}
         >
           <Form
             name="basic"
@@ -219,12 +224,34 @@ const ProductMngPage = () => {
               span: 4,
             }}
             wrapperCol={{
-              span: 20,
+              span: 18,
             }}
             autoComplete="off"
           >
-            <Form.Item label="상품명">
+            <Form.Item
+              label="상품명"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+            >
               <Input name="product_nm" onChange={getValue} />
+            </Form.Item>
+            <Form.Item label="대표이미지">
+              <img
+                src={productDetail.image}
+                style={{ width: "120px", border: "1px solid #ccc" }}
+                alt=""
+              />
+              <Input
+                type="file"
+                onChange={(e) => {
+                  onChangeImage(e.target.files[0]);
+                  setContent(e.target.files[0]);
+                }}
+              />
             </Form.Item>
             <Form.Item label="상품가격">
               <Input name="sale_price" type="number" onChange={getValue} />
@@ -237,7 +264,7 @@ const ProductMngPage = () => {
             </Form.Item>
           </Form>
 
-          <img
+          {/* <img
             src={productDetail.image}
             style={{ width: "120px", border: "1px solid #ccc" }}
             alt=""
@@ -248,7 +275,7 @@ const ProductMngPage = () => {
               onChangeImage(e.target.files[0]);
               setContent(e.target.files[0]);
             }}
-          />
+          /> */}
           {/* <Select
             defaultValue="furniture"
             name="category"
