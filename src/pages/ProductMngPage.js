@@ -7,11 +7,16 @@
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
-import {Button, Modal} from "antd";
+import { Button, Input, Select, Modal } from "antd";
 import swal from "sweetalert";
 import ProductList from "../components/ProductList";
 import ProductForm from "../components/ProductForm";
 import addComma from "../Utils";
+const { Option } = Select;
+
+const handleChange = (value) => {
+  console.log(`selected ${value}`);
+};
 
 const ProductMngPage = () => {
   const SERVER_URL = "http://localhost:4000";
@@ -31,6 +36,18 @@ const ProductMngPage = () => {
   const [content, setContent] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImg, setPreviewImg] = useState(null);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   // 처음 렌더링 시 실행
   useEffect(() => {
@@ -172,7 +189,9 @@ const ProductMngPage = () => {
     <Fragment>
       <Container>
         <div style={{ textAlign: "right", margin: "10px 0" }}>
-          <Button type="primary" onClick={editProduct}>상품 등록</Button>
+          <Button type="primary" onClick={editProduct}>
+            상품 등록
+          </Button>
         </div>
 
         <ProductList
@@ -182,21 +201,77 @@ const ProductMngPage = () => {
           editProduct={editProduct}
         />
 
-        {/* {isModalOpen && (
-          <ProductForm
-            productDetail={productDetail}
-            registerItem={registerItem}
-            getValue={getValue}
-            setContent={setContent}
-            setIsModalOpen={setIsModalOpen}
-            previewImg={previewImg}
-            onChangeImage={onChangeImage}
+        <Modal
+          title="상품 등록"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          <img
+            src={productDetail.image}
+            style={{ width: "120px", border: "1px solid #ccc" }}
+            alt=""
+          ></img>
+          <input
+            type="file"
+            onChange={(e) => {
+              onChangeImage(e.target.files[0]);
+              setContent(e.target.files[0]);
+            }}
           />
-        )} */}
+          <Select
+            defaultValue="furniture"
+            style={{
+              width: 120,
+            }}
+            onChange={handleChange}
+          >
+            <Option value="furniture">가구</Option>
+            <Option value="plant">식물/데코</Option>            
+          </Select>
 
-      <Modal
-        title="장바구니 담기"       
-      />
+          <Input
+            placeholder="상품명"
+            type="text"
+            name="product_nm"
+            value={productDetail.product_nm}
+            onChange={getValue}
+          />
+          <Input
+            placeholder="상품요약명"
+            type="text"
+            name="product_summary"
+            value={productDetail.product_summary}
+            onChange={getValue}
+          />
+          <Input
+            placeholder="상품가격"
+            type="number"
+            name="sale_price"
+            value={productDetail.sale_price}
+            onChange={getValue}
+          />
+          <Input
+            placeholder="할인율"
+            type="number"
+            name="discounted_rate"
+            value={productDetail.discounted_rate}
+            onChange={getValue}
+          />
+
+          <Button onClick={registerItem} style={{ margin: "16px 0" }}>
+            상품 등록
+          </Button>
+          <Button
+            variant="light"
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+            style={{ margin: "16px 6px" }}
+          >
+            취소
+          </Button>
+        </Modal>
       </Container>
     </Fragment>
   );
