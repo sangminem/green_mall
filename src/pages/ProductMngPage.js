@@ -7,7 +7,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
-import { Button, Input, Select, Radio, Modal } from "antd";
+import { Button, Input, Select, Form, Radio, Modal } from "antd";
 import swal from "sweetalert";
 import ProductList from "../components/ProductList";
 import ProductForm from "../components/ProductForm";
@@ -213,6 +213,30 @@ const ProductMngPage = () => {
           onOk={handleOk}
           onCancel={handleCancel}
         >
+          <Form
+            name="basic"
+            labelCol={{
+              span: 4,
+            }}
+            wrapperCol={{
+              span: 20,
+            }}
+            autoComplete="off"
+          >
+            <Form.Item label="상품명">
+              <Input name="product_nm" onChange={getValue} />
+            </Form.Item>
+            <Form.Item label="상품가격">
+              <Input name="sale_price" type="number" onChange={getValue} />
+            </Form.Item>
+            <Form.Item label="할인율">
+              <Input name="discounted_rate" type="number" onChange={getValue} />
+            </Form.Item>
+            <Form.Item label="배송구분">
+              <Input name="delivery_dvsn" onChange={getValue} />
+            </Form.Item>
+          </Form>
+
           <img
             src={productDetail.image}
             style={{ width: "120px", border: "1px solid #ccc" }}
@@ -237,7 +261,6 @@ const ProductMngPage = () => {
             <Option value="plant">식물/데코</Option>            
           </Select> */}
 
-
           {/* <Input
             placeholder="카테고리"
             type="text"
@@ -245,27 +268,6 @@ const ProductMngPage = () => {
             value={productDetail.category}
             onChange={getValue}
           /> */}
-          <Input
-            placeholder="상품명"
-            type="text"
-            name="product_nm"
-            value={productDetail.product_nm}
-            onChange={getValue}
-          />
-          <Input
-            placeholder="상품가격"
-            type="number"
-            name="sale_price"
-            value={productDetail.sale_price}
-            onChange={getValue}
-          />
-          <Input
-            placeholder="할인율"
-            type="number"
-            name="discounted_rate"
-            value={productDetail.discounted_rate}
-            onChange={getValue}
-          />
 
           <Button onClick={registerItem} style={{ margin: "16px 0" }}>
             상품 등록
