@@ -20,12 +20,14 @@ const ProductList = (props) => {
       title: "대표이미지",
       dataIndex: "IMAGE",
       key: "IMAGE",
-      render: (text) => <img src={text} alt="" style={{width: "60px", borderRadius: "5px"}}/>,
+      render: (text) => (
+        <img src={text} alt="" style={{ width: "60px", borderRadius: "5px" }} />
+      ),
     },
     {
       title: "상품명",
       dataIndex: "PRODUCT_NM",
-      key: "PRODUCT_NM",      
+      key: "PRODUCT_NM",
     },
     {
       title: "상품가격",
@@ -36,15 +38,22 @@ const ProductList = (props) => {
     {
       title: "카테고리",
       dataIndex: "CATEGORY",
-      key: "CATEGORY",      
+      key: "CATEGORY",
     },
   ];
 
   return (
     <React.Fragment>
-      <Container>
-        <Table columns={columns} dataSource={productList} />
-      </Container>
+      <Table
+        columns={columns}
+        dataSource={productList}
+        pagination={{
+          pageSize: 15,
+        }}
+        scroll={{
+          y: 540,
+        }}
+      />
     </React.Fragment>
   );
 };
