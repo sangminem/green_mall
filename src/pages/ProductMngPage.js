@@ -26,11 +26,12 @@ const ProductMngPage = () => {
 
   // 상품 상세정보 {}
   const [productDetail, setProductDetail] = useState({
-    product_nm: "",
-    product_summary: "",
-    item_price: "",
     category: "",
-    brand_nm: "",
+    product_nm: "",
+    sale_price: "",
+    discounted_rate: "",
+    delivery_dvsn: "",
+    detail_content: ""
   });
 
   const [content, setContent] = useState("");
@@ -158,6 +159,8 @@ const ProductMngPage = () => {
       ...productDetail,
       [name]: value,
     });
+
+    console.log(productDetail);
   };
 
   // 상품 등록/수정 버튼 클릭시
@@ -219,29 +222,30 @@ const ProductMngPage = () => {
               setContent(e.target.files[0]);
             }}
           />
-          <Select
+          {/* <Select
             defaultValue="furniture"
+            name="category"
             style={{
               width: 120,
             }}
-            onChange={handleChange}
+            onChange={getValue}
           >
             <Option value="furniture">가구</Option>
             <Option value="plant">식물/데코</Option>            
-          </Select>
+          </Select> */}
 
+          <Input
+            placeholder="카테고리"
+            type="text"
+            name="category"
+            value={productDetail.category}
+            onChange={getValue}
+          />
           <Input
             placeholder="상품명"
             type="text"
             name="product_nm"
             value={productDetail.product_nm}
-            onChange={getValue}
-          />
-          <Input
-            placeholder="상품요약명"
-            type="text"
-            name="product_summary"
-            value={productDetail.product_summary}
             onChange={getValue}
           />
           <Input

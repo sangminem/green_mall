@@ -107,7 +107,7 @@ app.post("/api/register", upload.single("img"), (req, res) => {
   const data =  JSON.parse(req.body.productDetail);   
 
   const insertData = [];
-  const sqlQuery = "INSERT INTO TBGM_PRODUCT (PRODUCT_NM, PRODUCT_SUMMARY, ITEM_PRICE, CATEGORY, BRAND_NM, IMAGE, RGST_DATE) VALUES (?, ?, ?, ?, ?, ?, NOW())";
+  const sqlQuery = "INSERT INTO TBGM_PRODUCT (CATEGORY, PRODUCT_NM, SALE_PRICE, DISCOUNTED_RATE, DELIVERY_DVSN, DETAIL_CONTENT, IMAGE, RGST_DATE) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
 
   for (let key in data) {
     insertData.push(data[key]);
