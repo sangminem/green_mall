@@ -217,6 +217,11 @@ const ProductMngPage = () => {
           onOk={handleOk}
           onCancel={handleCancel}
           width={750}
+          footer={[
+            <Button type="primary" key="submit" onClick={registerItem}>
+              등록
+            </Button>,
+          ]}
         >
           <Form
             name="basic"
@@ -228,15 +233,7 @@ const ProductMngPage = () => {
             }}
             autoComplete="off"
           >
-            <Form.Item
-              label="상품명"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your username!",
-                },
-              ]}
-            >
+            <Form.Item label="상품명">
               <Input name="product_nm" onChange={getValue} />
             </Form.Item>
             <Form.Item label="대표이미지">
@@ -264,18 +261,6 @@ const ProductMngPage = () => {
             </Form.Item>
           </Form>
 
-          {/* <img
-            src={productDetail.image}
-            style={{ width: "120px", border: "1px solid #ccc" }}
-            alt=""
-          ></img>
-          <input
-            type="file"
-            onChange={(e) => {
-              onChangeImage(e.target.files[0]);
-              setContent(e.target.files[0]);
-            }}
-          /> */}
           {/* <Select
             defaultValue="furniture"
             name="category"
@@ -295,19 +280,6 @@ const ProductMngPage = () => {
             value={productDetail.category}
             onChange={getValue}
           /> */}
-
-          <Button onClick={registerItem} style={{ margin: "16px 0" }}>
-            상품 등록
-          </Button>
-          <Button
-            variant="light"
-            onClick={() => {
-              setIsModalOpen(false);
-            }}
-            style={{ margin: "16px 6px" }}
-          >
-            취소
-          </Button>
         </Modal>
       </Container>
     </Fragment>

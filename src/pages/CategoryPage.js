@@ -76,12 +76,12 @@ const CategoryPage = () => {
         let data = res.data;
 
         for (let key in data) {
-          data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
+          data[key].IMAGE = `${SERVER_URL}/images/` + data[key].IMAGE; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
         }
 
         // 상품의 카테고리와 useParam의 id가 일치하는 리스트만 담기
         let copy = data.filter((item) => {
-          return item.category === id;
+          return item.CATEGORY === id;
         });
 
         setProducts(copy);
@@ -102,13 +102,13 @@ const CategoryPage = () => {
     switch (sort_type) {
       case 1:
         copy.sort((a, b) => {
-          return parseFloat(a.item_price) - parseFloat(b.item_price);
+          return parseFloat(a.SALE_PRICE) - parseFloat(b.SALE_PRICE);
         });
         setSelected("낮은가격순");
         break;
       case 2:
         copy.sort((a, b) => {
-          return parseFloat(b.item_price) - parseFloat(a.item_price);
+          return parseFloat(b.SALE_PRICE) - parseFloat(a.SALE_PRICE);
         });
         setSelected("높은가격순");
         break;
@@ -216,25 +216,16 @@ const CategoryPage = () => {
             return (
               <Fragment key={i}>
                 <Col span={12} style={{ margin: "18px 0" }}>
-                  {a.image !== "" ? (
+                  {a.IMAGE !== "" ? (
                     <img
-                      src={a.image}
+                      src={a.IMAGE}
                       alt=""
                       style={{ width: "100%", borderRadius: "12px" }}
                     />
                   ) : (
                     ""
-                  )}
-                  <p
-                    style={{
-                      fontSize: "12px",
-                      margin: "10px 0 6px",
-                      color: "#555",
-                    }}
-                  >
-                    {a.brand_nm}
-                  </p>
-                  <h4 style={{ fontSize: "14px" }}>{a.product_nm}</h4>
+                  )}                  
+                  <h4 style={{ fontSize: "14px" }}>{a.PRODUCT_NM}</h4>
                   <span
                     style={{
                       fontSize: "16px",
@@ -242,7 +233,7 @@ const CategoryPage = () => {
                       color: "#27ae60",
                     }}
                   >
-                    {addComma(a.item_price)} 원
+                    {addComma(a.SALE_PRICE)} 원
                   </span>
                   <button
                     style={{ border: 0, background: "none", fontSize: "13px" }}
