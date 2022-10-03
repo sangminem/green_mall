@@ -7,16 +7,12 @@
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
-import { Button, Input, Select, Modal } from "antd";
+import { Button, Input, Select, Radio, Modal } from "antd";
 import swal from "sweetalert";
 import ProductList from "../components/ProductList";
 import ProductForm from "../components/ProductForm";
 import addComma from "../Utils";
 const { Option } = Select;
-
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
 
 const ProductMngPage = () => {
   const SERVER_URL = "http://localhost:4000";
@@ -31,12 +27,19 @@ const ProductMngPage = () => {
     sale_price: "",
     discounted_rate: "",
     delivery_dvsn: "",
-    detail_content: ""
+    detail_content: "",
   });
 
   const [content, setContent] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImg, setPreviewImg] = useState(null);
+
+  const [value, setValue] = useState("furniture");
+
+  const onChange = (e) => {
+    console.log("radio checked", e.target.value);
+    setValue(e.target.value);
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -234,13 +237,14 @@ const ProductMngPage = () => {
             <Option value="plant">식물/데코</Option>            
           </Select> */}
 
-          <Input
+
+          {/* <Input
             placeholder="카테고리"
             type="text"
             name="category"
             value={productDetail.category}
             onChange={getValue}
-          />
+          /> */}
           <Input
             placeholder="상품명"
             type="text"
