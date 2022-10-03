@@ -223,7 +223,10 @@ const ProductMngPage = () => {
             autoComplete="off"
           >
             <Form.Item label="카테고리">
-              <Input name="category" onChange={getValue} />
+              <Radio.Group name="category" onChange={getValue}>
+                <Radio value="furniture">가구</Radio>
+                <Radio value="plant">식물/데코</Radio>                
+              </Radio.Group>
             </Form.Item>
             <Form.Item label="상품명">
               <Input name="product_nm" onChange={getValue} />
