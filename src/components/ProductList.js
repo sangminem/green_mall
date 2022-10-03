@@ -14,6 +14,7 @@ const ProductList = (props) => {
   useEffect(() => {}, []);
 
   const productList = props.productList;
+  const editProduct = props.editProduct;
 
   const columns = [
     {
@@ -39,6 +40,12 @@ const ProductList = (props) => {
       title: "카테고리",
       dataIndex: "CATEGORY",
       key: "CATEGORY",
+    },
+    {
+      title: '변경',
+      dataIndex: '',
+      key: 'x',
+      render: (text) => <button onClick={() => {editProduct(text.PRODUCT_ID)}}>수정</button>,
     },
   ];
 

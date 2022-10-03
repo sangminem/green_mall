@@ -34,10 +34,6 @@ const ProductMngPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImg, setPreviewImg] = useState(null);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -165,8 +161,14 @@ const ProductMngPage = () => {
 
     if (typeof idx == "number") {
       getProductDetail(idx);
+
+      console.log("수정");
     } else {
+      setProductDetail("");
+      console.log("등록");
     }
+
+    console.log(productDetail);
   };
 
   // 이미지 업로드시 이미지 프리뷰
@@ -223,13 +225,21 @@ const ProductMngPage = () => {
             autoComplete="off"
           >
             <Form.Item label="카테고리">
-              <Radio.Group name="category" onChange={getValue} value="furniture">
+              <Radio.Group
+                name="category"
+                onChange={getValue}
+                value="furniture"
+              >
                 <Radio value="furniture">가구</Radio>
                 <Radio value="plant">식물/데코</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item label="상품명">
-              <Input name="product_nm" onChange={getValue} />
+              <Input
+                name="product_nm"
+                value={productDetail.PRODUCT_NM}
+                onChange={getValue}
+              />
             </Form.Item>
             <Form.Item label="대표이미지">
               {previewImg ? (
@@ -261,7 +271,7 @@ const ProductMngPage = () => {
               <Input name="discounted_rate" type="number" onChange={getValue} />
             </Form.Item>
             <Form.Item label="배송구분">
-              <Radio.Group name="delivery_dvsn" onChange={getValue} value="일반배송">
+              <Radio.Group name="delivery_dvsn" onChange={getValue}>
                 <Radio value="일반배송">일반배송</Radio>
                 <Radio value="새벽배송">새벽배송</Radio>
               </Radio.Group>
