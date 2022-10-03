@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import addComma from "../Utils.js";
 import { Container } from "react-bootstrap";
-import { Row, Col, Dropdown, Menu, Space, Modal, Spin } from "antd";
+import { Row, Col, Dropdown, Menu, Space, Modal, Tag, Spin } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { IoHeartOutline } from "react-icons/io5";
 
@@ -226,7 +226,7 @@ const CategoryPage = () => {
                     ""
                   )}                  
                   <h4 style={{ fontSize: "14px" }}>{a.PRODUCT_NM}</h4>
-                  <span
+                  <p
                     style={{
                       fontSize: "16px",
                       fontWeight: 700,
@@ -234,8 +234,8 @@ const CategoryPage = () => {
                     }}
                   >
                     {addComma(a.SALE_PRICE)} 원
-                  </span>
-                  <p>{a.DELIVERY_DVSN}</p>
+                  </p>
+                  <Tag color="blue">{a.DELIVERY_DVSN}</Tag>
                   <button
                     style={{ border: 0, background: "none", fontSize: "13px" }}
                   >

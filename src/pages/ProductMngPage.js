@@ -92,6 +92,8 @@ const ProductMngPage = () => {
         data.IMAGE = `${SERVER_URL}/images/` + data.IMAGE;
 
         setProductDetail(data);
+
+        console.log(data);
       })
       .catch(function (err) {
         console.log(err);
@@ -233,8 +235,7 @@ const ProductMngPage = () => {
           >
             <Form.Item label="카테고리">
               <Radio.Group
-                name="category"
-                value={productDetail.CATEGORY}
+                name="category"                
                 onChange={getValue}                
               >
                 <Radio value="furniture">가구</Radio>
@@ -243,8 +244,7 @@ const ProductMngPage = () => {
             </Form.Item>
             <Form.Item label="상품명">
               <Input
-                name="product_nm"
-                value={productDetail.PRODUCT_NM}
+                name="product_nm"                
                 onChange={getValue}
               />
             </Form.Item>
@@ -264,7 +264,7 @@ const ProductMngPage = () => {
               )}
 
               <Input
-                type="file"
+                type="file"                
                 onChange={(e) => {
                   onChangeImage(e.target.files[0]);
                   setImg(e.target.files[0]);
@@ -274,23 +274,20 @@ const ProductMngPage = () => {
             <Form.Item label="상품가격">
               <Input
                 name="sale_price"
-                type="number"
-                value={productDetail.SALE_PRICE}
+                type="number"                
                 onChange={getValue}
               />
             </Form.Item>
             <Form.Item label="할인율">
               <Input
                 name="discounted_rate"
-                type="number"
-                value={productDetail.DISCOUNTED_RATE}
+                type="number"                
                 onChange={getValue}
               />
             </Form.Item>
             <Form.Item label="배송구분">
               <Radio.Group
-                name="delivery_dvsn"
-                value={productDetail.DELIVERY_DVSN}
+                name="delivery_dvsn"                
                 onChange={getValue}
               >
                 <Radio value="일반배송">일반배송</Radio>
