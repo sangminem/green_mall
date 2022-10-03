@@ -164,7 +164,14 @@ const ProductMngPage = () => {
 
       console.log("수정");
     } else {
-      setProductDetail("");
+      setProductDetail({
+        category: "",
+        product_nm: "",
+        sale_price: "",
+        discounted_rate: "",
+        delivery_dvsn: "",
+        detail_content: "",
+      });
       console.log("등록");
     }
 
@@ -227,8 +234,8 @@ const ProductMngPage = () => {
             <Form.Item label="카테고리">
               <Radio.Group
                 name="category"
-                onChange={getValue}
-                value="furniture"
+                value={productDetail.CATEGORY}
+                onChange={getValue}                
               >
                 <Radio value="furniture">가구</Radio>
                 <Radio value="plant">식물/데코</Radio>
@@ -265,13 +272,27 @@ const ProductMngPage = () => {
               />
             </Form.Item>
             <Form.Item label="상품가격">
-              <Input name="sale_price" type="number" onChange={getValue} />
+              <Input
+                name="sale_price"
+                type="number"
+                value={productDetail.SALE_PRICE}
+                onChange={getValue}
+              />
             </Form.Item>
             <Form.Item label="할인율">
-              <Input name="discounted_rate" type="number" onChange={getValue} />
+              <Input
+                name="discounted_rate"
+                type="number"
+                value={productDetail.DISCOUNTED_RATE}
+                onChange={getValue}
+              />
             </Form.Item>
             <Form.Item label="배송구분">
-              <Radio.Group name="delivery_dvsn" onChange={getValue}>
+              <Radio.Group
+                name="delivery_dvsn"
+                value={productDetail.DELIVERY_DVSN}
+                onChange={getValue}
+              >
                 <Radio value="일반배송">일반배송</Radio>
                 <Radio value="새벽배송">새벽배송</Radio>
               </Radio.Group>

@@ -235,6 +235,7 @@ const CategoryPage = () => {
                   >
                     {addComma(a.SALE_PRICE)} 원
                   </span>
+                  <p>{a.DELIVERY_DVSN}</p>
                   <button
                     style={{ border: 0, background: "none", fontSize: "13px" }}
                   >
