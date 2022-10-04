@@ -11,7 +11,6 @@ import { Button, Input, Form, Radio, Modal, message } from "antd";
 import ProductList from "../components/ProductList";
 import addComma from "../Utils";
 
-
 const ProductMngPage = () => {
   const SERVER_URL = "http://localhost:4000";
 
@@ -34,6 +33,7 @@ const ProductMngPage = () => {
   const [img, setImg] = useState("");
   const [previewImg, setPreviewImg] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editYn, setEditYn] = useState(false);
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -74,29 +74,21 @@ const ProductMngPage = () => {
   };
 
   /**
-   * 상품 상세정보 가져오기
+   * 상품 단건 가져오기
    *
    * @param {string}
    * @return
    */
   const getProductDetail = (idx) => {
-    const url = `${SERVER_URL}/api/products/detail`;
-    const data = {
-      product_id: idx, // product_id 로 상품 상세정보 조회
-    };
 
-    axios
-      .post(url, data)
-      .then(function (res) {
-        let data = res.data;
+    let copy = productList.filter(item => {
+      return item.PRODUCT_ID === idx
+    })
 
-        data.IMAGE = `${SERVER_URL}/images/` + data.IMAGE;
+    setProductForm(...copy);
 
-        setProductDetail(data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
+    console.log("productForm", productForm);
+    
   };
 
   /**
@@ -183,8 +175,11 @@ const ProductMngPage = () => {
 
     if (typeof idx == "number") {
       console.log("수정");
+      getProductDetail(idx);
+      setEditYn(true);
     } else {
       console.log("등록");
+      setEditYn(false);
     }
   };
 
@@ -230,68 +225,135 @@ const ProductMngPage = () => {
             </Button>,
           ]}
         >
-          <Form
-            name="basic"
-            labelCol={{
-              span: 4,
-            }}
-            wrapperCol={{
-              span: 18,
-            }}
-            autoComplete="off"
-          >
-            <Form.Item label="카테고리">
-              <Radio.Group
-                name="category"
-                value="furniture"
-                onChange={getValue}
-              >
-                <Radio value="furniture">가구</Radio>
-                <Radio value="plant">식물/데코</Radio>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item label="상품명">
-              <Input name="product_nm" onChange={getValue} />
-            </Form.Item>
-            <Form.Item label="대표이미지">
-              {previewImg ? (
-                <img
-                  src={previewImg}
-                  style={{ width: "120px", border: "1px solid #ccc" }}
-                  alt=""
+          {editYn ? (
+            // 수정 모드
+            <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+              <Form.Item label="카테고리">
+                <Radio.Group
+                  name="category"
+                  value={productForm.CATEGORY}
+                  onChange={getValue}
+                >
+                  <Radio value="furniture">가구</Radio>
+                  <Radio value="plant">식물/데코</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item label="상품명">
+                <Input
+                  name="product_nm"
+                  value={productForm.PRODUCT_NM}
+                  onChange={getValue}
                 />
-              ) : (
-                <img
-                  src={process.env.PUBLIC_URL + "/noimg2.png"}
-                  alt=""
-                  style={{ width: "120px", border: "1px solid #ccc" }}
+              </Form.Item>
+              <Form.Item label="대표이미지">
+                {productForm.IMAGE ? (
+                  <img
+                    src={productForm.IMAGE}
+                    style={{ width: "120px", border: "1px solid #ccc" }}
+                    alt=""
+                  />
+                ) : (
+                  <img
+                    src={process.env.PUBLIC_URL + "/noimg2.png"}
+                    alt=""
+                    style={{ width: "120px", border: "1px solid #ccc" }}
+                  />
+                )}
+                <Input
+                  type="file"
+                  onChange={(e) => {
+                    onChangeImage(e.target.files[0]);
+                    setImg(e.target.files[0]);
+                  }}
                 />
-              )}
-              <Input
-                type="file"
-                onChange={(e) => {
-                  onChangeImage(e.target.files[0]);
-                  setImg(e.target.files[0]);
-                }}
-              />
-            </Form.Item>
-            <Form.Item label="상품가격">
-              <Input name="sale_price" type="number" onChange={getValue} />
-            </Form.Item>
-            <Form.Item label="할인율">
-              <Input name="discounted_rate" type="number" onChange={getValue} />
-            </Form.Item>
-            <Form.Item label="배송구분">
-              <Radio.Group
-                name="delivery_dvsn"
-                value="일반배송"
-                onChange={getValue}
-              >
-                <Radio value="일반배송">일반배송</Radio>
-                <Radio value="새벽배송">새벽배송</Radio>
-              </Radio.Group>
-            </Form.Item>
-          </Form>
+              </Form.Item>
+              <Form.Item label="상품가격">
+                <Input
+                  name="sale_price"
+                  type="number"
+                  value={productForm.SALE_PRICE}
+                  onChange={getValue}
+                />
+              </Form.Item>
+              <Form.Item label="할인율">
+                <Input
+                  name="discounted_rate"
+                  type="number"
+                  value={productForm.DISCOUNTED_RATE}
+                  onChange={getValue}
+                />
+              </Form.Item>
+              <Form.Item label="배송구분">
+                <Radio.Group
+                  name="delivery_dvsn"
+                  value={productForm.DELIVERY_DVSN}
+                  onChange={getValue}
+                >
+                  <Radio value="일반배송">일반배송</Radio>
+                  <Radio value="새벽배송">새벽배송</Radio>
+                </Radio.Group>
+              </Form.Item>
+            </Form>
+          ) : (
+            // 등록 모드
+            <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+              <Form.Item label="카테고리">
+                <Radio.Group
+                  name="category"
+                  value="furniture"
+                  onChange={getValue}
+                >
+                  <Radio value="furniture">가구</Radio>
+                  <Radio value="plant">식물/데코</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item label="상품명">
+                <Input name="product_nm" onChange={getValue} />
+              </Form.Item>
+              <Form.Item label="대표이미지">
+                {previewImg ? (
+                  <img
+                    src={previewImg}
+                    style={{ width: "120px", border: "1px solid #ccc" }}
+                    alt=""
+                  />
+                ) : (
+                  <img
+                    src={process.env.PUBLIC_URL + "/noimg2.png"}
+                    alt=""
+                    style={{ width: "120px", border: "1px solid #ccc" }}
+                  />
+                )}
+                <Input
+                  type="file"
+                  onChange={(e) => {
+                    onChangeImage(e.target.files[0]);
+                    setImg(e.target.files[0]);
+                  }}
+                />
+              </Form.Item>
+              <Form.Item label="상품가격">
+                <Input name="sale_price" type="number" onChange={getValue} />
+              </Form.Item>
+              <Form.Item label="할인율">
+                <Input
+                  name="discounted_rate"
+                  type="number"
+                  onChange={getValue}
+                />
+              </Form.Item>
+              <Form.Item label="배송구분">
+                <Radio.Group
+                  name="delivery_dvsn"
+                  value="일반배송"
+                  onChange={getValue}
+                >
+                  <Radio value="일반배송">일반배송</Radio>
+                  <Radio value="새벽배송">새벽배송</Radio>
+                </Radio.Group>
+              </Form.Item>
+            </Form>
+          )}
         </Modal>
       </Container>
     </Fragment>
