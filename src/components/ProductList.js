@@ -5,7 +5,7 @@
  * */
 
 import React, { Fragment, useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Popconfirm } from "antd";
 import addComma from "../Utils";
 
 const ProductList = (props) => {
@@ -54,13 +54,11 @@ const ProductList = (props) => {
           >
             수정
           </Button>
-          <Button
-            onClick={() => {
-              deleteProduct(text.PRODUCT_ID);
-            }}
-          >
-            삭제
-          </Button>
+          <Popconfirm title="삭제하시겠습니까?" onConfirm={() => {deleteProduct(text.PRODUCT_ID)}}>
+            <Button>
+              삭제
+            </Button>
+          </Popconfirm>
         </Fragment>
       ),
     },
