@@ -8,10 +8,9 @@ import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
 import { Button, Input, Form, Radio, Modal, message } from "antd";
-import swal from "sweetalert";
 import ProductList from "../components/ProductList";
-import ProductForm from "../components/ProductForm";
 import addComma from "../Utils";
+
 
 const ProductMngPage = () => {
   const SERVER_URL = "http://localhost:4000";
@@ -215,8 +214,6 @@ const ProductMngPage = () => {
 
         <ProductList
           productList={productList}
-          Button={Button}
-          addComma={addComma}
           editProduct={editProduct}
           deleteProduct={deleteProduct}
         />
