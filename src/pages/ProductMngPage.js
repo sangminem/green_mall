@@ -20,7 +20,7 @@ const ProductMngPage = () => {
   // 상품 상세정보 {}
   const [productDetail, setProductDetail] = useState({});
 
-  // 상품 등록 {}
+  // 상품 등록 input {}
   const [productForm, setProductForm] = useState({
     category: "",
     product_nm: "",
@@ -42,6 +42,11 @@ const ProductMngPage = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const handleChange = (e) => {
+    setProductForm({[e.target.name]: e.target.value});
+}
+
 
   // 처음 렌더링 시 실행
   useEffect(() => {
@@ -66,7 +71,7 @@ const ProductMngPage = () => {
           data[key].IMAGE = `${SERVER_URL}/images/` + data[key].IMAGE; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
         }
 
-        setProductList(res.data);
+        setProductList(data);        
       })
       .catch(function (err) {
         console.log(err);
@@ -80,15 +85,23 @@ const ProductMngPage = () => {
    * @return
    */
   const getProductDetail = (idx) => {
+    const url = `${SERVER_URL}/api/products/detail`;
+    const data = {
+      product_id: idx, // product_id 로 상품 상세정보 조회
+    };
 
-    let copy = productList.filter(item => {
-      return item.PRODUCT_ID === idx
-    })
+    axios
+      .post(url, data)
+      .then(function (res) {
+        let data = res.data;
 
-    setProductForm(...copy);
+        data.IMAGE = `${SERVER_URL}/images/` + data.IMAGE;
 
-    console.log("productForm", productForm);
-    
+        setProductDetail(data);                
+      })
+      .catch(function (err) {
+        console.log(err);
+      });     
   };
 
   /**
@@ -165,8 +178,6 @@ const ProductMngPage = () => {
       ...productForm,
       [name]: value,
     });
-
-    console.log(productForm);
   };
 
   // 상품 등록/수정 버튼 클릭시
@@ -228,22 +239,15 @@ const ProductMngPage = () => {
           {editYn ? (
             // 수정 모드
             <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+              <p>{productDetail.PRODUCT_NM}</p>
               <Form.Item label="카테고리">
-                <Radio.Group
-                  name="category"
-                  value={productForm.CATEGORY}
-                  onChange={getValue}
-                >
+                <Radio.Group name="category" onChange={getValue}>
                   <Radio value="furniture">가구</Radio>
                   <Radio value="plant">식물/데코</Radio>
                 </Radio.Group>
               </Form.Item>
               <Form.Item label="상품명">
-                <Input
-                  name="product_nm"
-                  value={productForm.PRODUCT_NM}
-                  onChange={getValue}
-                />
+                <Input name="product_nm" value={productDetail.PRODUCT_NM} onChange={handleChange} />
               </Form.Item>
               <Form.Item label="대표이미지">
                 {productForm.IMAGE ? (
@@ -268,27 +272,17 @@ const ProductMngPage = () => {
                 />
               </Form.Item>
               <Form.Item label="상품가격">
-                <Input
-                  name="sale_price"
-                  type="number"
-                  value={productForm.SALE_PRICE}
-                  onChange={getValue}
-                />
+                <Input name="sale_price" type="number" onChange={getValue} />
               </Form.Item>
               <Form.Item label="할인율">
                 <Input
                   name="discounted_rate"
                   type="number"
-                  value={productForm.DISCOUNTED_RATE}
                   onChange={getValue}
                 />
               </Form.Item>
               <Form.Item label="배송구분">
-                <Radio.Group
-                  name="delivery_dvsn"
-                  value={productForm.DELIVERY_DVSN}
-                  onChange={getValue}
-                >
+                <Radio.Group name="delivery_dvsn" onChange={getValue}>
                   <Radio value="일반배송">일반배송</Radio>
                   <Radio value="새벽배송">새벽배송</Radio>
                 </Radio.Group>
