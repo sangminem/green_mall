@@ -101,10 +101,30 @@ app.get("/api/products", (req, res) => {
 });
 
 /**
+ * 상품 단건 삭제
+ */
+ app.delete("/api/products/delete", (req, res) => {
+  const data = req.body;
+  let prdid = data.product_id;
+
+  let sqlQuery = `DELETE FROM TBGM_PRODUCT WHERE PRODUCT_ID = ${prdid}`;
+
+  connection.query(sqlQuery, function (err, results) {
+    if (err) {
+      console.log(err);
+      console.log("데이터 삭제 실패");
+    } else {
+      console.log(results[0]);
+      res.send(results[0]);
+    }
+  });
+});
+
+/**
  * 상품 상세정보 등록
  */
 app.post("/api/register", upload.single("img"), (req, res) => {
-  const data =  JSON.parse(req.body.productDetail);   
+  const data =  JSON.parse(req.body.productForm);   
 
   const insertData = [];
   const sqlQuery = "INSERT INTO TBGM_PRODUCT (CATEGORY, PRODUCT_NM, SALE_PRICE, DISCOUNTED_RATE, DELIVERY_DVSN, DETAIL_CONTENT, IMAGE, RGST_DATE) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
