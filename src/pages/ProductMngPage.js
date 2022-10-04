@@ -7,7 +7,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
-import { Button, Input, Form, Radio, Modal } from "antd";
+import { Button, Input, Form, Radio, Modal, message } from "antd";
 import swal from "sweetalert";
 import ProductList from "../components/ProductList";
 import ProductForm from "../components/ProductForm";
@@ -119,18 +119,16 @@ const ProductMngPage = () => {
       .post(url, formData)
       .then(function (res) {
         if (res.data.errCode == 0) {
-          swal({
-            text: "상품정보를 성공적으로 등록했습니다.",
-            icon: "success",
-            button: "확인",
+          message.success({
+            content: "상품정보 등록 성공",
+            className: "custom-class",
           });
           setIsModalOpen(false);
           getProductList();
         } else {
-          swal({
-            text: "상품정보 등록중 오류가 발생했습니다.",
-            icon: "error",
-            button: "확인",
+          message.error({
+            content: "상품정보 등록 실패",
+            className: "custom-class",
           });
         }
         console.log(res);
@@ -152,7 +150,11 @@ const ProductMngPage = () => {
     axios
       .delete(url, postData)
       .then(function (res) {
-        alert("삭제 성공!!");
+        message.success({
+          content: "상품정보 삭제 성공",
+          className: "custom-class",
+        });
+        getProductList();
       })
       .catch(function (err) {
         console.log(err);
