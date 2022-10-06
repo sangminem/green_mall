@@ -20,10 +20,6 @@ const CategoryPage = () => {
   let [productCnt, setProductCnt] = useState(0); // 상품 갯수 number
   let [selected, setSelected] = useState("낮은가격순"); // 선택 정렬옵션
   let [cateTitle, setCateTitle] = useState(""); // 카테고리별 제목
-  let [isModalOpen, setIsModalOpen] = useState(false); // 모달 오픈
-  let [price, setPrice] = useState(9000); // 가격
-  let [count, setCount] = useState(1); // 수량
-  let [totalPrice, setTotalPrice] = useState(9000); // 총금액
 
   // 정렬 드롭다운 메뉴
   const menu = (
@@ -31,27 +27,15 @@ const CategoryPage = () => {
       items={[
         {
           key: "1",
-          label: (
-            <a href="javascript:void(0)" onClick={() => itemSort(1)}>
-              낮은가격순
-            </a>
-          ),
+          label: <button onClick={() => itemSort(1)}>낮은가격순</button>,
         },
         {
           key: "2",
-          label: (
-            <a href="javascript:void(0)" onClick={() => itemSort(2)}>
-              높은가격순
-            </a>
-          ),
+          label: <button onClick={() => itemSort(2)}>높은가격순</button>,
         },
         {
           key: "3",
-          label: (
-            <a href="javascript:void(0)" onClick={() => itemSort(3)}>
-              최신순
-            </a>
-          ),
+          label: <button onClick={() => itemSort(3)}>최신순</button>,
         },
       ]}
     />
@@ -141,57 +125,6 @@ const CategoryPage = () => {
     setCateTitle(title);
   };
 
-  /**
-   * 장바구니 모달
-   * @param
-   */
-  const showModal = function (props) {
-    setIsModalOpen(true);
-
-    console.log("props", props);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-    setLocalItem();
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  /**
-   * 장바구니 수량 계산
-   * @param
-   */
-  const calcCount = function (type) {
-    if (type === 1) {
-      count++;
-    } else {
-      count--;
-    }
-
-    setCount(count);
-    let total = price * count;
-    setTotalPrice(total);
-  };
-
-  /**
-   * 로컬스토리지에 담기
-   * @param
-   */
-  const setLocalItem = function () {
-    if (!localStorage.getItem("cart")) {
-      localStorage.setItem("cart", JSON.stringify([]));
-    }
-
-    let newItem = localStorage.getItem("cart");
-    newItem = JSON.parse(newItem);
-
-    newItem.push({ count: count });
-
-    localStorage.setItem("cart", JSON.stringify(newItem));
-  };
 
   return (
     <Fragment>
@@ -200,12 +133,12 @@ const CategoryPage = () => {
         <div className="flex">
           <span>상품 {productCnt}개</span>
           <Dropdown overlay={menu} trigger={["click"]}>
-            <a href="javascript:void(0)">
+            <button>
               <Space>
                 {selected}
                 <DownOutlined />
               </Space>
-            </a>
+            </button>
           </Dropdown>
         </div>
         <Row gutter={24}>
@@ -222,12 +155,22 @@ const CategoryPage = () => {
                   ) : (
                     ""
                   )}
-                  <p style={{ marginTop: "16px", fontSize: "14px" }}>{a.PRODUCT_NM}</p>
-                  <p style={{fontSize: "12px"}}>
-                    <span style={{ color: "#27ae60", fontWeight: 700, marginRight: "5px" }}>
+                  <p style={{ marginTop: "16px", fontSize: "14px" }}>
+                    {a.PRODUCT_NM}
+                  </p>
+                  <p style={{ fontSize: "12px" }}>
+                    <span
+                      style={{
+                        color: "#27ae60",
+                        fontWeight: 700,
+                        marginRight: "5px",
+                      }}
+                    >
                       {a.DISCOUNTED_RATE}%
                     </span>
-                    <del style={{color: "#999", fontSize: "13px"}}>{addComma(a.SALE_PRICE)} 원</del>
+                    <del style={{ color: "#999", fontSize: "13px" }}>
+                      {addComma(a.SALE_PRICE)} 원
+                    </del>
                   </p>
                   <p
                     style={{
@@ -235,7 +178,7 @@ const CategoryPage = () => {
                       fontWeight: 700,
                     }}
                   >
-                    {addComma(a.SALE_PRICE * a.DISCOUNTED_RATE / 100)} 원
+                    {addComma((a.SALE_PRICE * a.DISCOUNTED_RATE) / 100)} 원
                   </p>
                   <Tag color="blue">{a.DELIVERY_DVSN}</Tag>
                   <button
@@ -243,39 +186,12 @@ const CategoryPage = () => {
                   >
                     <IoHeartOutline /> 0
                   </button>
-                  <button onClick={() => showModal(a)}>장바구니</button>
                 </Col>
               </Fragment>
             );
           })}
         </Row>
       </Container>
-      <Modal
-        title="장바구니 담기"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <p>상품명: </p>
-        <p>가격: {price}</p>
-        <button
-          onClick={() => {
-            calcCount(1);
-          }}
-        >
-          +
-        </button>
-        <p>수량: {count}</p>
-        <button
-          onClick={() => {
-            calcCount(2);
-          }}
-        >
-          -
-        </button>
-
-        <p>총금액: {totalPrice}</p>
-      </Modal>
     </Fragment>
   );
 };
