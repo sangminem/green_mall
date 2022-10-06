@@ -11,7 +11,7 @@ import addComma from "../Utils.js";
 import { Container } from "react-bootstrap";
 import { Row, Col, Dropdown, Menu, Space, Modal, Tag, Spin } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import { IoHeartOutline } from "react-icons/io5";
+import { IoHeart, IoHeartOutline } from "react-icons/io5";
 
 // 카테고리 페이지
 const CategoryPage = () => {
@@ -20,6 +20,7 @@ const CategoryPage = () => {
   let [productCnt, setProductCnt] = useState(0); // 상품 갯수 number
   let [selected, setSelected] = useState("낮은가격순"); // 선택 정렬옵션
   let [cateTitle, setCateTitle] = useState(""); // 카테고리별 제목
+  let [heart, setHeart] = useState(false);  // 찜 하트
 
   // 정렬 드롭다운 메뉴
   const menu = (
@@ -141,6 +142,21 @@ const CategoryPage = () => {
     setCateTitle(title);
   };
 
+
+  /**
+   * 하트 채우기
+   * @param
+   */
+  const fillHeart = function() {
+    if(heart == false) {
+      setHeart(true)
+    } else {
+      setHeart(false)
+    }
+
+    
+  }
+
   return (
     <Fragment>
       <Container>
@@ -193,13 +209,12 @@ const CategoryPage = () => {
                       fontWeight: 700,
                     }}
                   >
-                    {addComma((a.SALE_PRICE * (100 -a.DISCOUNTED_RATE)) / 100)} 원
+                    {addComma((a.SALE_PRICE * (100 - a.DISCOUNTED_RATE)) / 100)}{" "}
+                    원
                   </p>
                   <Tag color="blue">{a.DELIVERY_DVSN}</Tag>
-                  <button
-                    style={{ border: 0, background: "none", fontSize: "13px" }}
-                  >
-                    <IoHeartOutline /> 0
+                  <button className="heartButton" onClick={fillHeart}>
+                    {heart ? <IoHeart style={{color: "#FF1E1E"}} /> : <IoHeartOutline/> }
                   </button>
                 </Col>
               </Fragment>

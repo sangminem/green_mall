@@ -38,6 +38,17 @@
 
 /* hy */
 
+.heartButton {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+}
+
+.heartButton svg {
+  font-size: 28px;
+  color: #555;
+}
+
 p {
   margin: 5px 0 !important;
 }
