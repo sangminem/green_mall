@@ -292,7 +292,7 @@ const ProductMngPage = () => {
               <Form.Item label="배송구분">
                 <Radio.Group name="delivery_dvsn" onChange={getValue}>
                   <Radio value="일반배송">일반배송</Radio>
-                  <Radio value="새벽배송">새벽배송</Radio>
+                  <Radio value="오늘출발">오늘출발</Radio>
                 </Radio.Group>
               </Form.Item>
             </Form>
@@ -351,7 +351,7 @@ const ProductMngPage = () => {
                   onChange={getValue}
                 >
                   <Radio value="일반배송">일반배송</Radio>
-                  <Radio value="새벽배송">새벽배송</Radio>
+                  <Radio value="오늘출발">오늘출발</Radio>
                 </Radio.Group>
               </Form.Item>
             </Form>

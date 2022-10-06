@@ -12,13 +12,14 @@ import { Container } from "react-bootstrap";
 import { Row, Col, Dropdown, Menu, Space, Modal, Tag, Spin } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
+import { TbTruckDelivery } from "react-icons/tb";
 
 // 카테고리 페이지
 const CategoryPage = () => {
   let { id } = useParams(); // 카테고리 id
   let [products, setProducts] = useState([]); // 상품 리스트 []
   let [productCnt, setProductCnt] = useState(0); // 상품 갯수 number
-  let [selected, setSelected] = useState("낮은가격순"); // 선택 정렬옵션
+  let [selected, setSelected] = useState("신상품순"); // 선택 정렬옵션
   let [cateTitle, setCateTitle] = useState(""); // 카테고리별 제목
   let [heart, setHeart] = useState(false);  // 찜 하트
 
@@ -49,6 +50,7 @@ const CategoryPage = () => {
   useEffect(() => {
     getData();
     pageTitle(id);
+    setSelected("신상품순")
   }, [id]);
 
   const SERVER_URL = "http://localhost:4000";
@@ -83,7 +85,7 @@ const CategoryPage = () => {
 
   /**
    * 상품 정렬 기능
-   * @param sort_type (1: 낮은가격순, 2: 높은가격순, 3:신상품순)
+   * @param sort_type (1: 낮은가격순, 2: 높은가격순, 3:신상품순, 4:할인율순)
    */
   const itemSort = function (sort_type) {
     let copy = [...products];
@@ -141,6 +143,8 @@ const CategoryPage = () => {
 
     setCateTitle(title);
   };
+
+
 
 
   /**
@@ -212,7 +216,9 @@ const CategoryPage = () => {
                     {addComma((a.SALE_PRICE * (100 - a.DISCOUNTED_RATE)) / 100)}{" "}
                     원
                   </p>
-                  <Tag color="blue">{a.DELIVERY_DVSN}</Tag>
+
+                  {a.DELIVERY_DVSN === "오늘출발" ? <Tag color="purple"><TbTruckDelivery/> {a.DELIVERY_DVSN}</Tag> : null}
+                  
                   <button className="heartButton" onClick={fillHeart}>
                     {heart ? <IoHeart style={{color: "#FF1E1E"}} /> : <IoHeartOutline/> }
                   </button>

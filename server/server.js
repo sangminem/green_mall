@@ -66,7 +66,7 @@ app.get("/", (req, res) => {
  * 상품 리스트 가져오기
  */
 app.get("/api/products", (req, res) => {
-  const sqlQuery = "SELECT * FROM TBGM_PRODUCT";
+  const sqlQuery = "SELECT * FROM TBGM_PRODUCT ORDER BY RGST_DATE DESC";
 
   connection.query(sqlQuery, function (err, results) {
     if (err) {
