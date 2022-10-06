@@ -49,7 +49,7 @@ const ProductList = (props) => {
         <Fragment>
           <Button
             onClick={() => {
-              editProduct(text.PRODUCT_ID);
+              editProduct(text);
             }}
           >
             수정

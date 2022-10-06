@@ -178,20 +178,27 @@ const ProductMngPage = () => {
       ...productForm,
       [name]: value,
     });
+
   };
 
   // 상품 등록/수정 버튼 클릭시
-  const editProduct = (idx) => {
+  const editProduct = (props) => {
     setIsModalOpen(true);
 
-    if (typeof idx == "number") {
-      console.log("수정");
-      getProductDetail(idx);
-      setEditYn(true);
-    } else {
-      console.log("등록");
-      setEditYn(false);
-    }
+    setEditYn(true);
+
+    console.log(props);
+
+    setProductDetail(props);
+
+    // if (typeof idx == "number") {
+    //   console.log("수정");
+    //   getProductDetail(idx);
+    //   setEditYn(true);
+    // } else {
+    //   console.log("등록");
+    //   setEditYn(false);
+    // }
   };
 
   // 이미지 업로드시 이미지 프리뷰
@@ -240,6 +247,7 @@ const ProductMngPage = () => {
             // 수정 모드
             <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
               <p>{productDetail.PRODUCT_NM}</p>
+              <p>{productDetail.SALE_PRICE}</p>                            
               <Form.Item label="카테고리">
                 <Radio.Group name="category" onChange={getValue}>
                   <Radio value="furniture">가구</Radio>
@@ -247,7 +255,7 @@ const ProductMngPage = () => {
                 </Radio.Group>
               </Form.Item>
               <Form.Item label="상품명">
-                <Input name="product_nm" value={productDetail.PRODUCT_NM} onChange={handleChange} />
+                <Input name="product_nm" value={productDetail.PRODUCT_NM} onChange={getValue} />
               </Form.Item>
               <Form.Item label="대표이미지">
                 {productForm.IMAGE ? (

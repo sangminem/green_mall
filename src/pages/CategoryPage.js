@@ -198,7 +198,7 @@ const CategoryPage = () => {
       <Container>
         <p className="tit-lg">{cateTitle}</p>
         <div className="flex">
-          <span>총 {productCnt} 개</span>
+          <span>상품 {productCnt}개</span>
           <Dropdown overlay={menu} trigger={["click"]}>
             <a href="javascript:void(0)">
               <Space>
