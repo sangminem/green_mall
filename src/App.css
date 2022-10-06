@@ -48,6 +48,14 @@ p {
   align-items: center;
 }
 
+.ant-space-item {
+  display: flex;
+}
+
+span.anticon.anticon-down svg {
+  width: 10px;
+}
+
 button {
   border: 0;
   background: none;

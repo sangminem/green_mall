@@ -35,7 +35,11 @@ const CategoryPage = () => {
         },
         {
           key: "3",
-          label: <button onClick={() => itemSort(3)}>최신순</button>,
+          label: <button onClick={() => itemSort(3)}>신상품순</button>,
+        },
+        {
+          key: "4",
+          label: <button onClick={() => itemSort(4)}>할인율순</button>,
         },
       ]}
     />
@@ -78,7 +82,7 @@ const CategoryPage = () => {
 
   /**
    * 상품 정렬 기능
-   * @param sort_type (1: 낮은가격순, 2: 높은가격순, 3:최신순)
+   * @param sort_type (1: 낮은가격순, 2: 높은가격순, 3:신상품순)
    */
   const itemSort = function (sort_type) {
     let copy = [...products];
@@ -95,6 +99,18 @@ const CategoryPage = () => {
           return parseFloat(b.SALE_PRICE) - parseFloat(a.SALE_PRICE);
         });
         setSelected("높은가격순");
+        break;
+      case 3:
+        copy.sort((a, b) => {
+          return parseFloat(new Date(b.RGST_DATE) - new Date(a.RGST_DATE));
+        });
+        setSelected("신상품순");
+        break;
+      case 4:
+        copy.sort((a, b) => {
+          return b.DISCOUNTED_RATE - a.DISCOUNTED_RATE;
+        });
+        setSelected("할인율순");
         break;
       default:
         console.log("default case");
@@ -124,7 +140,6 @@ const CategoryPage = () => {
 
     setCateTitle(title);
   };
-
 
   return (
     <Fragment>
@@ -178,7 +193,7 @@ const CategoryPage = () => {
                       fontWeight: 700,
                     }}
                   >
-                    {addComma((a.SALE_PRICE * a.DISCOUNTED_RATE) / 100)} 원
+                    {addComma((a.SALE_PRICE * (100 -a.DISCOUNTED_RATE)) / 100)} 원
                   </p>
                   <Tag color="blue">{a.DELIVERY_DVSN}</Tag>
                   <button
