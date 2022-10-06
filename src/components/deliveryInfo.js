@@ -1,9 +1,30 @@
 import React, { Component, Fragment } from 'react';
-import {Row, Col} from 'react-bootstrap'
+import {Row, Col, NavDropdown} from 'react-bootstrap'
 import styles from './../css/detail.module.css';
 import styled from 'styled-components';
 
 const DeliverylInfo = () => {
+    //date
+    const date = new Date();
+    const am = new Date(date.setDate(date.getDate()+1)); //새벽배송
+    const pm = new Date(date.setDate(date.getDate()+2)); //택배배송
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const week = ['일','월','화','수','목','금','토'];
+    let dayOfWeek = week[date.getDay()];
+    let amOfWeek = week[am.getDay()];
+    let pmOfWeek = week[pm.getDay()];
+    
+    console.log('date: ' + date.toLocaleDateString('ko-kr'));
+    console.log('year: ' + year);
+    console.log('month: ' + month);
+    console.log('day: ' + day);
+    console.log('week: ' + dayOfWeek);
+    console.log('tomorrow: ' + amOfWeek);
+    console.log('2 days later: ' + pmOfWeek);
+
     return (
         <React.Fragment>
             <Row className={`mt20 mb20 pt20 ${styles.delivery}`}>
@@ -18,8 +39,8 @@ const DeliverylInfo = () => {
             </Row>
             <Row className={`mt20 mb20 pt20 ${styles.delivery}`} >
                 <Col sm={2}><strong>배송정보</strong></Col>
-                <Col sm={10}>새벽배송: 지금 주문하면 8월 15일(월) 오전 7시 전 도착<br />
-                        택배배송: 지금 주문하면 8월 16일(화) 출고 예정</Col>
+                <Col sm={10}>새벽배송: 지금 주문하면 {month}월 {day+2}일({amOfWeek}) 오전 7시 전 도착<br />
+                        택배배송: 지금 주문하면 {month}월 {day+1}일({dayOfWeek}) 출고 예정</Col>
             </Row>
         </React.Fragment>
     );
