@@ -176,7 +176,7 @@ const CategoryPage = () => {
             </button>
           </Dropdown>
         </div>
-        <Row gutter={24}>
+        <Row gutter={26}>
           {products.map((a, i) => {
             return (
               <Fragment key={i}>
@@ -190,7 +190,7 @@ const CategoryPage = () => {
                   ) : (
                     ""
                   )}
-                  <p style={{ marginTop: "16px", fontSize: "14px" }}>
+                  <p style={{ paddingTop: "8px", fontSize: "14px" }}>
                     {a.PRODUCT_NM}
                   </p>
                   <p style={{ fontSize: "12px" }}>
