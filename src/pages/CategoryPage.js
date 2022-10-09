@@ -22,6 +22,7 @@ const CategoryPage = () => {
   let [selected, setSelected] = useState("신상품순"); // 선택 정렬옵션
   let [cateTitle, setCateTitle] = useState(""); // 카테고리별 제목
   let [heart, setHeart] = useState(false); // 찜 하트
+  let [saleType, setSaleType] = useState(false);
   let [loading, setLoading] = useState(false);
 
   // 정렬 드롭다운 메뉴
@@ -49,6 +50,11 @@ const CategoryPage = () => {
   );
 
   useEffect(() => {
+    if(id === "sale") {
+      setSaleType(true);
+    } else {
+      setSaleType(false);
+    }
     getData();
     pageTitle(id);
     setSelected("신상품순");
@@ -138,6 +144,9 @@ const CategoryPage = () => {
       case "plant":
         title = "🪴식물/데코";
         break;
+      case "sale":
+        title = "SALE";
+        break;
       default:
         break;
     }
@@ -162,7 +171,7 @@ const CategoryPage = () => {
       <Container>
         <p className="tit-lg">{cateTitle}</p>
         <div className="flex">
-          <span>상품 {productCnt}개</span>
+          <span>{productCnt}개의 상품</span>
           <Dropdown overlay={menu} trigger={["click"]}>
             <button>
               <Space>
@@ -172,65 +181,131 @@ const CategoryPage = () => {
             </button>
           </Dropdown>
         </div>
-        <Row gutter={26}>
-          {products.map((a, i) => {
-            return (
-              <Fragment key={i}>
-                <Col span={12} style={{ margin: "18px 0" }}>
-                  {a.IMAGE !== "" ? (
-                    <img
-                      src={a.IMAGE}
-                      alt=""
-                      style={{ width: "100%", borderRadius: "12px" }}
-                    />
-                  ) : (
-                    ""
-                  )}
-                  <p style={{ paddingTop: "8px", fontSize: "14px" }}>
-                    {a.PRODUCT_NM}
-                  </p>
-                  <p style={{ fontSize: "12px" }}>
-                    <span
+        {saleType ? (
+          <Row gutter={26}>
+            {products.map((a, i) => {
+              return (
+                <Fragment key={i}>
+                  <Col span={8} style={{ margin: "18px 0" }}>
+                    {a.IMAGE !== "" ? (
+                      <img
+                        src={a.IMAGE}
+                        alt=""
+                        style={{ width: "100%", borderRadius: "12px" }}
+                      />
+                    ) : (
+                      ""
+                    )}
+                    <p style={{ paddingTop: "8px", fontSize: "14px" }}>
+                      {a.PRODUCT_NM}
+                    </p>
+                    <p style={{ fontSize: "12px" }}>
+                      <span
+                        style={{
+                          color: "#27ae60",
+                          fontWeight: 700,
+                          marginRight: "5px",
+                        }}
+                      >
+                        {a.DISCOUNTED_RATE}%
+                      </span>
+                      <del style={{ color: "#999", fontSize: "13px" }}>
+                        {addComma(a.SALE_PRICE)} 원
+                      </del>
+                    </p>
+                    <p
                       style={{
-                        color: "#27ae60",
+                        fontSize: "16px",
                         fontWeight: 700,
-                        marginRight: "5px",
                       }}
                     >
-                      {a.DISCOUNTED_RATE}%
-                    </span>
-                    <del style={{ color: "#999", fontSize: "13px" }}>
-                      {addComma(a.SALE_PRICE)} 원
-                    </del>
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {addComma((a.SALE_PRICE * (100 - a.DISCOUNTED_RATE)) / 100)}{" "}
-                    원
-                  </p>
+                      {addComma(
+                        (a.SALE_PRICE * (100 - a.DISCOUNTED_RATE)) / 100
+                      )}{" "}
+                      원
+                    </p>
 
-                  {a.DELIVERY_DVSN === "오늘출발" ? (
-                    <Tag color="purple">
-                      <TbTruckDelivery /> {a.DELIVERY_DVSN}
-                    </Tag>
-                  ) : null}
+                    {a.DELIVERY_DVSN === "오늘출발" ? (
+                      <Tag color="purple">
+                        <TbTruckDelivery /> {a.DELIVERY_DVSN}
+                      </Tag>
+                    ) : null}
 
-                  <button className="heartButton" onClick={fillHeart}>
-                    {heart ? (
-                      <IoMdHeart style={{ color: "#ff4800" }} />
+                    <button className="heartButton" onClick={fillHeart}>
+                      {heart ? (
+                        <IoMdHeart style={{ color: "#ff4800" }} />
+                      ) : (
+                        <IoMdHeartEmpty />
+                      )}
+                    </button>
+                  </Col>
+                </Fragment>
+              );
+            })}
+          </Row>
+        ) : (
+          <Row gutter={26}>
+            {products.map((a, i) => {
+              return (
+                <Fragment key={i}>
+                  <Col span={12} style={{ margin: "18px 0" }}>
+                    {a.IMAGE !== "" ? (
+                      <img
+                        src={a.IMAGE}
+                        alt=""
+                        style={{ width: "100%", borderRadius: "12px" }}
+                      />
                     ) : (
-                      <IoMdHeartEmpty />
+                      ""
                     )}
-                  </button>
-                </Col>
-              </Fragment>
-            );
-          })}
-        </Row>
+                    <p style={{ paddingTop: "8px", fontSize: "14px" }}>
+                      {a.PRODUCT_NM}
+                    </p>
+                    <p style={{ fontSize: "12px" }}>
+                      <span
+                        style={{
+                          color: "#27ae60",
+                          fontWeight: 700,
+                          marginRight: "5px",
+                        }}
+                      >
+                        {a.DISCOUNTED_RATE}%
+                      </span>
+                      <del style={{ color: "#999", fontSize: "13px" }}>
+                        {addComma(a.SALE_PRICE)} 원
+                      </del>
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {addComma(
+                        (a.SALE_PRICE * (100 - a.DISCOUNTED_RATE)) / 100
+                      )}{" "}
+                      원
+                    </p>
+
+                    {a.DELIVERY_DVSN === "오늘출발" ? (
+                      <Tag color="purple">
+                        <TbTruckDelivery /> {a.DELIVERY_DVSN}
+                      </Tag>
+                    ) : null}
+
+                    <button className="heartButton" onClick={fillHeart}>
+                      {heart ? (
+                        <IoMdHeart style={{ color: "#ff4800" }} />
+                      ) : (
+                        <IoMdHeartEmpty />
+                      )}
+                    </button>
+                  </Col>
+                </Fragment>
+              );
+            })}
+          </Row>
+        )}
       </Container>
     </Fragment>
   );

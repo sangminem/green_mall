@@ -232,6 +232,7 @@ const ProductMngPage = () => {
           {editYn ? (
             // 수정 모드
             <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+              <h3>상품 기본정보</h3>
               <p>{productDetail.PRODUCT_NM}</p>
               <p>{productDetail.SALE_PRICE}</p>                            
               <Form.Item label="카테고리">
@@ -285,6 +286,7 @@ const ProductMngPage = () => {
           ) : (
             // 등록 모드
             <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+              <h6>상품 기본정보</h6>
               <Form.Item label="카테고리">
                 <Radio.Group
                   name="category"

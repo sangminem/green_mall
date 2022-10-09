@@ -38,6 +38,15 @@
 
 /* hy */
 
+.g-header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+
 .heartButton {
   position: absolute;
   top: 15px;
