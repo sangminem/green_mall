@@ -290,11 +290,12 @@ const ProductMngPage = () => {
               <Form.Item label="카테고리">
                 <Radio.Group
                   name="category"
-                  value="furniture"
+                  // value="furniture"
                   onChange={getValue}
                 >
                   <Radio value="furniture">가구</Radio>
                   <Radio value="plant">식물/데코</Radio>
+                  <Radio value="pet">반려동물</Radio>
                 </Radio.Group>
               </Form.Item>
               <Form.Item label="상품명">

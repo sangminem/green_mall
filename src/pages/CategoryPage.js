@@ -9,10 +9,18 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import addComma from "../Utils.js";
 import { Container } from "react-bootstrap";
-import { Row, Col, Dropdown, Menu, Space, Tag, Spin } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { Row, Col, Dropdown, Menu, Space, Tag, Spin, Skeleton } from "antd";
+import { DownOutlined, LoadingOutlined } from "@ant-design/icons";
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { TbTruckDelivery } from "react-icons/tb";
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+    }}
+    spin
+  />
+);
 
 // 카테고리 페이지
 const CategoryPage = () => {
@@ -50,11 +58,12 @@ const CategoryPage = () => {
   );
 
   useEffect(() => {
-    if(id === "sale") {
+    if (id === "sale") {
       setSaleType(true);
     } else {
       setSaleType(false);
     }
+    setLoading(true);
     getData();
     pageTitle(id);
     setSelected("신상품순");
@@ -84,6 +93,7 @@ const CategoryPage = () => {
 
         setProducts(copy);
         setProductCnt(copy.length);
+        setLoading(false);
       })
       .catch(function (err) {
         console.log(err);
@@ -144,6 +154,9 @@ const CategoryPage = () => {
       case "plant":
         title = "🪴식물/데코";
         break;
+      case "pet":
+        title = "🦮반려동물";
+        break;
       case "sale":
         title = "SALE";
         break;
@@ -169,7 +182,10 @@ const CategoryPage = () => {
   return (
     <Fragment>
       <Container>
-        <p className="tit-lg">{cateTitle}</p>
+        <div className="flex" style={{ marginBottom: "10px" }}>
+          <span className="tit-lg">{cateTitle}</span>
+          {loading ? <Spin indicator={antIcon} /> : null}
+        </div>
         <div className="flex">
           <span>{productCnt}개의 상품</span>
           <Dropdown overlay={menu} trigger={["click"]}>
@@ -181,131 +197,65 @@ const CategoryPage = () => {
             </button>
           </Dropdown>
         </div>
-        {saleType ? (
-          <Row gutter={26}>
-            {products.map((a, i) => {
-              return (
-                <Fragment key={i}>
-                  <Col span={8} style={{ margin: "18px 0" }}>
-                    {a.IMAGE !== "" ? (
-                      <img
-                        src={a.IMAGE}
-                        alt=""
-                        style={{ width: "100%", borderRadius: "12px" }}
-                      />
-                    ) : (
-                      ""
-                    )}
-                    <p style={{ paddingTop: "8px", fontSize: "14px" }}>
-                      {a.PRODUCT_NM}
-                    </p>
-                    <p style={{ fontSize: "12px" }}>
-                      <span
-                        style={{
-                          color: "#27ae60",
-                          fontWeight: 700,
-                          marginRight: "5px",
-                        }}
-                      >
-                        {a.DISCOUNTED_RATE}%
-                      </span>
-                      <del style={{ color: "#999", fontSize: "13px" }}>
-                        {addComma(a.SALE_PRICE)} 원
-                      </del>
-                    </p>
-                    <p
+        <Row gutter={26}>
+          {products.map((a, i) => {
+            return (
+              <Fragment key={i}>
+                <Col span={12} style={{ margin: "18px 0" }}>
+                  {a.IMAGE !== "" ? (
+                    <img
+                      src={a.IMAGE}
+                      alt=""
+                      style={{ width: "100%", borderRadius: "12px" }}
+                    />
+                  ) : (
+                    ""
+                  )}
+                  <p style={{ paddingTop: "8px", fontSize: "14px" }}>
+                    {a.PRODUCT_NM}
+                  </p>
+                  <p style={{ fontSize: "12px" }}>
+                    <span
                       style={{
-                        fontSize: "16px",
+                        color: "#27ae60",
                         fontWeight: 700,
+                        marginRight: "5px",
                       }}
                     >
-                      {addComma(
-                        (a.SALE_PRICE * (100 - a.DISCOUNTED_RATE)) / 100
-                      )}{" "}
-                      원
-                    </p>
+                      {a.DISCOUNTED_RATE}%
+                    </span>
+                    <del style={{ color: "#999", fontSize: "13px" }}>
+                      {addComma(a.SALE_PRICE)} 원
+                    </del>
+                  </p>
+                  <p
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {addComma((a.SALE_PRICE * (100 - a.DISCOUNTED_RATE)) / 100)}{" "}
+                    원
+                  </p>
 
-                    {a.DELIVERY_DVSN === "오늘출발" ? (
-                      <Tag color="purple">
-                        <TbTruckDelivery /> {a.DELIVERY_DVSN}
-                      </Tag>
-                    ) : null}
+                  {a.DELIVERY_DVSN === "오늘출발" ? (
+                    <Tag color="purple">
+                      <TbTruckDelivery /> {a.DELIVERY_DVSN}
+                    </Tag>
+                  ) : null}                  
 
-                    <button className="heartButton" onClick={fillHeart}>
-                      {heart ? (
-                        <IoMdHeart style={{ color: "#ff4800" }} />
-                      ) : (
-                        <IoMdHeartEmpty />
-                      )}
-                    </button>
-                  </Col>
-                </Fragment>
-              );
-            })}
-          </Row>
-        ) : (
-          <Row gutter={26}>
-            {products.map((a, i) => {
-              return (
-                <Fragment key={i}>
-                  <Col span={12} style={{ margin: "18px 0" }}>
-                    {a.IMAGE !== "" ? (
-                      <img
-                        src={a.IMAGE}
-                        alt=""
-                        style={{ width: "100%", borderRadius: "12px" }}
-                      />
+                  <button className="heartButton" onClick={fillHeart}>
+                    {heart ? (
+                      <IoMdHeart style={{ color: "#ff4800" }} />
                     ) : (
-                      ""
+                      <IoMdHeartEmpty />
                     )}
-                    <p style={{ paddingTop: "8px", fontSize: "14px" }}>
-                      {a.PRODUCT_NM}
-                    </p>
-                    <p style={{ fontSize: "12px" }}>
-                      <span
-                        style={{
-                          color: "#27ae60",
-                          fontWeight: 700,
-                          marginRight: "5px",
-                        }}
-                      >
-                        {a.DISCOUNTED_RATE}%
-                      </span>
-                      <del style={{ color: "#999", fontSize: "13px" }}>
-                        {addComma(a.SALE_PRICE)} 원
-                      </del>
-                    </p>
-                    <p
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: 700,
-                      }}
-                    >
-                      {addComma(
-                        (a.SALE_PRICE * (100 - a.DISCOUNTED_RATE)) / 100
-                      )}{" "}
-                      원
-                    </p>
-
-                    {a.DELIVERY_DVSN === "오늘출발" ? (
-                      <Tag color="purple">
-                        <TbTruckDelivery /> {a.DELIVERY_DVSN}
-                      </Tag>
-                    ) : null}
-
-                    <button className="heartButton" onClick={fillHeart}>
-                      {heart ? (
-                        <IoMdHeart style={{ color: "#ff4800" }} />
-                      ) : (
-                        <IoMdHeartEmpty />
-                      )}
-                    </button>
-                  </Col>
-                </Fragment>
-              );
-            })}
-          </Row>
-        )}
+                  </button>
+                </Col>
+              </Fragment>
+            );
+          })}
+        </Row>
       </Container>
     </Fragment>
   );

@@ -27,6 +27,9 @@ const Header = () => {
             <Nav.Link as={Link} to="/category/plant">
               식물/데코
             </Nav.Link>
+            <Nav.Link as={Link} to="/category/pet">
+              반려동물
+            </Nav.Link>
             <Nav.Link as={Link} to="/category/sale">
               SALE
             </Nav.Link>
