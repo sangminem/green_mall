@@ -9,9 +9,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import addComma from "../Utils.js";
 import { Container } from "react-bootstrap";
-import { Row, Col, Dropdown, Menu, Space, Modal, Tag, Spin } from "antd";
+import { Row, Col, Dropdown, Menu, Space, Tag, Spin } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import { IoHeart, IoHeartOutline } from "react-icons/io5";
+import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { TbTruckDelivery } from "react-icons/tb";
 
 // 카테고리 페이지
@@ -21,7 +21,8 @@ const CategoryPage = () => {
   let [productCnt, setProductCnt] = useState(0); // 상품 갯수 number
   let [selected, setSelected] = useState("신상품순"); // 선택 정렬옵션
   let [cateTitle, setCateTitle] = useState(""); // 카테고리별 제목
-  let [heart, setHeart] = useState(false);  // 찜 하트
+  let [heart, setHeart] = useState(false); // 찜 하트
+  let [loading, setLoading] = useState(false);
 
   // 정렬 드롭다운 메뉴
   const menu = (
@@ -50,7 +51,7 @@ const CategoryPage = () => {
   useEffect(() => {
     getData();
     pageTitle(id);
-    setSelected("신상품순")
+    setSelected("신상품순");
   }, [id]);
 
   const SERVER_URL = "http://localhost:4000";
@@ -144,22 +145,17 @@ const CategoryPage = () => {
     setCateTitle(title);
   };
 
-
-
-
   /**
    * 하트 채우기
    * @param
    */
-  const fillHeart = function() {
-    if(heart == false) {
-      setHeart(true)
+  const fillHeart = function () {
+    if (heart == false) {
+      setHeart(true);
     } else {
-      setHeart(false)
+      setHeart(false);
     }
-
-    
-  }
+  };
 
   return (
     <Fragment>
@@ -217,10 +213,18 @@ const CategoryPage = () => {
                     원
                   </p>
 
-                  {a.DELIVERY_DVSN === "오늘출발" ? <Tag color="purple"><TbTruckDelivery/> {a.DELIVERY_DVSN}</Tag> : null}
-                  
+                  {a.DELIVERY_DVSN === "오늘출발" ? (
+                    <Tag color="purple">
+                      <TbTruckDelivery /> {a.DELIVERY_DVSN}
+                    </Tag>
+                  ) : null}
+
                   <button className="heartButton" onClick={fillHeart}>
-                    {heart ? <IoHeart style={{color: "#FF1E1E"}} /> : <IoHeartOutline/> }
+                    {heart ? (
+                      <IoMdHeart style={{ color: "#ff4800" }} />
+                    ) : (
+                      <IoMdHeartEmpty />
+                    )}
                   </button>
                 </Col>
               </Fragment>

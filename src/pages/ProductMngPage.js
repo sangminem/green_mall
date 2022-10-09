@@ -183,22 +183,8 @@ const ProductMngPage = () => {
 
   // 상품 등록/수정 버튼 클릭시
   const editProduct = (props) => {
-    setIsModalOpen(true);
-
-    setEditYn(true);
-
-    console.log(props);
-
+    setIsModalOpen(true);    
     setProductDetail(props);
-
-    // if (typeof idx == "number") {
-    //   console.log("수정");
-    //   getProductDetail(idx);
-    //   setEditYn(true);
-    // } else {
-    //   console.log("등록");
-    //   setEditYn(false);
-    // }
   };
 
   // 이미지 업로드시 이미지 프리뷰
