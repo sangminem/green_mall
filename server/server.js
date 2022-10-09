@@ -123,7 +123,7 @@ app.get("/api/products", (req, res) => {
 /**
  * 상품 상세정보 등록
  */
-app.post("/api/register", upload.single("img"), (req, res) => {
+app.post("/api/register", upload.single("img"), (req, res) => {  
   const data =  JSON.parse(req.body.productForm);   
 
   const insertData = [];
@@ -154,4 +154,57 @@ app.post("/api/register", upload.single("img"), (req, res) => {
       }
     }
   );
+});
+
+
+/**
+ * 회원가입 API
+ */
+app.post("/api/signup", (req, res) => {
+
+  let data = req.body;
+
+  const insertData = [];
+  const sqlQuery = "INSERT INTO TBGM_USER (USER_NM, PASSWORD, EMAIL_ID, RGST_DATE) VALUES (?, ?, ?, NOW())";
+
+  for (let key in data) {
+    insertData.push(data[key]);
+  }
+
+  connection.query(
+    sqlQuery,
+    insertData,
+    function (err, rows, fields) {
+      if (err) {
+        res.send(err);
+        console.log(err);
+        console.log("회원가입 실패");
+      } else {
+        res.send({ errCode: 0 });
+        console.log(rows);
+        console.log("회원가입 성공");
+      }
+    }
+  );
+});
+
+
+/**
+ * 로그인 API
+ */
+app.post("/api/login", (req, res) => {
+  const data = req.body;
+  let email_id = data.email_id;
+
+  let sqlQuery = `SELECT * FROM TBGM_USER WHERE EMAIL_ID = '${email_id}'`;
+
+  connection.query(sqlQuery, function (err, results) {
+    if (err) {
+      console.log(err);
+      console.log("데이터 가져오기 실패");
+    } else {
+      console.log(results[0]);
+      res.send(results[0]);
+    }
+  });
 });
