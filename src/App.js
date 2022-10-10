@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import CartPage from "./pages/CartPage";
 import ProductMngPage from "./pages/ProductMngPage";
+import MyPage from "./pages/MyPage";
 import FixedHeader from "./components/FixedHeader";
 const { Content } = Layout;
 
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/detail/:id" element={<DetailPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/productMng" element={<ProductMngPage />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Routes>
       </Content>
     </Layout>
