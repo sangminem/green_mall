@@ -4,6 +4,9 @@
   font-family: "Noto Sans KR";
   font-weight: 400;
   font-size: 15px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .App {
@@ -37,6 +40,19 @@
 
 
 /* hy */
+
+.g-menu p {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 20px !important;
+  cursor: pointer;
+}
+
+.ant-layout-header {
+  height: 46px !important;
+  line-height: 46px !important;
+  border-bottom: 1px solid #ddd;
+}
 
 .g-header {
   position: fixed !important;

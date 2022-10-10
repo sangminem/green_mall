@@ -22,7 +22,7 @@ const App = () => {
       <Content
         className="site-layout"
         style={{
-          padding: "0 50px",
+          padding: "0 20px",
           marginTop: 64,
         }}
       >
