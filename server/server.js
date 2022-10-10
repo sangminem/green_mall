@@ -204,7 +204,7 @@ app.post("/api/login", (req, res) => {
       console.log("데이터 가져오기 실패");
     } else {
       console.log(results[0]);
-      res.send(results[0]);
+      res.send(results[0]);      
     }
   });
 });

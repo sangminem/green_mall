@@ -6,7 +6,7 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { IoCartOutline } from "react-icons/io5";
+import { IoCartOutline, IoPersonOutline } from "react-icons/io5";
 import { Tabs } from "antd";
 import CategoryPage from "../pages/CategoryPage";
 
@@ -35,6 +35,9 @@ const Header = () => {
             </Nav.Link>
             <Nav.Link as={Link} to="/productMng">
               상품관리
+            </Nav.Link>
+            <Nav.Link as={Link} to="/login">
+              <IoPersonOutline />
             </Nav.Link>
             <Nav.Link as={Link} to="/">
               <IoCartOutline />

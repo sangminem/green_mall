@@ -8,9 +8,21 @@ const LoginPage = () => {
 
   // 회원가입 input
   const [loginForm, setLoginForm] = useState({
-    email_id: "",    
+    email_id: "",
     password: "",
   });
+
+  let [loginYn, setLoginYn] = useState(false);
+  let [loginId, setLoginId] = useState("");
+
+  useEffect(() => {
+    if(sessionStorage.getItem("userInfo")) {
+      setLoginYn(true);
+
+      let userinfo = JSON.parse(sessionStorage.getItem("userInfo"));
+      setLoginId(userinfo.USER_NM);
+    }
+  }, [])
 
   /**
    * input value 가져오기
@@ -35,11 +47,13 @@ const LoginPage = () => {
     axios
       .post(url, loginForm)
       .then(function (res) {
-        if (res.data.errCode == 0) {
+        if (res.data) {
           message.success({
             content: "로그인 성공",
             className: "custom-class",
           });
+
+          sessionStorage.setItem("userInfo", JSON.stringify(res.data));
         } else {
           message.error({
             content: "로그인 실패",
@@ -56,26 +70,35 @@ const LoginPage = () => {
   return (
     <React.Fragment>
       <Container>
-        <p className="tit-lg">로그인</p>
-        <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-          <Form.Item label="이메일">
+        {loginYn ? (
+          <p> {loginId} 님 환영합니다!</p>
+        ) : (
+          <div style={{ width: "450px" }}>
+            <p className="tit-lg">로그인</p>
             <Input
               name="email_id"
-              placeholder="이메일을 입력하세요"
+              placeholder="아이디를 입력하세요"
               onChange={getValue}
+              style={{ marginBottom: "12px" }}
+              size="large"
             />
-          </Form.Item>
-          <Form.Item label="비밀번호">
             <Input
               name="password"
               placeholder="비밀번호를 입력하세요"
               onChange={getValue}
+              style={{ marginBottom: "12px" }}
+              size="large"
             />
-          </Form.Item>
-          <Button type="primary" onClick={login}>
-            로그인
-          </Button>
-        </Form>
+            <Button
+              size="large"
+              type="primary"
+              onClick={login}
+              style={{ width: "450px" }}
+            >
+              로그인
+            </Button>
+          </div>
+        )}
       </Container>
     </React.Fragment>
   );
