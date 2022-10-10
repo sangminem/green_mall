@@ -12,13 +12,13 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import CartPage from "./pages/CartPage";
 import ProductMngPage from "./pages/ProductMngPage";
-import Header from "./components/Header";
+import FixedHeader from "./components/FixedHeader";
 const { Content } = Layout;
 
 const App = () => {
   return (
-    <Layout>
-      <Header/>
+    <Layout style={{width: "700px", margin: "0 auto"}}>
+      <FixedHeader/>
       <Content
         className="site-layout"
         style={{
