@@ -7,6 +7,15 @@ const DetailInfo = () => {
     return (
         <React.Fragment>
             <Row className={styles.selling}>
+                <Col sm={12}><strong>수량정보</strong></Col>
+                <Col sm={12}>
+                    <ul>
+                        <li>1인 구매 하실 수 있는 최고 수량은 20개 입니다.</li>
+                    </ul>
+                </Col>
+            </Row>
+
+            <Row className={styles.selling}>
                 <Col sm={12}><strong>배송정보</strong></Col>
                 <Col sm={12}>
                     <ul>

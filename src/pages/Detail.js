@@ -9,7 +9,8 @@ import DetailPopup from '../popup/detailPopup';
 
 const Detail = (props) => {
     const [modalOpen, setModalOpen] = useState(false);
-    const [cart, setCart] = useState(false);
+    const [title, setTitle] = useState('어메이징 원목 침대깔판')
+    const [price, setPrice] = useState('70,000')
 
     const openModal = () => {
         setModalOpen(true);
@@ -30,14 +31,14 @@ const Detail = (props) => {
                         </Col>
                     </Row>
                     <Stack gap={0}>
-                        <div className={styles.title}>어메이징 원목 침대깔판 <span>(7일 이내 무상반품)</span></div>
-                        <div className={styles.price}><s>70,000</s><sup>85%</sup></div>
+                        <div className={styles.title}>{title}<span>(7일 이내 무상반품)</span></div>
+                        <div className={styles.price}><s>{price}</s><sup>85%</sup></div>
                         <div className={styles.salePrice}><span>9,900</span></div>
                     </Stack>
                     <DeliverylInfo />
                     <div className="d-grid gap-2">
                         <Button variant="secondary" onClick={openModal}>구매하기</Button>
-                        <DetailPopup open={modalOpen} close={closeModal} cart={cart} header="장바구니 담기">
+                        <DetailPopup open={modalOpen} close={closeModal} header="장바구니 담기" title={title} price={price}>
                         </DetailPopup>
                     </div>
                     <Row className={`mt20 mb20 pt20`}>
