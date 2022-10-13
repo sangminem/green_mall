@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useState } from 'react';
 import {Row} from 'react-bootstrap'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -19,10 +19,25 @@ const DetailPopup = (props) => {
     console.log(`selected ${value}`);
     };
 
-    //InputNumber
-    const onChange = (value) => {
-        console.log('changed', value);
-    };
+    //option-count&price
+    const addCount = function(type) {
+        count++;
+
+        setCount(count);
+        let total = price * count;
+        setTotalPrice(totalPrice);
+    }
+    
+    const minusCount = function() {
+        count--;
+    
+        setCount(count);
+        let total = price * count;
+        setTotalPrice(totalPrice);
+    }
+    
+    let [count, setCount] = useState(1);  // 수량
+    let [totalPrice, setTotalPrice] =  useState();  // 총금액
 
     // cart
     const dispatch = useDispatch()
@@ -40,11 +55,27 @@ const DetailPopup = (props) => {
             </header>
             <main>
                 <Select defaultValue="disabled" onChange={handleChange}>
-                    <Option value="disabled" disabled>[필수] 옵션을 선택해주세요</Option>
+                    <Option value="disabled" disabled>[필수] 제품 옵션을 선택해주세요</Option>
                     <Option value="product">{title}</Option>
                 </Select>
-                <InputNumber min={1} max={10} defaultValue={1} onChange={onChange} />
-                <p className='price'>주문 금액 <span>{price}원</span></p>
+                <Select defaultValue="disabled" onChange={handleChange}>
+                    <Option value="disabled" disabled>[필수] 택배 옵션을 선택해주세요</Option>
+                    <Option value="product">새벽배송</Option>
+                    <Option value="product">택배배송</Option>
+                </Select>
+                <div className='priceBox'>
+                    <p className='hidden'>가격: {price}</p>
+                    <div>
+                        <div className='countBox'>
+                            <span className='hidden'>수량:</span>
+                            <button onClick={addCount}>+</button>
+                            {count}
+                            <button onClick={minusCount}>-</button>
+                        </div>
+                        <p className='totalPrice'>주문 금액 <span>{totalPrice}원</span></p>
+                    </div>
+                </div>
+                
             </main>
             <footer>
                 <button className="cart" onClick={(props)=>{
