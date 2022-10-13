@@ -6,10 +6,8 @@
 
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
-import Container from "react-bootstrap/Container";
 import { Button, Input, Form, Radio, Modal, message } from "antd";
 import ProductList from "../components/ProductList";
-import addComma from "../Utils";
 
 const ProductMngPage = () => {
   const SERVER_URL = "http://localhost:4000";
@@ -44,9 +42,8 @@ const ProductMngPage = () => {
   };
 
   const handleChange = (e) => {
-    setProductForm({[e.target.name]: e.target.value});
-}
-
+    setProductForm({ [e.target.name]: e.target.value });
+  };
 
   // 처음 렌더링 시 실행
   useEffect(() => {
@@ -71,7 +68,7 @@ const ProductMngPage = () => {
           data[key].IMAGE = `${SERVER_URL}/images/` + data[key].IMAGE; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
         }
 
-        setProductList(data);        
+        setProductList(data);
       })
       .catch(function (err) {
         console.log(err);
@@ -97,11 +94,11 @@ const ProductMngPage = () => {
 
         data.IMAGE = `${SERVER_URL}/images/` + data.IMAGE;
 
-        setProductDetail(data);                
+        setProductDetail(data);
       })
       .catch(function (err) {
         console.log(err);
-      });     
+      });
   };
 
   /**
@@ -178,12 +175,11 @@ const ProductMngPage = () => {
       ...productForm,
       [name]: value,
     });
-
   };
 
   // 상품 등록/수정 버튼 클릭시
   const editProduct = (props) => {
-    setIsModalOpen(true);    
+    setIsModalOpen(true);
     setProductDetail(props);
   };
 
@@ -203,150 +199,145 @@ const ProductMngPage = () => {
   };
 
   return (
-    <Fragment>
-      <Container>
-        <div style={{ textAlign: "right", margin: "10px 0" }}>
-          <Button type="primary" onClick={editProduct}>
-            상품 등록
-          </Button>
-        </div>
+    <Fragment>      
+      <div className="flex" style={{ marginBottom: "10px" }}>
+        <span className="tit-lg">상품관리</span>
+        <Button type="primary" onClick={editProduct}>
+          상품 등록
+        </Button>
+      </div>
 
-        <ProductList
-          productList={productList}
-          editProduct={editProduct}
-          deleteProduct={deleteProduct}
-        />
+      <ProductList
+        productList={productList}
+        editProduct={editProduct}
+        deleteProduct={deleteProduct}
+      />
 
-        <Modal
-          title="상품 등록"
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          width={700}
-          footer={[
-            <Button type="primary" key="submit" onClick={registerItem}>
-              등록
-            </Button>,
-          ]}
-        >
-          {editYn ? (
-            // 수정 모드
-            <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-              <h3>상품 기본정보</h3>
-              <p>{productDetail.PRODUCT_NM}</p>
-              <p>{productDetail.SALE_PRICE}</p>                            
-              <Form.Item label="카테고리">
-                <Radio.Group name="category" onChange={getValue}>
-                  <Radio value="furniture">가구</Radio>
-                  <Radio value="plant">식물/데코</Radio>
-                </Radio.Group>
-              </Form.Item>
-              <Form.Item label="상품명">
-                <Input name="product_nm" value={productDetail.PRODUCT_NM} onChange={getValue} />
-              </Form.Item>
-              <Form.Item label="대표이미지">
-                {productForm.IMAGE ? (
-                  <img
-                    src={productForm.IMAGE}
-                    style={{ width: "120px", border: "1px solid #ccc" }}
-                    alt=""
-                  />
-                ) : (
-                  <img
-                    src={process.env.PUBLIC_URL + "/noimg2.png"}
-                    alt=""
-                    style={{ width: "120px", border: "1px solid #ccc" }}
-                  />
-                )}
-                <Input
-                  type="file"
-                  onChange={(e) => {
-                    onChangeImage(e.target.files[0]);
-                    setImg(e.target.files[0]);
-                  }}
+      <Modal
+        title="상품 등록"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={700}
+        footer={[
+          <Button type="primary" key="submit" onClick={registerItem}>
+            등록
+          </Button>,
+        ]}
+      >
+        {editYn ? (
+          // 수정 모드
+          <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+            <h3>상품 기본정보</h3>
+            <p>{productDetail.PRODUCT_NM}</p>
+            <p>{productDetail.SALE_PRICE}</p>
+            <Form.Item label="카테고리">
+              <Radio.Group name="category" onChange={getValue}>
+                <Radio value="furniture">가구</Radio>
+                <Radio value="plant">식물/데코</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item label="상품명">
+              <Input
+                name="product_nm"
+                value={productDetail.PRODUCT_NM}
+                onChange={getValue}
+              />
+            </Form.Item>
+            <Form.Item label="대표이미지">
+              {productForm.IMAGE ? (
+                <img
+                  src={productForm.IMAGE}
+                  style={{ width: "120px", border: "1px solid #ccc" }}
+                  alt=""
                 />
-              </Form.Item>
-              <Form.Item label="상품가격">
-                <Input name="sale_price" type="number" onChange={getValue} />
-              </Form.Item>
-              <Form.Item label="할인율">
-                <Input
-                  name="discounted_rate"
-                  type="number"
-                  onChange={getValue}
+              ) : (
+                <img
+                  src={process.env.PUBLIC_URL + "/noimg2.png"}
+                  alt=""
+                  style={{ width: "120px", border: "1px solid #ccc" }}
                 />
-              </Form.Item>
-              <Form.Item label="배송구분">
-                <Radio.Group name="delivery_dvsn" onChange={getValue}>
-                  <Radio value="일반배송">일반배송</Radio>
-                  <Radio value="오늘출발">오늘출발</Radio>
-                </Radio.Group>
-              </Form.Item>
-            </Form>
-          ) : (
-            // 등록 모드
-            <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-              <h6>상품 기본정보</h6>
-              <Form.Item label="카테고리">
-                <Radio.Group
-                  name="category"
-                  // value="furniture"
-                  onChange={getValue}
-                >
-                  <Radio value="furniture">가구</Radio>
-                  <Radio value="plant">식물/데코</Radio>
-                  <Radio value="pet">반려동물</Radio>
-                </Radio.Group>
-              </Form.Item>
-              <Form.Item label="상품명">
-                <Input name="product_nm" onChange={getValue} />
-              </Form.Item>
-              <Form.Item label="대표이미지">
-                {previewImg ? (
-                  <img
-                    src={previewImg}
-                    style={{ width: "120px", border: "1px solid #ccc" }}
-                    alt=""
-                  />
-                ) : (
-                  <img
-                    src={process.env.PUBLIC_URL + "/noimg2.png"}
-                    alt=""
-                    style={{ width: "120px", border: "1px solid #ccc" }}
-                  />
-                )}
-                <Input
-                  type="file"
-                  onChange={(e) => {
-                    onChangeImage(e.target.files[0]);
-                    setImg(e.target.files[0]);
-                  }}
+              )}
+              <Input
+                type="file"
+                onChange={(e) => {
+                  onChangeImage(e.target.files[0]);
+                  setImg(e.target.files[0]);
+                }}
+              />
+            </Form.Item>
+            <Form.Item label="상품가격">
+              <Input name="sale_price" type="number" onChange={getValue} />
+            </Form.Item>
+            <Form.Item label="할인율">
+              <Input name="discounted_rate" type="number" onChange={getValue} />
+            </Form.Item>
+            <Form.Item label="배송구분">
+              <Radio.Group name="delivery_dvsn" onChange={getValue}>
+                <Radio value="일반배송">일반배송</Radio>
+                <Radio value="오늘출발">오늘출발</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </Form>
+        ) : (
+          // 등록 모드
+          <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+            <h6>상품 기본정보</h6>
+            <Form.Item label="카테고리">
+              <Radio.Group
+                name="category"
+                // value="furniture"
+                onChange={getValue}
+              >
+                <Radio value="furniture">가구</Radio>
+                <Radio value="plant">식물/데코</Radio>
+                <Radio value="pet">반려동물</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item label="상품명">
+              <Input name="product_nm" onChange={getValue} />
+            </Form.Item>
+            <Form.Item label="대표이미지">
+              {previewImg ? (
+                <img
+                  src={previewImg}
+                  style={{ width: "120px", border: "1px solid #ccc" }}
+                  alt=""
                 />
-              </Form.Item>
-              <Form.Item label="상품가격">
-                <Input name="sale_price" type="number" onChange={getValue} />
-              </Form.Item>
-              <Form.Item label="할인율">
-                <Input
-                  name="discounted_rate"
-                  type="number"
-                  onChange={getValue}
+              ) : (
+                <img
+                  src={process.env.PUBLIC_URL + "/noimg2.png"}
+                  alt=""
+                  style={{ width: "120px", border: "1px solid #ccc" }}
                 />
-              </Form.Item>
-              <Form.Item label="배송구분">
-                <Radio.Group
-                  name="delivery_dvsn"
-                  value="일반배송"
-                  onChange={getValue}
-                >
-                  <Radio value="일반배송">일반배송</Radio>
-                  <Radio value="오늘출발">오늘출발</Radio>
-                </Radio.Group>
-              </Form.Item>
-            </Form>
-          )}
-        </Modal>
-      </Container>
+              )}
+              <Input
+                type="file"
+                onChange={(e) => {
+                  onChangeImage(e.target.files[0]);
+                  setImg(e.target.files[0]);
+                }}
+              />
+            </Form.Item>
+            <Form.Item label="상품가격">
+              <Input name="sale_price" type="number" onChange={getValue} />
+            </Form.Item>
+            <Form.Item label="할인율">
+              <Input name="discounted_rate" type="number" onChange={getValue} />
+            </Form.Item>
+            <Form.Item label="배송구분">
+              <Radio.Group
+                name="delivery_dvsn"
+                value="일반배송"
+                onChange={getValue}
+              >
+                <Radio value="일반배송">일반배송</Radio>
+                <Radio value="오늘출발">오늘출발</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </Form>
+        )}
+      </Modal>
     </Fragment>
   );
 };

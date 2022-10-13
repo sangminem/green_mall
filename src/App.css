@@ -13,11 +13,6 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -29,18 +24,13 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
 .container {
   max-width: 720px !important;  
 }
 
 
 
-/* hy */
-
+/* 하연 추가 */
 .g-menu p {
   font-size: 15px;
   font-weight: 500;
@@ -48,7 +38,53 @@
   cursor: pointer;
 }
 
+.tit-lg {
+  font-size: 18px; 
+  font-weight: 500;
+  color: #111
+}
+
+.tit-md {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111
+}
+
+.tit-sm {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111
+}
+
+.txt-lg {
+  font-size: 16px;
+  color: #444
+}
+
+.txt-md {
+  font-size: 14px;
+  color: #444
+}
+
+.txt-sm {
+  font-size: 12px;
+  color: #444
+}
+
+.mr5 {
+  margin-right: 5px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.anticon {
+  vertical-align: middle;
+}
+
 .ant-layout-header {
+  padding: 0 20px !important;
   height: 46px !important;
   line-height: 46px !important;
   border-bottom: 1px solid #ddd;
@@ -104,19 +140,6 @@ span.anticon.anticon-down svg {
 button {
   border: 0;
   background: none;
-}
-
-.tit-lg {
-  font-size: 18px; 
-  font-weight: 500;
-}
-
-.tit-md {
-  font-size: 15px;
-}
-
-.tit-sm {
-  font-size: 14px;
 }
 
 .tbl {
