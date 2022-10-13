@@ -4,105 +4,38 @@
  * @since 2022.08.24
  * */
 
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Button, Input, Form, Radio, Modal, message } from "antd";
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+import swal from "sweetalert";
 import ProductList from "../components/ProductList";
+import ProductForm from "../components/ProductForm";
 
 const ProductMngPage = () => {
-  const SERVER_URL = "http://localhost:4000";
-
-  // 상품 리스트 []
-  const [productList, setProductList] = useState([]);
-
-  // 상품 상세정보 {}
-  const [productDetail, setProductDetail] = useState({});
-
-  // 상품 등록 input {}
-  const [productForm, setProductForm] = useState({
-    category: "",
+  // 상품정보
+  const [productInfo, setProductInfo] = useState({
     product_nm: "",
-    sale_price: "",
-    discounted_rate: "",
-    delivery_dvsn: "",
-    detail_content: "",
+    product_summary: "",
+    item_price: "",
+    category: "",
+    brand_nm: "",
   });
 
-  const [img, setImg] = useState("");
-  const [previewImg, setPreviewImg] = useState(null);
+  const [content, setContent] = useState("");
+  const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editYn, setEditYn] = useState(false);
+  const [previewImg, setPreviewImg] = useState(null);
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleChange = (e) => {
-    setProductForm({ [e.target.name]: e.target.value });
-  };
+  const SERVER_URL = "http://localhost:4000";
 
   // 처음 렌더링 시 실행
   useEffect(() => {
-    getProductList();
+    getData();
   }, []);
 
   /**
-   * 상품 리스트 가져오기
-   *
-   * @param {string} categoryId 카테고리ID
-   * @return
-   */
-  const getProductList = function () {
-    const url = `${SERVER_URL}/api/products`;
-
-    axios
-      .get(url)
-      .then(function (res) {
-        let data = res.data;
-
-        for (let key in data) {
-          data[key].IMAGE = `${SERVER_URL}/images/` + data[key].IMAGE; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
-        }
-
-        setProductList(data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
-  /**
-   * 상품 단건 가져오기
-   *
-   * @param {string}
-   * @return
-   */
-  const getProductDetail = (idx) => {
-    const url = `${SERVER_URL}/api/products/detail`;
-    const data = {
-      product_id: idx, // product_id 로 상품 상세정보 조회
-    };
-
-    axios
-      .post(url, data)
-      .then(function (res) {
-        let data = res.data;
-
-        data.IMAGE = `${SERVER_URL}/images/` + data.IMAGE;
-
-        setProductDetail(data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
-  /**
-   * 상품 상세정보 등록
+   * 상품 데이터 DB에 등록
    *
    * @param
    * @return
@@ -113,23 +46,25 @@ const ProductMngPage = () => {
     const url = `${SERVER_URL}/api/register`;
 
     const formData = new FormData();
-    formData.append("productForm", JSON.stringify(productForm));
-    formData.append("img", img);
+    formData.append("productInfo", JSON.stringify(productInfo));
+    formData.append("img", content);
 
     axios
       .post(url, formData)
       .then(function (res) {
         if (res.data.errCode == 0) {
-          message.success({
-            content: "상품정보 등록 성공",
-            className: "custom-class",
+          swal({
+            text: "상품정보를 성공적으로 등록했습니다.",
+            icon: "success",
+            button: "확인",
           });
           setIsModalOpen(false);
-          getProductList();
+          getData();
         } else {
-          message.error({
-            content: "상품정보 등록 실패",
-            className: "custom-class",
+          swal({
+            text: "상품정보 등록중 오류가 발생했습니다.",
+            icon: "error",
+            button: "확인",
           });
         }
         console.log(res);
@@ -139,27 +74,50 @@ const ProductMngPage = () => {
       });
   };
 
-  // 상품 삭제
-  const deleteProduct = (idx) => {
-    const url = `${SERVER_URL}/api/products/delete`;
-    const postData = {
-      data: {
-        product_id: idx,
-      },
-    };
+  /**
+   * 카테고리별 상품 데이터 가져오기
+   *
+   * @param {string} categoryId 카테고리ID
+   * @return
+   */
+  const getData = function (categoryId) {
+    let url = "";
+    if (categoryId) {
+      url = `${SERVER_URL}/api/products/${categoryId}`;
+    } else {
+      url = `${SERVER_URL}/api/products/all`;
+    }
 
     axios
-      .delete(url, postData)
+      .get(url)
       .then(function (res) {
-        message.success({
-          content: "상품정보 삭제 성공",
-          className: "custom-class",
-        });
-        getProductList();
+        let data = res.data;
+
+        for (let key in data) {
+          data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
+        }
+
+        setProducts(res.data);
       })
       .catch(function (err) {
         console.log(err);
       });
+  };
+
+  /**
+   * 상품 상세정보 가져오기
+   *
+   * @param {string} categoryId 카테고리ID
+   * @return
+   */
+  const setData = (e) => {
+    console.log(e);
+
+    let copy = products.filter((item) => {
+      return item.product_nm == 21;
+    });
+
+    // setProduct_nm(copy[0].product_nm);
   };
 
   /**
@@ -171,19 +129,22 @@ const ProductMngPage = () => {
   const getValue = (e) => {
     let { name, value } = e.target;
 
-    setProductForm({
-      ...productForm,
+    setProductInfo({
+      ...productInfo,
       [name]: value,
     });
   };
 
-  // 상품 등록/수정 버튼 클릭시
-  const editProduct = (props) => {
+  /**
+   * 상품 정보 등록/수정 버튼 클릭시
+   *
+   * @param
+   * @return
+   */
+  const editProduct = () => {
     setIsModalOpen(true);
-    setProductDetail(props);
   };
 
-  // 이미지 업로드시 이미지 프리뷰
   const onChangeImage = (fileBlob) => {
     const reader = new FileReader();
 
@@ -199,146 +160,25 @@ const ProductMngPage = () => {
   };
 
   return (
-    <Fragment>      
-      <div className="flex" style={{ marginBottom: "10px" }}>
-        <span className="tit-lg">상품관리</span>
-        <Button type="primary" onClick={editProduct}>
-          상품 등록
-        </Button>
-      </div>
+    <React.Fragment>
+      <Container>
+        <Button onClick={editProduct}>상품 등록</Button>
 
-      <ProductList
-        productList={productList}
-        editProduct={editProduct}
-        deleteProduct={deleteProduct}
-      />
+        <ProductList Button={Button} products={products} />
 
-      <Modal
-        title="상품 등록"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        width={700}
-        footer={[
-          <Button type="primary" key="submit" onClick={registerItem}>
-            등록
-          </Button>,
-        ]}
-      >
-        {editYn ? (
-          // 수정 모드
-          <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-            <h3>상품 기본정보</h3>
-            <p>{productDetail.PRODUCT_NM}</p>
-            <p>{productDetail.SALE_PRICE}</p>
-            <Form.Item label="카테고리">
-              <Radio.Group name="category" onChange={getValue}>
-                <Radio value="furniture">가구</Radio>
-                <Radio value="plant">식물/데코</Radio>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item label="상품명">
-              <Input
-                name="product_nm"
-                value={productDetail.PRODUCT_NM}
-                onChange={getValue}
-              />
-            </Form.Item>
-            <Form.Item label="대표이미지">
-              {productForm.IMAGE ? (
-                <img
-                  src={productForm.IMAGE}
-                  style={{ width: "120px", border: "1px solid #ccc" }}
-                  alt=""
-                />
-              ) : (
-                <img
-                  src={process.env.PUBLIC_URL + "/noimg2.png"}
-                  alt=""
-                  style={{ width: "120px", border: "1px solid #ccc" }}
-                />
-              )}
-              <Input
-                type="file"
-                onChange={(e) => {
-                  onChangeImage(e.target.files[0]);
-                  setImg(e.target.files[0]);
-                }}
-              />
-            </Form.Item>
-            <Form.Item label="상품가격">
-              <Input name="sale_price" type="number" onChange={getValue} />
-            </Form.Item>
-            <Form.Item label="할인율">
-              <Input name="discounted_rate" type="number" onChange={getValue} />
-            </Form.Item>
-            <Form.Item label="배송구분">
-              <Radio.Group name="delivery_dvsn" onChange={getValue}>
-                <Radio value="일반배송">일반배송</Radio>
-                <Radio value="오늘출발">오늘출발</Radio>
-              </Radio.Group>
-            </Form.Item>
-          </Form>
-        ) : (
-          // 등록 모드
-          <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-            <h6>상품 기본정보</h6>
-            <Form.Item label="카테고리">
-              <Radio.Group
-                name="category"
-                // value="furniture"
-                onChange={getValue}
-              >
-                <Radio value="furniture">가구</Radio>
-                <Radio value="plant">식물/데코</Radio>
-                <Radio value="pet">반려동물</Radio>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item label="상품명">
-              <Input name="product_nm" onChange={getValue} />
-            </Form.Item>
-            <Form.Item label="대표이미지">
-              {previewImg ? (
-                <img
-                  src={previewImg}
-                  style={{ width: "120px", border: "1px solid #ccc" }}
-                  alt=""
-                />
-              ) : (
-                <img
-                  src={process.env.PUBLIC_URL + "/noimg2.png"}
-                  alt=""
-                  style={{ width: "120px", border: "1px solid #ccc" }}
-                />
-              )}
-              <Input
-                type="file"
-                onChange={(e) => {
-                  onChangeImage(e.target.files[0]);
-                  setImg(e.target.files[0]);
-                }}
-              />
-            </Form.Item>
-            <Form.Item label="상품가격">
-              <Input name="sale_price" type="number" onChange={getValue} />
-            </Form.Item>
-            <Form.Item label="할인율">
-              <Input name="discounted_rate" type="number" onChange={getValue} />
-            </Form.Item>
-            <Form.Item label="배송구분">
-              <Radio.Group
-                name="delivery_dvsn"
-                value="일반배송"
-                onChange={getValue}
-              >
-                <Radio value="일반배송">일반배송</Radio>
-                <Radio value="오늘출발">오늘출발</Radio>
-              </Radio.Group>
-            </Form.Item>
-          </Form>
+        {isModalOpen && (
+          <ProductForm
+            registerItem={registerItem}
+            getValue={getValue}
+            setContent={setContent}
+            setIsModalOpen={setIsModalOpen}
+            getData={getData}
+            previewImg={previewImg}
+            onChangeImage={onChangeImage}
+          />
         )}
-      </Modal>
-    </Fragment>
+      </Container>
+    </React.Fragment>
   );
 };
 
