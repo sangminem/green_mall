@@ -5,7 +5,7 @@
  */
 
 import React, { Fragment, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import addComma from "../Utils.js";
 import { Container } from "react-bootstrap";
@@ -32,6 +32,10 @@ const CategoryPage = () => {
   let [heart, setHeart] = useState(false); // 찜 하트
   let [saleType, setSaleType] = useState(false);
   let [loading, setLoading] = useState(false);
+
+  const SERVER_URL = "http://localhost:4000";
+
+  const navigate = useNavigate();
 
   // 정렬 드롭다운 메뉴
   const menu = (
@@ -68,8 +72,6 @@ const CategoryPage = () => {
     pageTitle(id);
     setSelected("신상품순");
   }, [id]);
-
-  const SERVER_URL = "http://localhost:4000";
 
   /**
    * 상품 카테고리 리스트 조회
@@ -194,8 +196,8 @@ const CategoryPage = () => {
       <Row gutter={26}>
         {products.map((a, i) => {
           return (
-            <Fragment key={i}>
-              <Col span={12} style={{ margin: "18px 0" }}>
+            <Fragment key={i}>             
+              <Col span={12} style={{ margin: "18px 0" }} onClick={() => navigate(`/detail/${a.PRODUCT_ID}`)}>
                 {a.IMAGE !== "" ? (
                   <img
                     src={a.IMAGE}
