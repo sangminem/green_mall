@@ -1,11 +1,8 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { BrowserRouter, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Layout, Drawer, Row, Col, Divider } from "antd";
-import {
-  IoMenuSharp,
-  IoCartOutline,
-} from "react-icons/io5";
+import { Layout, Drawer, Row, Col, Divider } from "antd";
+import { IoMenuSharp, IoCartOutline } from "react-icons/io5";
 const { Header } = Layout;
 
 const FixedHeader = () => {

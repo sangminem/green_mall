@@ -27,16 +27,11 @@ const ListPage = (props) => {
    */
   const getData = function () {
     const url = `${SERVER_URL}/api/product`;
+    const img_url_base = `${SERVER_URL}/images/`;
 
     axios
       .get(url)
       .then(function (res) {
-        let data = res.data;
-
-        for (let key in data) {
-          data[key].image = `${SERVER_URL}/images/` + data[key].image; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
-        }
-
         props.setProductList(res.data);
       })
       .catch(function (err) {
@@ -84,7 +79,7 @@ const ListPage = (props) => {
                   <Link to={`/detail/${a.product_id}`}>
                     {a.image !== "" ? (
                       <img
-                        src={a.image}
+                        src={img_url_base + a.image}
                         alt=""
                         style={{ width: "100%", borderRadius: "12px" }}
                       />
