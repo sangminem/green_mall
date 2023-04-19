@@ -4,11 +4,11 @@
  * @since 2022.08.24
  * */
 
- import React, { Fragment, useEffect, useState } from "react";
- import axios from "axios";
- import { Button, Input, Form, Radio, Modal, message } from "antd";
- import ProductList from "../components/ProductList";
- import { CKEditor } from '@ckeditor/ckeditor5-react';
+import React, { Fragment, useEffect, useState } from "react";
+import axios from "axios";
+import { Button, Input, Form, Radio, Modal, message } from "antd";
+import ProductList from "../components/ProductList";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
  
  const ProductMngPage = () => {
@@ -32,7 +32,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
    const [img, setImg] = useState("");
    const [previewImg, setPreviewImg] = useState(null);
    const [isModalOpen, setIsModalOpen] = useState(false);
-   const [editYn, setEditYn] = useState(false);
+   const editYn = useState(false)[0];
    const [detailContent, setDetailContent] = useState("");
  
    const handleOk = () => {
@@ -41,10 +41,6 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
  
    const handleCancel = () => {
      setIsModalOpen(false);
-   };
- 
-   const handleChange = (e) => {
-     setProductForm({ [e.target.name]: e.target.value });
    };
  
    // 처음 렌더링 시 실행
@@ -78,32 +74,6 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
    };
  
    /**
-    * 상품 단건 가져오기
-    *
-    * @param {string}
-    * @return
-    */
-   const getProductDetail = (idx) => {
-     const url = `${SERVER_URL}/api/products/detail`;
-     const data = {
-       product_id: idx, // product_id 로 상품 상세정보 조회
-     };
- 
-     axios
-       .post(url, data)
-       .then(function (res) {
-         let data = res.data;
- 
-         data.IMAGE = `${SERVER_URL}/images/` + data.IMAGE;
- 
-         setProductDetail(data);
-       })
-       .catch(function (err) {
-         console.log(err);
-       });
-   };
- 
-   /**
     * 상품 상세정보 등록
     *
     * @param
@@ -122,7 +92,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
      axios
        .post(url, formData)
        .then(function (res) {
-         if (res.data.errCode == 0) {
+         if (res.data.errCode === 0) {
            message.success({
              content: "상품정보 등록 성공",
              className: "custom-class",

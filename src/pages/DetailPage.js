@@ -1,29 +1,11 @@
-import React, { Component, Fragment, useEffect, useState } from "react";
-
-import {
-  Button,
-  Stack,
-  Container,
-  Row,
-  Col,
-  Card,
-  Modal,
-} from "react-bootstrap";
-
+import React, { useEffect, useState } from "react";
+import { Button, Stack, Container, Row, Col, Card } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-
 import axios from "axios";
-
 import Image from "react-bootstrap/Image";
-
 import styles from "./../css/detail.module.css";
-
-import styled from "styled-components";
-
 import Detailinfo from "../components/DetailInfo";
-
 import DeliverylInfo from "../components/deliveryInfo";
-
 import DetailPopup from "../popup/detailPopup";
 import ReactHtmlParser from "react-html-parser";
 

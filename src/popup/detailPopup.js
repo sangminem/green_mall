@@ -1,13 +1,9 @@
-import React, { Component, Fragment, useState } from 'react';
-import {Row} from 'react-bootstrap'
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import { Select, InputNumber } from 'antd';
+import React, { useState } from 'react';
+import { Select } from 'antd';
 import { useDispatch } from 'react-redux'
 import { addItem } from '../store/Store'
 import './../css/modal.css';
-import 'antd/dist/antd.css';
-import styled from 'styled-components';
+import 'antd/dist/antd.min.css';
 
 const DetailPopup = (props) => {
     // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
@@ -24,7 +20,6 @@ const DetailPopup = (props) => {
         count++;
 
         setCount(count);
-        let total = price * count;
         setTotalPrice(totalPrice);
     }
     
@@ -32,7 +27,6 @@ const DetailPopup = (props) => {
         count--;
     
         setCount(count);
-        let total = price * count;
         setTotalPrice(totalPrice);
     }
     

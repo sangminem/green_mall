@@ -4,19 +4,16 @@
  * @since 2022.08.23
  */
 
-import React, { Fragment, useEffect, useState, useLayoutEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
 import axios from "axios";
-import swal from "sweetalert";
 import addComma from "../Utils.js";
 import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { IoHeartOutline } from "react-icons/io5";
 
 const ListPage = (props) => {
-  const location = useLocation();
-  const { categoryId } = useParams();
   const SERVER_URL = "http://localhost:4000";
+  const img_url_base = `${SERVER_URL}/images/`;
 
   useEffect(() => {
     getData();
@@ -27,7 +24,6 @@ const ListPage = (props) => {
    */
   const getData = function () {
     const url = `${SERVER_URL}/api/product`;
-    const img_url_base = `${SERVER_URL}/images/`;
 
     axios
       .get(url)

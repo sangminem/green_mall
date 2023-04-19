@@ -1,19 +1,15 @@
-import React, {Fragment, useCallback, useState, useEffect} from 'react';
+import React from 'react';
 import { Container, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { addCount, addItem, minusCount, deleteCount } from './../store/Store'
+import { addCount, minusCount, deleteCount } from './../store/Store'
 import styles from './../css/cart.module.css';
 
-const CartPage = (props) => {
-    // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-    const { open, close, header, title, price } = props;
-
+const CartPage = () => {
     const state = useSelector((state)=>{
         return state
     })
     const dispatch = useDispatch()
-    const [count, setCount] = useState(0)
-    const [message, setMessage] = useState('장바구니가 비었습니다 🧺')
+
 
     return (
         <React.Fragment>
@@ -36,7 +32,7 @@ const CartPage = (props) => {
                             state.cart.map((a, i) => {
                                 return(
                                     <tr key={i}>
-                                        {state.cart[i] != 1 ?
+                                        {state.cart[i] !== 1 ?
                                             <>
                                                 <td>{state.cart[i].id}</td>
                                                 <td>{state.cart[i].name}</td>

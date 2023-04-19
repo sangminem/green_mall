@@ -1,9 +1,9 @@
-import React, { useState, Component, Fragment } from "react";
+import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "antd/dist/antd.css";
-import { Layout, Tabs } from "antd";
-import { BrowserRouter, Route, Routes, useHistory } from "react-router-dom";
+import "antd/dist/antd.min.css";
+import { Layout } from "antd";
+import { Route, Routes } from "react-router-dom";
 
 import MainPage from "./pages/MainPage";
 import CategoryPage from "./pages/CategoryPage";

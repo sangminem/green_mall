@@ -4,15 +4,15 @@
  * @since 2022.08.23
  */
 
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import addComma from "../Utils.js";
-import { Container } from "react-bootstrap";
-import { Row, Col, Dropdown, Menu, Space, Tag, Spin, Skeleton } from "antd";
+import { Row, Col, Dropdown, Menu, Tag, Spin } from "antd";
 import { DownOutlined, LoadingOutlined } from "@ant-design/icons";
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { TbTruckDelivery } from "react-icons/tb";
+
 const antIcon = (
   <LoadingOutlined
     style={{
@@ -61,24 +61,11 @@ const CategoryPage = () => {
     />
   );
 
-  useEffect(() => {
-    if (id === "sale") {
-      setSaleType(true);
-    } else {
-      setSaleType(false);
-    }
-    setLoading(true);
-    getData();
-    pageTitle(id);
-    setSelected("신상품순");
-  }, [id]);
-
   /**
    * 상품 카테고리 리스트 조회
    */
-  const getData = function () {
+  const getData = useCallback(function () {
     const url = `${SERVER_URL}/api/products`;
-
     axios
       .get(url)
       .then(function (res) {
@@ -100,7 +87,19 @@ const CategoryPage = () => {
       .catch(function (err) {
         console.log(err);
       });
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id === "sale") {
+      setSaleType(true);
+    } else {
+      setSaleType(false);
+    }
+    setLoading(true);
+    getData();
+    pageTitle(id);
+    setSelected("신상품순");
+  }, [getData, id, saleType]);
 
   /**
    * 상품 정렬 기능
@@ -158,7 +157,7 @@ const CategoryPage = () => {
         title = "🛋가구";
         break;
       case "plant":
-        title = "🪴식물/데코";
+        title = "🌵식물/데코";
         break;
       case "pet":
         title = "🦮반려동물";
@@ -175,7 +174,7 @@ const CategoryPage = () => {
    * @param
    */
   const fillHeart = function () {
-    if (heart == false) {
+    if (heart === false) {
       setHeart(true);
     } else {
       setHeart(false);
