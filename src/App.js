@@ -14,13 +14,12 @@ import CartPage from "./pages/CartPage";
 import ProductMngPage from "./pages/ProductMngPage";
 import MyPage from "./pages/MyPage";
 import FixedHeader from "./components/FixedHeader";
+
 const { Content } = Layout;
 
 const App = () => {
-
   // const [productList, setProductList] = useState([]);  // 상품 리스트
   // const [productDetail, setProductDetail] = useState({});  // 상품 상세
-
 
   return (
     <Layout style={{width: "700px", margin: "0 auto"}}>
