@@ -1,7 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import {Row, Col, NavDropdown} from 'react-bootstrap'
+import React from 'react';
+import { Row, Col } from 'react-bootstrap'
 import styles from './../css/detail.module.css';
-import styled from 'styled-components';
 
 const DeliverylInfo = () => {
     //date

@@ -9,7 +9,6 @@ const FixedHeader = () => {
   const [open, setOpen] = useState(false);
   let [loginYn, setLoginYn] = useState(false);
   let [loginId, setLoginId] = useState("");
-  const [visible, setVisible] = useState(false);  // drawer 보임여부
 
   const navigate = useNavigate();
 
