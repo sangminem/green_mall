@@ -10,8 +10,12 @@ import ProductList from "../components/ProductList";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-import db from '../db/firebase'
+import db from '../firebase/db'
 import { doc, collection, getDocs, addDoc, updateDoc, deleteDoc, Timestamp } from "firebase/firestore";
+
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
+const storage = getStorage();
 
 const ProductMngPage = () => {
   // 상품 리스트 []
@@ -48,32 +52,33 @@ const ProductMngPage = () => {
     getProductList();
   }, []);
 
-  useEffect(() => {
-    if(editYn === true) {
-      console.log(productDetail);
-    }
-  }, [editYn])
- 
-   /**
-    * 상품 리스트 가져오기
-    *
-    * @param {string} categoryId 카테고리ID
-    * @return
-    */
-   const getProductList = function () {
-    getDocs(collection(db, "TBGM_PRODUCT")).then((querySnapshot) => {
-      let dataList = []
-      querySnapshot.forEach((doc) => {
-        // console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-        let docData = doc.data();
-        docData['PRODUCT_ID'] = doc.id;
-        dataList.push(docData);
-        setProductList(dataList);
-      });
-    }).catch((err) => {
-      console.log(err);
+  /**
+  * 상품 리스트 가져오기
+  *
+  * @param {string} categoryId 카테고리ID
+  * @return
+  */
+  const getProductList = async function () {
+  try {
+    let dataList = [];
+    let docData = {};
+    const querySnapshot = await getDocs(collection(db, "TBGM_PRODUCT"));
+    querySnapshot.forEach(async (doc) => {
+      // console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+      docData = doc.data();
+      docData['PRODUCT_ID'] = doc.id;
+      console.log("inner");
     });
-   };
+    const starsRef = ref(storage, 'images/' + docData['PRODUCT_ID'] + '.jpg');
+    const url = await getDownloadURL(starsRef);
+    docData['IMAGE'] = url;
+    dataList.push(docData);
+    console.log("outter");
+    setProductList(dataList);
+  } catch(err) {
+    console.log(err);
+  }
+  };
  
    /**
     * 상품 상세정보 등록
@@ -204,8 +209,9 @@ const ProductMngPage = () => {
              <p>{productDetail.SALE_PRICE}</p>
              <Form.Item label="카테고리">
                <Radio.Group name="CATEGORY" onChange={getValue}>
-                 <Radio value="furniture">가구</Radio>
-                 <Radio value="plant">식물/데코</Radio>
+                 <Radio value="가구">가구</Radio>
+                 <Radio value="식물/데코">식물/데코</Radio>
+                 <Radio value="반려동물">반려동물</Radio>
                </Radio.Group>
              </Form.Item>
              <Form.Item label="상품명">
@@ -218,7 +224,7 @@ const ProductMngPage = () => {
              <Form.Item label="대표이미지">
                {productForm.IMAGE ? (
                  <img
-                   src={"/images/detail/" + productForm.IMAGE}
+                   src={productForm.IMAGE}
                    style={{ width: "120px", border: "1px solid #ccc" }}
                    alt=""
                  />
@@ -260,9 +266,9 @@ const ProductMngPage = () => {
                  // value="furniture"
                  onChange={getValue}
                >
-                 <Radio value="furniture">가구</Radio>
-                 <Radio value="plant">식물/데코</Radio>
-                 <Radio value="pet">반려동물</Radio>
+                 <Radio value="가구">가구</Radio>
+                 <Radio value="식물/데코">식물/데코</Radio>
+                 <Radio value="반려동물">반려동물</Radio>
                </Radio.Group>
              </Form.Item>
              <Form.Item label="상품명">

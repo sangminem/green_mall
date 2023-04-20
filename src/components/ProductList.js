@@ -21,7 +21,7 @@
        dataIndex: "IMAGE",
        width: 90,
        render: (text) => (
-         <img src={"/images/detail/" + text} alt="" style={{ width: "60px", borderRadius: "5px" }} />
+         <img src={text} alt="" style={{ width: "60px", borderRadius: "5px" }} />
        ),
      },
      {

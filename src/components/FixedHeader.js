@@ -74,7 +74,7 @@ const FixedHeader = () => {
           <p onClick={() => {navigate("/category/plant"); setOpen(false);}}>식물/데코</p>
           <p onClick={() => {navigate("/category/pet"); setOpen(false);}}>반려동물</p>
           <Divider orientation="left">관리자 전용</Divider>
-          <p onClick={() => {navigate("/productMng"); setOpen(false);}}>상품관리h</p>
+          <p onClick={() => {navigate("/productMng"); setOpen(false);}}>상품관리</p>
           <Divider orientation="left"></Divider>
           <p
             onClick={() => {sessionStorage.removeItem("userInfo"); setOpen(false);}}
