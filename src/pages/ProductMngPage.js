@@ -63,18 +63,18 @@ const ProductMngPage = () => {
     let dataList = [];
     let docData = {};
     const querySnapshot = await getDocs(collection(db, "TBGM_PRODUCT"));
-    querySnapshot.forEach(async (doc) => {
+    querySnapshot.forEach((doc) => {
       // console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
       docData = doc.data();
       docData['PRODUCT_ID'] = doc.id;
-      console.log("inner");
+      dataList.push(docData);
     });
-    const starsRef = ref(storage, 'images/' + docData['PRODUCT_ID'] + '.jpg');
-    const url = await getDownloadURL(starsRef);
-    docData['IMAGE'] = url;
-    dataList.push(docData);
-    console.log("outter");
     setProductList(dataList);
+    for(let i=0; i<dataList.length; i++) {
+      const url = await getDownloadURL(ref(storage, 'images/' + dataList[i]['PRODUCT_ID'] + '.jpg'));
+      dataList[i]['IMAGE'] = url;
+      setProductList([...dataList]);
+    }
   } catch(err) {
     console.log(err);
   }
