@@ -28,18 +28,20 @@ const ProductMngPage = () => {
     DETAIL_CONTENT: ""
   }
   const [productDetail, setProductDetail] = useState(initProductDetail);
- 
   const [img, setImg] = useState("");
   const [previewImg, setPreviewImg] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editYn, setEditYn] = useState(false);
-
   const [imageInputTag, setImageInputTag] = useState(null);
 
   // 처음 렌더링 시 실행
   useEffect(() => {
     getProductList();
   }, []);
+
+  useEffect(() => {
+    setProductDetail(productDetail);
+  }, [productDetail]);  
 
   /**
   * 상품 리스트 가져오기
@@ -95,7 +97,7 @@ const ProductMngPage = () => {
       }
     };
 
-    // console.log(data);
+    console.log(data);
     // console.log(img);
 
     if(!nextStep) {
@@ -216,7 +218,6 @@ const ProductMngPage = () => {
   // 상품 등록/수정 버튼 클릭시
   const editProduct = (props) => {
     setEditYn(props.editYn);
-    setProductDetail(props.productDetail);
 
     const inputTag = <Input
       type="file"
@@ -232,9 +233,11 @@ const ProductMngPage = () => {
     setIsModalOpen(true);
     setPreviewImg(null);
     setImageInputTag(null);
+    setProductDetail(initProductDetail);
     setTimeout(() => {
+      setProductDetail(props.productDetail);
       setImageInputTag(inputTag);
-    }, 500);
+    }, 200);
   };
 
   // 이미지 업로드시 이미지 프리뷰
@@ -277,6 +280,8 @@ const ProductMngPage = () => {
         previewImg={previewImg}
         editYn={editYn}
         imageInputTag={imageInputTag}
+        setImageInputTag={setImageInputTag}
+        initProductDetail={initProductDetail}
       />
     </Fragment>
   );
