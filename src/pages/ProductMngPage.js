@@ -5,47 +5,36 @@
  * */
 
 import React, { Fragment, useEffect, useState } from "react";
-import { Button, Input, Form, Radio, Modal, message } from "antd";
+import { Button, Input, message } from "antd";
 import ProductList from "../components/ProductList";
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-import db from '../firebase/db'
+import db from '../firebase/db';
+import storage from '../firebase/storage';
 import { doc, collection, getDocs, addDoc, updateDoc, deleteDoc, Timestamp } from "firebase/firestore";
-
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
-
-const storage = getStorage();
+import { ref, getDownloadURL, uploadBytes, deleteObject } from "firebase/storage";
+import ProductModal from "../components/ProductModal";
 
 const ProductMngPage = () => {
   // 상품 리스트 []
   const [productList, setProductList] = useState([]);
 
   // 상품 상세정보 {}
-  const [productDetail, setProductDetail] = useState({});
- 
-  // 상품 등록 input {}
-  const [productForm, setProductForm] = useState({
+  const initProductDetail = {
     CATEGORY: "",
     PRODUCT_NM: "",
     SALE_PRICE: "",
     DISCOUNTED_RATE: "",
     DELIVERY_DVSN: "",
-  });
+    DETAIL_CONTENT: ""
+  }
+  const [productDetail, setProductDetail] = useState(initProductDetail);
  
   const [img, setImg] = useState("");
   const [previewImg, setPreviewImg] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editYn, setEditYn] = useState(false);
-  const [detailContent, setDetailContent] = useState("");
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  const [imageInputTag, setImageInputTag] = useState(null);
 
   // 처음 렌더링 시 실행
   useEffect(() => {
@@ -59,104 +48,193 @@ const ProductMngPage = () => {
   * @return
   */
   const getProductList = async function () {
-  try {
-    let dataList = [];
-    let docData = {};
-    const querySnapshot = await getDocs(collection(db, "TBGM_PRODUCT"));
-    querySnapshot.forEach((doc) => {
-      // console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-      docData = doc.data();
-      docData['PRODUCT_ID'] = doc.id;
-      dataList.push(docData);
-    });
-    setProductList(dataList);
-    for(let i=0; i<dataList.length; i++) {
-      const url = await getDownloadURL(ref(storage, 'images/' + dataList[i]['PRODUCT_ID'] + '.jpg'));
-      dataList[i]['IMAGE'] = url;
-      setProductList([...dataList]);
+    try {
+      let dataList = [];
+      let docData = {};
+      const querySnapshot = await getDocs(collection(db, "TBGM_PRODUCT"));
+      querySnapshot.forEach((doc) => {
+        // console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+        docData = doc.data();
+        docData['PRODUCT_ID'] = doc.id;
+        dataList.push(docData);
+      });
+      setProductList(dataList);
+      for(let i=0; i<dataList.length; i++) {
+        try{
+          const url = await getDownloadURL(ref(storage, 'images/' + dataList[i]['PRODUCT_ID'] + '.jpg'));
+          dataList[i]['IMAGE'] = url;
+        } catch(err) {
+          dataList[i]['IMAGE'] = '/noimg.jpg';
+        }
+        setProductList([...dataList]);
+      }
+    } catch(err) {
+      console.log(err);
     }
-  } catch(err) {
-    console.log(err);
-  }
   };
  
-   /**
-    * 상품 상세정보 등록
-    *
-    * @param
-    * @return
-    */
+  /**
+  * 상품 상세정보 등록
+  *
+  * @param
+  * @return
+  */
   const registerItem = function (e) {
     e.preventDefault();
 
-    let data = productForm;
-    data['DETAIL_CONTENT'] = detailContent;
-    data['IMAGE'] = img.name;
+    let data = productDetail;
     data['RGST_DATE'] = Timestamp.now();
 
     let nextStep = true;
 
     for (const key in data) {
-      if(data[key] === "" || data[key] === undefined)
-      nextStep = false;
-      break;
+      // console.log(key, data[key]);
+      if(data[key] === "" || data[key] === undefined) {
+        nextStep = false;
+        break;
+      }
     };
 
     // console.log(data);
+    // console.log(img);
 
     if(!nextStep) {
       alert("입력값을 확인해 주세요.");
-      return;
-    }
+    } else {
+      const saveData = {...data};
+      delete saveData["PRODUCT_ID"]; //ID는 필드로 저장하지 않음
+      delete saveData["IMAGE"]; //이미지 정보는 따로 저장하지 않음
+      if(editYn) {
+        updateDoc(doc(db, "TBGM_PRODUCT", data["PRODUCT_ID"]), saveData).then((docRef) => {
+          // console.log("Document written with ID: ", docRef.id);
+          setIsModalOpen(false);
+          const successMessage = "상품정보 수정 성공";
+          if(img !== undefined) {
+            uploadImage(img, 'images/' + data["PRODUCT_ID"] + '.jpg', () => {
+              getProductList();
+              message.success({
+                content: successMessage,
+                className: "custom-class",
+              });
+            });
+          } else {
+            message.success({
+              content: successMessage,
+              className: "custom-class",
+            });
+          }
+        }).catch((err) => {
+          console.log(err);
+        });
 
-    addDoc(collection(db, "TBGM_PRODUCT"), data).then((docRef) => {
-      // console.log("Document written with ID: ", docRef.id);
-      message.success({
-        content: "상품정보 등록 성공",
-        className: "custom-class",
-      });
-      getProductList();
-      setIsModalOpen(false);
+      }else{
+        addDoc(collection(db, "TBGM_PRODUCT"), saveData).then((docRef) => {
+          // console.log("Document written with ID: ", docRef.id);
+          setIsModalOpen(false);
+          const successMessage = "상품정보 등록 성공";
+          if(img !== undefined) {
+            uploadImage(img, 'images/' + docRef.id + '.jpg', () => {
+              getProductList();
+              message.success({
+                content: successMessage,
+                className: "custom-class",
+              });
+            });
+          } else {
+            message.success({
+              content: successMessage,
+              className: "custom-class",
+            });
+          }
+        }).catch((err) => {
+          console.log(err);
+        });
+      }
+    }
+  };
+
+  // 이미지 업로드
+  const uploadImage = (file, path, callback) => {
+    const storageRef = ref(storage, path);
+    const metadata = {
+      contentType: 'image/jpeg',
+    };
+
+    // 'file' comes from the Blob or File API
+    uploadBytes(storageRef, file, metadata).then((snapshot) => {
+      // console.log('Uploaded a blob or file!');
+      callback();
     }).catch((err) => {
       console.log(err);
+      message.success({
+        content: "이미지 업로드 실패",
+        className: "custom-class",
+      });
     });
-  };
+  }
  
   // 상품 삭제
   const deleteProduct = (idx) => {
     deleteDoc(doc(db, "TBGM_PRODUCT", idx)).then((res) => {
-      message.success({
-        content: "상품정보 삭제 성공",
-        className: "custom-class",
-      });
       getProductList();
+      deleteImage('images/' + idx + '.jpg', () => {
+        message.success({
+          content: "상품정보 삭제 성공",
+          className: "custom-class",
+        });
+      })
     }).catch(function (err) {
       console.log(err);
+      message.success({
+        content: "상품정보 삭제 실패",
+        className: "custom-class",
+      });
     });
   }
  
+  // 이미지 삭제
+  const deleteImage = (path, callback) => {
+    const storageRef = ref(storage, path);
+    deleteObject(storageRef).then(() => {
+      callback();
+    }).catch((err) => {
+      console.log(err);
+      message.success({
+        content: "이미지 삭제 실패",
+        className: "custom-class",
+      });
+    });
+  }
+
   /**
   * input value 가져오기
   *
   * @param
   * @return
   */
-  const getValue = (e) => {
-    let { name, value } = e.target;
 
-    console.log(e);
-
-    setProductForm({
-      ...productForm,
-      [name]: value,
-    });
-  };
- 
   // 상품 등록/수정 버튼 클릭시
   const editProduct = (props) => {
-    setEditYn(true);
+    setEditYn(props.editYn);
+    setProductDetail(props.productDetail);
+
+    const inputTag = <Input
+      type="file"
+      onChange={(e) => {
+        if(e.target.files[0] !== undefined) {
+          onChangeImage(e.target.files[0]);
+          setImg(e.target.files[0]);
+        } else {
+          setImg("");
+        }
+      }}
+    />
     setIsModalOpen(true);
-    setProductDetail(props);
+    setPreviewImg(null);
+    setImageInputTag(null);
+    setTimeout(() => {
+      setImageInputTag(inputTag);
+    }, 500);
   };
 
   // 이미지 업로드시 이미지 프리뷰
@@ -168,165 +246,41 @@ const ProductMngPage = () => {
     return new Promise((resolve) => {
       reader.onload = () => {
         setPreviewImg(reader.result);
-
         resolve();
       };
     });
   };
  
-   return (
-     <Fragment>      
-       <div className="flex" style={{ marginBottom: "10px" }}>
-         <span className="tit-lg">상품관리</span>
-         <Button type="primary" onClick={editProduct}>
-           상품 등록
-         </Button>
-       </div>
+  return (
+    <Fragment>      
+      <div className="flex" style={{ marginBottom: "10px" }}>
+        <span className="tit-lg">상품관리</span>
+        <Button type="primary" onClick={() => {
+          editProduct({"productDetail": initProductDetail, "editYn": false});
+        }}>
+          상품 등록
+        </Button>
+      </div>
+
+      <ProductList
+        productList={productList}
+        editProduct={editProduct}
+        deleteProduct={deleteProduct}
+      />
+
+      <ProductModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        registerItem={registerItem}
+        productDetail={productDetail}
+        setProductDetail={setProductDetail}
+        previewImg={previewImg}
+        editYn={editYn}
+        imageInputTag={imageInputTag}
+      />
+    </Fragment>
+  );
+};
  
-       <ProductList
-         productList={productList}
-         editProduct={editProduct}
-         deleteProduct={deleteProduct}
-       />
- 
-       <Modal
-         title="상품 등록"
-         open={isModalOpen}
-         onOk={handleOk}
-         onCancel={handleCancel}
-         width={700}
-         footer={[
-           <Button type="primary" key="submit" onClick={registerItem}>
-             등록
-           </Button>,
-         ]}
-       >
-         {editYn ? (
-           // 수정 모드
-           <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-             <h3>상품 기본정보</h3>
-             <p>{productDetail.PRODUCT_NM}</p>
-             <p>{productDetail.SALE_PRICE}</p>
-             <Form.Item label="카테고리">
-               <Radio.Group name="CATEGORY" onChange={getValue}>
-                 <Radio value="가구">가구</Radio>
-                 <Radio value="식물/데코">식물/데코</Radio>
-                 <Radio value="반려동물">반려동물</Radio>
-               </Radio.Group>
-             </Form.Item>
-             <Form.Item label="상품명">
-               <Input
-                 name="PRODUCT_NM"
-                 value={productDetail.PRODUCT_NM}
-                 onChange={getValue}
-               />
-             </Form.Item>
-             <Form.Item label="대표이미지">
-               {productForm.IMAGE ? (
-                 <img
-                   src={productForm.IMAGE}
-                   style={{ width: "120px", border: "1px solid #ccc" }}
-                   alt=""
-                 />
-               ) : (
-                 <img
-                   src={"/noimg2.png"}
-                   alt=""
-                   style={{ width: "120px", border: "1px solid #ccc" }}
-                 />
-               )}
-               <Input
-                 type="file"
-                 onChange={(e) => {
-                   onChangeImage(e.target.files[0]);
-                   setImg(e.target.files[0]);
-                 }}
-               />
-             </Form.Item>
-             <Form.Item label="상품가격">
-               <Input name="SALE_PRICE" type="number" onChange={getValue} />
-             </Form.Item>
-             <Form.Item label="할인율">
-               <Input name="DISCOUNTED_RATE" type="number" onChange={getValue} />
-             </Form.Item>
-             <Form.Item label="배송구분">
-               <Radio.Group name="DELIVERY_DVSN" onChange={getValue}>
-                 <Radio value="일반배송">일반배송</Radio>
-                 <Radio value="오늘출발">오늘출발</Radio>
-               </Radio.Group>
-             </Form.Item>
-           </Form>
-         ) : (
-           // 등록 모드
-           <Form labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-             <h6>상품 기본정보</h6>
-             <Form.Item label="카테고리">
-               <Radio.Group
-                 name="CATEGORY"
-                 // value="furniture"
-                 onChange={getValue}
-               >
-                 <Radio value="가구">가구</Radio>
-                 <Radio value="식물/데코">식물/데코</Radio>
-                 <Radio value="반려동물">반려동물</Radio>
-               </Radio.Group>
-             </Form.Item>
-             <Form.Item label="상품명">
-               <Input name="PRODUCT_NM" onChange={getValue} />
-             </Form.Item>
-             <Form.Item label="대표이미지">
-               {previewImg ? (
-                 <img
-                   src={previewImg}
-                   style={{ width: "120px", border: "1px solid #ccc" }}
-                   alt=""
-                 />
-               ) : (
-                 <img
-                   src={process.env.PUBLIC_URL + "/noimg2.png"}
-                   alt=""
-                   style={{ width: "120px", border: "1px solid #ccc" }}
-                 />
-               )}
-               <Input
-                 type="file"
-                 onChange={(e) => {
-                   onChangeImage(e.target.files[0]);
-                   setImg(e.target.files[0]);
-                 }}
-               />
-             </Form.Item>
-             <Form.Item label="상품가격">
-               <Input name="SALE_PRICE" type="number" onChange={getValue} />
-             </Form.Item>
-             <Form.Item label="할인율">
-               <Input name="DISCOUNTED_RATE" type="number" onChange={getValue} />
-             </Form.Item>
-             <Form.Item label="배송구분">
-               <Radio.Group
-                 name="DELIVERY_DVSN"
-                 value="일반배송"
-                 onChange={getValue}
-               >
-                 <Radio value="일반배송">일반배송</Radio>
-                 <Radio value="오늘출발">오늘출발</Radio>
-               </Radio.Group>
-             </Form.Item>
-             <CKEditor
-            editor={ClassicEditor}
-            data="<p>Hello from CKEditor 5!</p>"
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              console.log({ event, editor, data });
-              setDetailContent(data);
-            }}
-          />
-           </Form>
-         )}
-       </Modal>
-     </Fragment>
-   );
- };
- 
- export default ProductMngPage;
+export default ProductMngPage;
  

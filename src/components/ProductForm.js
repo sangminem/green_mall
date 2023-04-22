@@ -4,8 +4,7 @@
  * @since 2022.08.24
  * */
 
-import React, { Fragment, useEffect, useState } from "react";
-import Form from "react-bootstrap/Form";
+import React, { useEffect } from "react";
 import { Button, Input, Modal } from "antd";
 
 const ProductForm = (props) => {
