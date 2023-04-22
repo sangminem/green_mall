@@ -111,7 +111,7 @@ const ProductMngPage = () => {
           // console.log("Document written with ID: ", docRef.id);
           setIsModalOpen(false);
           const successMessage = "상품정보 수정 성공";
-          if(img !== undefined || img !== "" || img !== null) {
+          if(img !== undefined && img !== "" && img !== null) {
             uploadImage(img, 'images/' + data["PRODUCT_ID"] + '.jpg', () => {
               getProductList();
               message.success({
