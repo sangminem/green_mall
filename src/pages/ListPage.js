@@ -4,16 +4,18 @@
  * @since 2022.08.23
  */
 
-import React, { useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import addComma from "../Utils.js";
 import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { IoHeartOutline } from "react-icons/io5";
+import { collection, getDocs } from "firebase/firestore";
+import db from "../firebase/db.js";
+import { getDownloadURL, ref } from "firebase/storage";
+import storage from "../firebase/storage.js";
 
-const ListPage = (props) => {
-  const SERVER_URL = "http://localhost:4000";
-  const img_url_base = `${SERVER_URL}/images/`;
+const ListPage = () => {
+  const [productList, setProductList] = useState([]);
 
   useEffect(() => {
     getData();
@@ -22,38 +24,51 @@ const ListPage = (props) => {
   /**
    * 상품 리스트 호출
    */
-  const getData = function () {
-    const url = `${SERVER_URL}/api/product`;
-
-    axios
-      .get(url)
-      .then(function (res) {
-        props.setProductList(res.data);
-      })
-      .catch(function (err) {
-        console.log(err);
+  const getData = async function () {
+    try {
+      let dataList = [];
+      let docData = {};
+      const querySnapshot = await getDocs(collection(db, "TBGM_PRODUCT"));
+      querySnapshot.forEach((doc) => {
+        // console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+        docData = doc.data();
+        docData['PRODUCT_ID'] = doc.id;
+        dataList.push(docData);
       });
-  };
+      setProductList(dataList);
+      for(let i=0; i<dataList.length; i++) {
+        try{
+          const url = await getDownloadURL(ref(storage, 'images/' + dataList[i]['PRODUCT_ID'] + '.jpg'));
+          dataList[i]['IMAGE'] = url;
+        } catch(err) {
+          dataList[i]['IMAGE'] = '/noimg.jpg';
+        }
+        setProductList([...dataList]);
+      }
+    } catch(err) {
+      console.log(err);
+    }
+  }
 
   /**
    * 상품 정렬 기능
    */
   const itemSort = function (gubun) {
-    let prdCopy = [...props.productList];
+    let prdCopy = [...productList];
 
     if (gubun === "low") {
       // 낮은 가격순 정렬
       prdCopy.sort((a, b) => {
-        return parseFloat(a.item_price) - parseFloat(b.item_price);
+        return parseFloat(a.SALE_PRICE) - parseFloat(b.SALE_PRICE);
       });
     } else {
       // 높은 가격순 정렬
       prdCopy.sort((a, b) => {
-        return parseFloat(b.item_price) - parseFloat(a.item_price);
+        return parseFloat(b.SALE_PRICE) - parseFloat(a.SALE_PRICE);
       });
     }
 
-    props.setProductList(prdCopy);
+    setProductList(prdCopy);
   };
 
   return (
@@ -68,20 +83,16 @@ const ListPage = (props) => {
           </Dropdown.Item>
         </DropdownButton>
         <Row>
-          {props.productList.map((a, i) => {
+          {productList.map((a, i) => {
             return (
               <React.Fragment key={i}>
                 <Col xs={6} style={{ margin: "18px 0", padding: "0 15px" }}>
-                  <Link to={`/detail/${a.product_id}`}>
-                    {a.image !== "" ? (
-                      <img
-                        src={img_url_base + a.image}
-                        alt=""
-                        style={{ width: "100%", borderRadius: "12px" }}
-                      />
-                    ) : (
-                      ""
-                    )}
+                  <Link to={`/detail/${a.PRODUCT_ID}`}>
+                    <img
+                      src={a.IMAGE?a.IMAGE:"/noimg.jpg"}
+                      alt=""
+                      style={{ width: "100%", borderRadius: "12px" }}
+                    />
                     <p
                       style={{
                         fontSize: "12px",
@@ -89,9 +100,9 @@ const ListPage = (props) => {
                         color: "#555",
                       }}
                     >
-                      {a.brand_nm}
+                      {a.CATEGORY}
                     </p>
-                    <h4 style={{ fontSize: "14px" }}>{a.product_nm}</h4>
+                    <h4 style={{ fontSize: "14px" }}>{a.PRODUCT_NM}</h4>
                     <span
                       style={{
                         fontSize: "16px",
@@ -99,7 +110,7 @@ const ListPage = (props) => {
                         color: "#27ae60",
                       }}
                     >
-                      {addComma(a.item_price)} 원
+                      {addComma(a.SALE_PRICE)} 원
                     </span>
                     <button
                       style={{

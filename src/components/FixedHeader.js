@@ -70,6 +70,7 @@ const FixedHeader = () => {
           }          
           <p onClick={() => {navigate("/"); setOpen(false);} }>홈</p>
           <Divider orientation="left">카테고리</Divider>
+          <p onClick={() => {navigate("list"); setOpen(false);} }>전체</p>
           <p onClick={() => {navigate("/category/furniture"); setOpen(false);}}>가구</p>
           <p onClick={() => {navigate("/category/plant"); setOpen(false);}}>식물/데코</p>
           <p onClick={() => {navigate("/category/pet"); setOpen(false);}}>반려동물</p>

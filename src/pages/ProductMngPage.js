@@ -73,7 +73,7 @@ const ProductMngPage = () => {
     } catch(err) {
       console.log(err);
     }
-  };
+  }
  
   /**
   * 상품 상세정보 등록
@@ -153,7 +153,7 @@ const ProductMngPage = () => {
         });
       }
     }
-  };
+  }
 
   // 이미지 업로드
   const uploadImage = (file, path, callback) => {
@@ -238,7 +238,7 @@ const ProductMngPage = () => {
       setProductDetail(props.productDetail);
       setImageInputTag(inputTag);
     }, 200);
-  };
+  }
 
   // 이미지 업로드시 이미지 프리뷰
   const onChangeImage = (fileBlob) => {
@@ -252,7 +252,7 @@ const ProductMngPage = () => {
         resolve();
       };
     });
-  };
+  }
  
   return (
     <Fragment>      
@@ -285,7 +285,7 @@ const ProductMngPage = () => {
       />
     </Fragment>
   );
-};
+}
  
 export default ProductMngPage;
  

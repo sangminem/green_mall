@@ -6,12 +6,15 @@
 
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import addComma from "../Utils.js";
 import { Row, Col, Dropdown, Menu, Tag, Spin } from "antd";
 import { DownOutlined, LoadingOutlined } from "@ant-design/icons";
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { TbTruckDelivery } from "react-icons/tb";
+import { collection, getDocs } from "firebase/firestore";
+import db from "../firebase/db.js";
+import { getDownloadURL, ref } from "firebase/storage";
+import storage from "../firebase/storage.js";
 
 const antIcon = (
   <LoadingOutlined
@@ -32,8 +35,6 @@ const CategoryPage = () => {
   let [heart, setHeart] = useState(false); // 찜 하트
   let [saleType, setSaleType] = useState(false);
   let [loading, setLoading] = useState(false);
-
-  const SERVER_URL = "http://localhost:4000";
 
   const navigate = useNavigate();
 
@@ -64,29 +65,52 @@ const CategoryPage = () => {
   /**
    * 상품 카테고리 리스트 조회
    */
-  const getData = useCallback(function () {
-    const url = `${SERVER_URL}/api/products`;
-    axios
-      .get(url)
-      .then(function (res) {
-        let data = res.data;
-
-        for (let key in data) {
-          data[key].IMAGE = `${SERVER_URL}/images/` + data[key].IMAGE; // 이미지 경로 세팅. DB에는 파일명만 저장되기 때문에 경로로 다시 변환해주기
-        }
-
-        // 상품의 카테고리와 useParam의 id가 일치하는 리스트만 담기
-        let copy = data.filter((item) => {
-          return item.CATEGORY === id;
-        });
-
-        setProducts(copy);
-        setProductCnt(copy.length);
-        setLoading(false);
-      })
-      .catch(function (err) {
-        console.log(err);
+  const getData = useCallback(async () => {
+    try {
+      let dataList = [];
+      let docData = {};
+      const querySnapshot = await getDocs(collection(db, "TBGM_PRODUCT"));
+      querySnapshot.forEach((doc) => {
+        // console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+        docData = doc.data();
+        docData['PRODUCT_ID'] = doc.id;
+        dataList.push(docData);
       });
+      
+      let category = '';
+      switch(id) {
+        case 'furniture':
+          category = '가구';
+          break;
+        case 'plant':
+          category = '식물/데코';
+          break;
+        case 'pet':
+          category = '반려동물';
+          break;
+        default:
+          category = '';
+      }
+
+      let copy = dataList.filter((item) => {
+        return item.CATEGORY === category;
+      });
+      setProducts(copy);
+      setProductCnt(copy.length);
+      setLoading(false);
+
+      for(let i=0; i<copy.length; i++) {
+        try{
+          const url = await getDownloadURL(ref(storage, 'images/' + copy[i]['PRODUCT_ID'] + '.jpg'));
+          copy[i]['IMAGE'] = url;
+        } catch(err) {
+          copy[i]['IMAGE'] = '/noimg.jpg';
+        }
+        setProducts([...copy]);
+      }
+    } catch(err) {
+      console.log(err);
+    }
   }, [id]);
 
   useEffect(() => {
@@ -205,15 +229,11 @@ const CategoryPage = () => {
                 style={{ margin: "18px 0" }}
                 onClick={() => navigate(`/detail/${a.PRODUCT_ID}`)}
               >
-                {a.IMAGE !== "" ? (
-                  <img
-                    src={a.IMAGE}
-                    alt=""
-                    style={{ width: "100%", borderRadius: "12px" }}
-                  />
-                ) : (
-                  ""
-                )}
+                <img
+                  src={a.IMAGE?a.IMAGE:"/noimg.jpg"}
+                  alt=""
+                  style={{ width: "100%", borderRadius: "12px" }}
+                />
                 <p className="txt-md">{a.PRODUCT_NM}</p>
                 <div>
                   <span

@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
-import {Button, Navbar, Container, Nav, NavDropdown, Row, Col} from 'react-bootstrap'
+import React from 'react'
+import {Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter, Route, Routes, useNavigate, useHistory} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
     let navigate = useNavigate();

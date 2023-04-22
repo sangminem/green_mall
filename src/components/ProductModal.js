@@ -7,6 +7,7 @@
 import { Button, Input, Form, Radio, Modal } from "antd";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import LoadingScreen from "./LoadingScreen";
 
 const ProductModal = (props) => {
     const { isModalOpen, setIsModalOpen, productDetail, setProductDetail, registerItem, previewImg, imageInputTag, editYn } = props;
@@ -41,38 +42,24 @@ const ProductModal = (props) => {
                     <h3>상품 기본정보</h3>
                     <Form.Item label="카테고리">
                         <Radio.Group name="CATEGORY" value={productDetail.CATEGORY} onChange={getValue}>
-                        <Radio value="가구">가구</Radio>
-                        <Radio value="식물/데코">식물/데코</Radio>
-                        <Radio value="반려동물">반려동물</Radio>
+                            <Radio value="가구">가구</Radio>
+                            <Radio value="식물/데코">식물/데코</Radio>
+                            <Radio value="반려동물">반려동물</Radio>
                         </Radio.Group>
                     </Form.Item>
                     <Form.Item label="상품명">
                         <Input
-                        name="PRODUCT_NM"
-                        value={productDetail.PRODUCT_NM}
-                        onChange={getValue}
+                            name="PRODUCT_NM"
+                            value={productDetail.PRODUCT_NM}
+                            onChange={getValue}
                         />
                     </Form.Item>
                     <Form.Item label="대표이미지">
-                        {previewImg ? (
                         <img
-                            src={previewImg}
-                            style={{ width: "120px", border: "1px solid #ccc" }}
+                            src={previewImg?previewImg:(productDetail.IMAGE?productDetail.IMAGE:"/noimg2.png")}
+                            style={{ width: "120px", height: "120px", border: "1px solid #ccc" }}
                             alt=""
                         />
-                        ) : (productDetail.IMAGE ? (
-                        <img
-                            src={productDetail.IMAGE}
-                            style={{ width: "120px", border: "1px solid #ccc" }}
-                            alt=""
-                        />
-                        ) : (
-                        <img
-                            src={"/noimg2.png"}
-                            alt=""
-                            style={{ width: "120px", border: "1px solid #ccc" }}
-                        />
-                        ))}
                         {imageInputTag}
                     </Form.Item>
                     <Form.Item label="상품가격">
@@ -83,8 +70,8 @@ const ProductModal = (props) => {
                     </Form.Item>
                     <Form.Item label="배송구분">
                         <Radio.Group name="DELIVERY_DVSN" value={productDetail.DELIVERY_DVSN} onChange={getValue}>
-                        <Radio value="일반배송">일반배송</Radio>
-                        <Radio value="오늘출발">오늘출발</Radio>
+                            <Radio value="일반배송">일반배송</Radio>
+                            <Radio value="오늘출발">오늘출발</Radio>
                         </Radio.Group>
                     </Form.Item>
                     <Form.Item label="상품설명">
@@ -92,17 +79,17 @@ const ProductModal = (props) => {
                             editor={ClassicEditor}
                             data={productDetail.DETAIL_CONTENT}
                             onChange={(event, editor) => {
-                            const data = editor.getData();
-                            // console.log({ event, editor, data });
-                            setProductDetail({
-                                ...productDetail,
-                                "DETAIL_CONTENT": data
-                            });
+                                const data = editor.getData();
+                                // console.log({ event, editor, data });
+                                setProductDetail({
+                                    ...productDetail,
+                                    "DETAIL_CONTENT": data
+                                });
                             }}
                         />
                     </Form.Item>
                 </Form>
-            ) : <div style={{"height":"600px", "display":"grid", "justifyContent":"space-evenly", "alignContent":"space-evenly"}}>Loading Contents...</div>}
+            ) : <LoadingScreen/>}
         </Modal>
     )
 };

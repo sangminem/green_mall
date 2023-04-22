@@ -14,6 +14,7 @@ import CartPage from "./pages/CartPage";
 import ProductMngPage from "./pages/ProductMngPage";
 import MyPage from "./pages/MyPage";
 import FixedHeader from "./components/FixedHeader";
+import ListPage from "./pages/ListPage";
 
 const { Content } = Layout;
 
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/detail/:id" element={<DetailPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/productMng" element={<ProductMngPage />} />
+          <Route path="/list" element={<ListPage />} />
           <Route path="/mypage" element={<MyPage />} />
         </Routes>
       </Content>
