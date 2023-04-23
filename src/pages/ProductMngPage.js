@@ -97,7 +97,7 @@ const ProductMngPage = () => {
       }
     };
 
-    console.log(data);
+    // console.log(data);
     // console.log(img);
 
     if(!nextStep) {
@@ -120,6 +120,7 @@ const ProductMngPage = () => {
               });
             });
           } else {
+            getProductList();
             message.success({
               content: successMessage,
               className: "custom-class",
