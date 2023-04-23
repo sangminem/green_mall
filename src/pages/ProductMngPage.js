@@ -275,14 +275,12 @@ const ProductMngPage = () => {
       <ProductModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        registerItem={registerItem}
         productDetail={productDetail}
         setProductDetail={setProductDetail}
+        registerItem={registerItem}
         previewImg={previewImg}
-        editYn={editYn}
         imageInputTag={imageInputTag}
-        setImageInputTag={setImageInputTag}
-        initProductDetail={initProductDetail}
+        editYn={editYn}
       />
     </Fragment>
   );
