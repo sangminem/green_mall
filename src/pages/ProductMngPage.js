@@ -8,8 +8,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Button, Input, message } from "antd";
 import ProductList from "../components/ProductList";
 
-import db from '../firebase/db';
-import storage from '../firebase/storage';
+import { db, storage } from '../firebase/firebase';
 import { doc, collection, getDocs, addDoc, updateDoc, deleteDoc, Timestamp } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes, deleteObject } from "firebase/storage";
 import ProductModal from "../components/ProductModal";

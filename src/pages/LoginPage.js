@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { Button, Input, message } from "antd";
-import axios from "axios";
+import { auth } from "../firebase/firebase"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const SERVER_URL = "http://localhost:4000";
-
   // 회원가입 input
   const [loginForm, setLoginForm] = useState({
     email_id: "",
@@ -14,6 +14,8 @@ const LoginPage = () => {
 
   let [loginYn, setLoginYn] = useState(false);
   let [loginId, setLoginId] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if(sessionStorage.getItem("userInfo")) {
@@ -42,28 +44,53 @@ const LoginPage = () => {
   const login = (e) => {
     e.preventDefault();
 
-    const url = `${SERVER_URL}/api/login`;
-
-    axios
-      .post(url, loginForm)
-      .then(function (res) {
-        if (res.data) {
-          message.success({
-            content: "로그인 성공",
-            className: "custom-class",
-          });
-
-          sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+    signInWithEmailAndPassword(auth, loginForm["email_id"], loginForm["password"])
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+        console.log(user);
+        message.success({
+          content: "로그인 성공",
+          className: "custom-class",
+        });
+        navigate("/");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        if(errorCode === "auth/user-not-found") {
+          if(window.confirm("가입 내역이 없습니다. 가입하시겠습니까?")) {
+            createUserWithEmailAndPassword(auth, loginForm["email_id"], loginForm["password"])
+              .then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                // ...
+                console.log(user);
+                message.success({
+                  content: "가입 성공",
+                  className: "custom-class",
+                });
+                navigate("/");
+              })
+              .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode, errorMessage);
+                // ..
+                message.success({
+                  content: "가입 실패",
+                  className: "custom-class",
+                });
+              });
+          }
         } else {
-          message.error({
+          message.success({
             content: "로그인 실패",
             className: "custom-class",
           });
         }
-        console.log(res);
-      })
-      .catch(function (err) {
-        console.log(err);
       });
   };
 

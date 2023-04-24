@@ -10,9 +10,8 @@ import { Container, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { IoHeartOutline } from "react-icons/io5";
 import { collection, getDocs } from "firebase/firestore";
-import db from "../firebase/db.js";
+import { db, storage } from "../firebase/firebase.js";
 import { getDownloadURL, ref } from "firebase/storage";
-import storage from "../firebase/storage.js";
 
 const ListPage = () => {
   const [productList, setProductList] = useState([]);

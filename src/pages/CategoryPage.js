@@ -12,9 +12,8 @@ import { DownOutlined, LoadingOutlined } from "@ant-design/icons";
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { TbTruckDelivery } from "react-icons/tb";
 import { collection, getDocs } from "firebase/firestore";
-import db from "../firebase/db.js";
 import { getDownloadURL, ref } from "firebase/storage";
-import storage from "../firebase/storage.js";
+import { storage, db } from "../firebase/firebase.js";
 
 const antIcon = (
   <LoadingOutlined

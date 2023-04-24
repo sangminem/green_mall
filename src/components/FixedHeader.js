@@ -1,8 +1,10 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Layout, Drawer, Row, Col, Divider } from "antd";
+import { Layout, Drawer, Row, Col, Divider, message } from "antd";
 import { IoMenuSharp, IoCartOutline } from "react-icons/io5";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../firebase/firebase";
 const { Header } = Layout;
 
 const FixedHeader = () => {
@@ -20,15 +22,43 @@ const FixedHeader = () => {
     setOpen(false);
   };
 
+  const _signOut = () => {
+    signOut(auth).then(() => {
+      message.success({
+        content: "로그아웃 성공",
+        className: "custom-class",
+      });
+      onClose();
+      navigate("/");
+    }).catch((err) => {
+      message.success({
+        content: "로그아웃 실패",
+        className: "custom-class",
+      });
+    });
+  }
 
-  useEffect(() => {
-    if(sessionStorage.getItem("userInfo")) {
-      setLoginYn(true);
-
-      let userinfo = JSON.parse(sessionStorage.getItem("userInfo"));
-      setLoginId(userinfo.USER_NM);
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      const uid = user.uid;
+      // ...
+      console.log(uid);
+      if(!loginYn) {
+        setLoginId(user.email);
+        setLoginYn(true);
+      }
+    } else {
+      // User is signed out
+      // ...
+      console.log("signed out");
+      if(loginYn) {
+        setLoginId("");
+        setLoginYn(false);
+      }
     }
-  }, [loginYn])
+  });
 
   return (
     <Fragment>
@@ -69,20 +99,25 @@ const FixedHeader = () => {
             : <p onClick={() => {navigate("/login"); setOpen(false);}}>로그인이 필요해요</p>
           }          
           <p onClick={() => {navigate("/"); setOpen(false);} }>홈</p>
-          <Divider orientation="left">카테고리</Divider>
-          <p onClick={() => {navigate("list"); setOpen(false);} }>전체</p>
-          <p onClick={() => {navigate("/category/furniture"); setOpen(false);}}>가구</p>
-          <p onClick={() => {navigate("/category/plant"); setOpen(false);}}>식물/데코</p>
-          <p onClick={() => {navigate("/category/pet"); setOpen(false);}}>반려동물</p>
-          <Divider orientation="left">관리자 전용</Divider>
-          <p onClick={() => {navigate("/productMng"); setOpen(false);}}>상품관리</p>
-          <Divider orientation="left"></Divider>
-          <p
-            onClick={() => {sessionStorage.removeItem("userInfo"); setOpen(false);}}
-            style={{ fontSize: "14px", color: "#777" }}
-          >
-            로그아웃
-          </p>
+          {
+            loginYn ?
+            <>
+              <Divider orientation="left">카테고리</Divider>
+              <p onClick={() => {navigate("list"); setOpen(false);} }>전체</p>
+              <p onClick={() => {navigate("/category/furniture"); setOpen(false);}}>가구</p>
+              <p onClick={() => {navigate("/category/plant"); setOpen(false);}}>식물/데코</p>
+              <p onClick={() => {navigate("/category/pet"); setOpen(false);}}>반려동물</p>
+              <Divider orientation="left">관리자 전용</Divider>
+              <p onClick={() => {navigate("/productMng"); setOpen(false);}}>상품관리</p>
+              <Divider orientation="left"></Divider>
+              <p
+                onClick={_signOut}
+                style={{ fontSize: "14px", color: "#777" }}
+              >
+                로그아웃
+              </p>
+            </> : null
+          }
         </div>
       </Drawer>
     </Fragment>
