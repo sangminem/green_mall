@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Button, Stack, Container, Row, Col, Card } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import Image from "react-bootstrap/Image";
 import styles from "./../css/detail.module.css";
 import Detailinfo from "../components/DetailInfo";
 import DeliverylInfo from "../components/deliveryInfo";
 import DetailPopup from "../popup/detailPopup";
 import ReactHtmlParser from "react-html-parser";
+import db from "../firebase/db";
+import storage from "../firebase/storage";
+import { getDoc, doc } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
+import addComma from "../Utils";
 
 const DetailPage = () => {
   let { id } = useParams(); // 카테고리 id
   const [productDetail, setProductDetail] = useState({}); // 상품 상세정보 {}
-  const SERVER_URL = "http://localhost:4000";
 
   // 처음 렌더링 시 실행
   useEffect(() => {
@@ -26,22 +29,22 @@ const DetailPage = () => {
    * @param {string}
    * @return
    */
-  const getProductDetail = (idx) => {
-    const url = `${SERVER_URL}/api/products/detail`;
-    const data = {
-      product_id: idx, // product_id 로 상품 상세정보 조회
-    };
+  const getProductDetail = async (idx) => {
+    try {
+      let docData = {};
+      const querySnapshot = await getDoc(doc(db, "TBGM_PRODUCT", idx));
+      docData = querySnapshot.data();
+      docData['PRODUCT_ID'] = idx;
+      setProductDetail(docData);
 
-    axios
-      .post(url, data)
-      .then(function (res) {
-        let data = res.data;
-        data.IMAGE = `${SERVER_URL}/images/` + data.IMAGE;
-        setProductDetail(data);
-      })
-      .catch(function (err) {
-        console.log(err);
+      const url = await getDownloadURL(ref(storage, 'images/' + idx + '.jpg'));
+      setProductDetail({
+        ...docData,
+        IMAGE: url
       });
+    } catch(err) {
+      console.log(err);
+    }
   };
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -72,7 +75,7 @@ const DetailPage = () => {
           <Stack gap={0}>
             <p>{productDetail.PRODUCT_NM}</p>
 
-            <p>{productDetail.SALE_PRICE}</p>
+            <p>{addComma(productDetail.SALE_PRICE)} 원</p>
 
             <div className={styles.title}>
               {productDetail.PRODUCT_NM}
@@ -80,7 +83,7 @@ const DetailPage = () => {
             </div>
 
             <div className={styles.price}>
-              <s>{productDetail.SALE_PRICE}</s>
+              <s>{addComma(productDetail.SALE_PRICE)}</s> 원
               <sup>{productDetail.DISCOUNTED_RATE}%</sup>
             </div>
 
@@ -101,7 +104,7 @@ const DetailPage = () => {
               close={closeModal}
               header="장바구니 담기"
               title={productDetail.PRODUCT_NM}
-              price={productDetail.SALE_PRICE}
+              price={addComma(productDetail.SALE_PRICE)}
             ></DetailPopup>
           </div>
 
