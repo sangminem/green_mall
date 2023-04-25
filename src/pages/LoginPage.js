@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import { Button, Input, message } from "antd";
 import { auth } from "../firebase/firebase"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
 const LoginPage = () => {
   // 회원가입 input
@@ -17,14 +18,27 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if(sessionStorage.getItem("userInfo")) {
-      setLoginYn(true);
-
-      let userinfo = JSON.parse(sessionStorage.getItem("userInfo"));
-      setLoginId(userinfo.USER_NM);
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      // const uid = user.uid;
+      // ...
+      // console.log(uid);
+      if(!loginYn) {
+        setLoginId(user.email);
+        setLoginYn(true);
+      }
+    } else {
+      // User is signed out
+      // ...
+      // console.log("signed out");
+      if(loginYn) {
+        setLoginId("");
+        setLoginYn(false);
+      }
     }
-  }, [])
+  });
 
   /**
    * input value 가져오기
@@ -47,9 +61,9 @@ const LoginPage = () => {
     signInWithEmailAndPassword(auth, loginForm["email_id"], loginForm["password"])
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
+        // const user = userCredential.user;
         // ...
-        console.log(user);
+        // console.log(user);
         message.success({
           content: "로그인 성공",
           className: "custom-class",
@@ -65,9 +79,9 @@ const LoginPage = () => {
             createUserWithEmailAndPassword(auth, loginForm["email_id"], loginForm["password"])
               .then((userCredential) => {
                 // Signed in
-                const user = userCredential.user;
+                // const user = userCredential.user;
                 // ...
-                console.log(user);
+                // console.log(user);
                 message.success({
                   content: "가입 성공",
                   className: "custom-class",
@@ -75,9 +89,9 @@ const LoginPage = () => {
                 navigate("/");
               })
               .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode, errorMessage);
+                // const errorCode = error.code;
+                // const errorMessage = error.message;
+                // console.log(errorCode, errorMessage);
                 // ..
                 message.success({
                   content: "가입 실패",
