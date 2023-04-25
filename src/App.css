@@ -207,3 +207,26 @@ button {
   background: rgb(39, 174, 96) !important;
   border: rgb(39, 174, 96) !important;
 }
+
+.square {
+  width: 100%;
+  position: relative;
+}
+
+.square:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.square .ant-skeleton-element {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.square .ant-skeleton-element .ant-skeleton-image {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+}

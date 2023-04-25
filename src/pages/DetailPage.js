@@ -11,6 +11,7 @@ import { db, storage } from "../firebase/firebase";
 import { getDoc, doc } from "firebase/firestore";
 import { ref, getDownloadURL } from "firebase/storage";
 import addComma from "../Utils";
+import { Skeleton } from "antd";
 
 const DetailPage = () => {
   let { id } = useParams(); // 카테고리 id
@@ -62,12 +63,14 @@ const DetailPage = () => {
         <div className="productTitle">
           <Row>
             <Col>
-              <Image
-                style={{
-                  width: "100%",
-                }}
-                src={productDetail.IMAGE}
-              />
+              { productDetail.IMAGE ?
+                  <Image
+                  style={{
+                    width: "100%",
+                  }}
+                  src={productDetail.IMAGE}
+                /> : <div className="square"><Skeleton.Image active={true} style={{ borderRadius: "5px" }} /></div>
+              }
             </Col>
           </Row>
 

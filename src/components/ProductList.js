@@ -5,7 +5,7 @@
  * */
 
 import React, { Fragment, useEffect } from "react";
-import { Table, Button, Popconfirm } from "antd";
+import { Table, Button, Popconfirm, Skeleton } from "antd";
 import addComma from "../Utils";
 
 const ProductList = (props) => {
@@ -21,7 +21,8 @@ const ProductList = (props) => {
       dataIndex: "IMAGE",
       width: 90,
       render: (image) => (
-        <img src={image} alt="" style={{ width: "60px", borderRadius: "5px" }} />
+        image ? <img src={image} alt="" style={{ width: "60px", borderRadius: "5px" }} />
+          : <Skeleton.Image active={true} style={{ width: "60px", height: "60px", borderRadius: "5px" }} />
       ),
     },
     {

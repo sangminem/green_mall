@@ -7,7 +7,7 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import addComma from "../Utils.js";
-import { Row, Col, Dropdown, Menu, Tag, Spin } from "antd";
+import { Row, Col, Dropdown, Menu, Tag, Spin, Skeleton } from "antd";
 import { DownOutlined, LoadingOutlined } from "@ant-design/icons";
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { TbTruckDelivery } from "react-icons/tb";
@@ -228,11 +228,12 @@ const CategoryPage = () => {
                 style={{ margin: "18px 0" }}
                 onClick={() => navigate(`/detail/${a.PRODUCT_ID}`)}
               >
+                {a.IMAGE ?
                 <img
-                  src={a.IMAGE?a.IMAGE:"/noimg.jpg"}
+                  src={a.IMAGE}
                   alt=""
                   style={{ width: "100%", borderRadius: "12px" }}
-                />
+                /> : <div className="square"><Skeleton.Image active={true} style={{ borderRadius: "5px" }} /></div> }
                 <p className="txt-md">{a.PRODUCT_NM}</p>
                 <div>
                   <span

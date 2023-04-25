@@ -12,6 +12,7 @@ import { IoHeartOutline } from "react-icons/io5";
 import { collection, getDocs } from "firebase/firestore";
 import { db, storage } from "../firebase/firebase.js";
 import { getDownloadURL, ref } from "firebase/storage";
+import { Skeleton } from "antd";
 
 const ListPage = () => {
   const [productList, setProductList] = useState([]);
@@ -87,11 +88,12 @@ const ListPage = () => {
               <React.Fragment key={i}>
                 <Col xs={6} style={{ margin: "18px 0", padding: "0 15px" }}>
                   <Link to={`/detail/${a.PRODUCT_ID}`}>
+                  {a.IMAGE ?
                     <img
-                      src={a.IMAGE?a.IMAGE:"/noimg.jpg"}
+                      src={a.IMAGE}
                       alt=""
                       style={{ width: "100%", borderRadius: "12px" }}
-                    />
+                    /> : <div className="square"><Skeleton.Image active={true} style={{ borderRadius: "5px" }} /></div> }
                     <p
                       style={{
                         fontSize: "12px",
